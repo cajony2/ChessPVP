@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+//Main activity
 public class Login extends Activity implements View.OnClickListener {
 
     public final static String USERNAME = "com.example.roma.servletTest.USERNAME";
