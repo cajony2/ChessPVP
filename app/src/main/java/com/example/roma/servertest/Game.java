@@ -136,28 +136,29 @@ public class Game {
             temp = array.getJSONObject(i);
             String piece = temp.getString("name");
             String color = temp.getString("color");
+            int position = temp.getInt("position");
 
             switch (piece){
                 case "empty":
-                    tiles[i] = new Empty(temp.getString("name"),temp.getString("color"),temp.getInt("position"));
+                    tiles[i] = new Empty(piece, color, position);
                     break;
                 case "bishop":
-                    tiles[i] = new Bishop(temp.getString("name"),temp.getString("color"),temp.getInt("position"));
+                    tiles[i] = new Bishop(piece, color, position);
                     break;
                 case "king":
-                    tiles[i] = new King(temp.getString("name"),temp.getString("color"),temp.getInt("position"));
+                    tiles[i] = new King(piece, color, position);
                     break;
                 case "queen":
-                    tiles[i] = new Queen(temp.getString("name"),temp.getString("color"),temp.getInt("position"));
+                    tiles[i] = new Queen(piece, color, position);
                     break;
                 case "knight":
-                    tiles[i] = new Knight(temp.getString("name"),temp.getString("color"),temp.getInt("position"));
+                    tiles[i] = new Knight(piece, color, position);
                     break;
                 case "pawn":
-                    tiles[i] = new Pawn(temp.getString("name"),temp.getString("color"),temp.getInt("position"));
+                    tiles[i] = new Pawn(piece, color, position);
                     break;
                 case "rook":
-                    tiles[i] = new Rook(temp.getString("name"),temp.getString("color"),temp.getInt("position"));
+                    tiles[i] = new Rook(piece, color, position);
                     break;
                 default:
                     Log.d("error","in default: "+piece);
