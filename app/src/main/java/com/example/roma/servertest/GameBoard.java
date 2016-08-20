@@ -73,7 +73,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         submit = (Button) findViewById(R.id.submit);
 
         moveMade = false;
-        isSelected =false;
+        isSelected = false;
         possibleMove = new boolean[64];
 
         for(int i=0 ; i<possibleMove.length ; i++){
