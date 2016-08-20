@@ -1,33 +1,32 @@
 package com.example.roma.servertest;
 
 /**
- * Created by Roma on 8/10/2016.
+ * Created by Roma & Jony on 8/10/2016.
  */
 import android.util.Log;
-
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Game {
 
-
+    //variables
     private Piece[] tiles;
     private String player1;
     private String player2;
     private int status;
     private String turn;
 
+    //constructor
     public Game (String _player1){
         player1=_player1;
         player2="";
         status = 0 ;      // 0=  create new game;
         turn = player1;
         createBoard();
-
     }
+
     //receiving json from server and create new game object
     public Game (JSONObject gameJson){
         Log.d("ingameConstructor","creating new game from, json");
@@ -43,9 +42,8 @@ public class Game {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
+
     private void createBoard(){
         tiles =  new Piece[64];
 
@@ -62,14 +60,15 @@ public class Game {
                 tiles[i]=new Empty("empty" ,"white",i);
             else
                 tiles[i]=new Empty("empty" ,"black",i);
-
         }
+
         // add the pawns
         for(int i =8 ; i<16 ;i++){
             tiles[i] = new Pawn("pawn","white",i);
             tiles[i+40]= new Pawn("pawn","black",i+40);
         }
-        // add other pieces
+
+        // add white pieces
         tiles[56]=(new Rook("rook" , "white",56));
         tiles[57]=(new Knight("Knight" , "white",57));
         tiles[58]=(new Bishop("Bishop" , "white",58));
@@ -79,8 +78,7 @@ public class Game {
         tiles[62]=(new Knight("Knight" , "white",62));
         tiles[63]=(new Rook("rook" ,"white",63));
 
-
-
+        // add black pieces
         tiles[0]=(new Rook("rook" ,"black",0));
         tiles[1]=(new Knight("Knight" , "black",1));
         tiles[2]=(new Bishop("Bishop" , "black",2));
@@ -89,17 +87,7 @@ public class Game {
         tiles[5]=(new Bishop("Bishop" , "black",5));
         tiles[6]=(new Knight("Knight" , "black",6));
         tiles[7]=(new Rook("rook" , "black",7));
-
-
-
-
-
-
     }
-
-
-
-
 
 
     public String getPlayer1(){
