@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Game"
+        android:id="@+id/createGameBtn"
+        android:layout_alignTop="@+id/psw"
+        android:layout_alignLeft="@+id/createUser"
+        android:layout_alignStart="@+id/createUser"
+        android:layout_marginTop="63dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/firstName"
+        android:text="First name"
+        android:layout_above="@+id/createGameBtn"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/psw"
+        android:text="Password"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/createGameBtn"
+        android:layout_alignStart="@+id/createGameBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Chess"
+        android:id="@+id/textView"
+        android:layout_above="@+id/firstName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create User"
+        android:id="@+id/createUser"
+        android:layout_below="@+id/createGameBtn"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect"
+        android:id="@+id/startGameButton"
+        android:layout_below="@+id/createUser"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join Game"
+        android:id="@+id/joinGame"
+        android:layout_below="@+id/startGameButton"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
