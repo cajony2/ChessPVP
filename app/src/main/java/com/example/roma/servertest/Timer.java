@@ -41,9 +41,9 @@ public class Timer   {
             public void run() {
                 String minutes ="",seconds="";
 
-                if(timeRemaining>=0  &&  !canceled) {
-                    if(timeRemaining>=60) {
-                        minutes=""+(int)timeRemaining/60;
+                        if(timeRemaining>=0  &&  !canceled) {
+                            if(timeRemaining>=60) {
+                                minutes=""+ timeRemaining /60;
                     }
                     else {
                         minutes="0";

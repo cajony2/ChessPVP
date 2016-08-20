@@ -1,14 +1,12 @@
 package com.example.roma.servertest;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.content.Intent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +15,6 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-//Main activity
 public class Login extends Activity implements View.OnClickListener {
 
     public final static String USERNAME = "com.example.roma.servletTest.USERNAME";
@@ -28,7 +25,6 @@ public class Login extends Activity implements View.OnClickListener {
 
     Button doubleMe;
     Button createUser;
-    Button startGameBtn ;
     Button joinGame;
 
     @Override
@@ -40,19 +36,18 @@ public class Login extends Activity implements View.OnClickListener {
         pswField = (EditText) findViewById(R.id.psw);
 
         doubleMe  = (Button) findViewById(R.id.createGameBtn);
-        createUser = (Button) findViewById(R.id.createUser);
-        startGameBtn = (Button) findViewById(R.id.startGameButton);
+        createUser = (Button) findViewById(R.id.logIn);
         joinGame = (Button) findViewById(R.id.joinGame);
 
         doubleMe.setOnClickListener(this);
         createUser.setOnClickListener(this);
-        startGameBtn.setOnClickListener(this);
+
         joinGame.setOnClickListener(this);
     }
 
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.createUser:
+            case R.id.logIn:
                 createUser();
                 break;
             case R.id.createGameBtn:
