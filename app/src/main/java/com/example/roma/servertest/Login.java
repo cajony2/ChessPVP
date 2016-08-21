@@ -119,7 +119,7 @@ public class Login extends Activity implements View.OnClickListener {
     private void createGame(){
 
 
-        Intent intent = new Intent(this, GameBoard.class);
+        Intent intent = new Intent(this, InitGame.class);
 
         intent.putExtra(USERNAME,inputValue.getText().toString() );
         intent.putExtra(ACTION,"createNewGame");

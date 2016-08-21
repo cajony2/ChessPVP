@@ -23,6 +23,12 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 
+/*
+    this is the game himself display the game board with all the pieces and make moves
+    contact the server and receive the new board after the second player has made his move
+    we will have this activity from the begining of the game till the end!!!
+
+ */
 public class GameBoard extends Activity implements AdapterView.OnItemClickListener ,View.OnClickListener {
 
     ArrayList<Piece> pieces;
@@ -40,11 +46,6 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     Button submit;
     boolean moveMade;
 
-    int[] images={R.drawable.bdt60,R.drawable.blt60,R.drawable.kdt60,
-            R.drawable.klt60,R.drawable.ndt60,R.drawable.nlt60,
-            R.drawable.pdt60,R.drawable.plt60,R.drawable.qdt60,
-            R.drawable.qlt60,R.drawable.rdt60,R.drawable.rlt60,
-            R.drawable.black,R.drawable.white};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,9 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         game=null;
 
         userName = intent.getStringExtra(Login.USERNAME);
-        String action = intent.getStringExtra(Login.ACTION);
+
+        String gameJson = intent.getStringExtra("game");
+        String action  = intent.getStringExtra("action");
 
         Log.d("chess","gameBoard created , action: "+action);
 
@@ -70,6 +73,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
 
         moveMade = false;
         isSelected =false;
+
         possibleMove = new boolean[64];//i think it gets false values at initialization (default values)
 
         //maybe unnecessary
@@ -78,18 +82,39 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         }
 
         switch (action){
-            case "createNewGame":
-                new ReadFromDB(this,"createNewGame").execute();
-                break;
-            case "joinGame":
-                new ReadFromDB(this,"joinGame").execute();
+            case "fullGame":
+                Game game = null;
+                try {
+                    game = new Game(new JSONObject(gameJson));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(game!=null) {
+                    adapter = new Adapter(this, game, null);
+                    gv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    player1.setText(game.getPlayer1());
+                    player2.setText(game.getPlayer2());
+                    Log.d("chess", "game created shpud work");
+                    Log.d("chess", "player1: " + game.getPlayer1());
+
+                }
                 break;
         }
+
+
         gv.setOnItemClickListener(this);
         submit.setOnClickListener(this);
     }
 
+
     @Override
+    // listener  for the gridview when the user clicks a tile check if the tile contains a piece and
+    // the piece is of the legal color and create a legalmoves array and update adapter and UI
+    //if the click is after we selected a piece   check if the move is legal and if so make the move
+    // update adapter and UI and disable the touch
+    //THIS METHOD CREATED ONLY FOR TESTING NEED ALOT OF CHANGING!!!!!!!!!!
+    //TODO finish this method :)
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("ITEMCLICKED","item number "+position);
 
@@ -97,7 +122,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         Piece[] pieces = game.getBoard2();
         int selectedTile=adapter.getSelectedTile();
 
-        ArrayList<Integer> moves = null;
+        ArrayList<Integer> moves ;
         // do only if the square clicked is the users color
         if (!isSelected) {
             Log.d("debug","username: "+userName+" player1: "+game.getPlayer1());
@@ -137,6 +162,8 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     }
 
     @Override
+
+    //if the user clicks the SUBMIT button send a move to the server and disable the touch
     public void onClick(View v) {
         if(moveMade){
             Log.d("chess","clicked submit");
@@ -151,6 +178,8 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         }
     }
 
+    // since we have the the middle layer "initgame" we won't be needing these for now
+    // i leave it for other server connections (make a move get newBoard end game and so on...)
     class ReadFromDB extends AsyncTask< Void, Void, String> {
         Activity activity;
         String action;
@@ -193,7 +222,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     message += nextLine;
                 }
 
-                Log.d("chess","the return message "+message);
+                //Log.d("chess","the return message "+message);
                 in.close();
             }
             catch (Exception e1)
@@ -204,34 +233,40 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         }
 
         @Override
+
+
         public void onPostExecute(String message){
 
             if(!action.equals("makeMove")) {
                 try
                 {
                     game = new Game(new JSONObject(message));
+
+                    if (game != null) {
+                        adapter = new Adapter(activity, game, null);
+                        gv.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        player1.setText(game.getPlayer1());
+
+                        Log.d("chess","gameStarted with id:"+game.getGameId());
+
+                        Timer timer = new Timer(60,timerTextView);
+                        timer.start();
+
+                        if (game.getPlayer2() != null) {
+                            player2.setText(game.getPlayer2());
+                        } else
+                            player2.setText("Searching for Player");
+
+
+                        //TO DO - set eaten pieces
+
+                        //TO DO - log to server an get game json object
+                    }
                 }
                 catch (JSONException ex)
                 {
                     ex.printStackTrace();
-                }
-                if (game != null) {
-                    adapter = new Adapter(activity, game, null);
-                    gv.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    player1.setText(game.getPlayer1());
-
-                    Timer timer = new Timer(60,timerTextView);
-                    timer.start();
-
-                    if (game.getPlayer2() != null) {
-                        player2.setText(game.getPlayer2());
-                    } else
-                        player2.setText("Searching for Player");
-
-                    //TO DO - set eaten pieces
-
-                    //TO DO - log to server an get game json object
                 }
             }
             //TO DO - set players name

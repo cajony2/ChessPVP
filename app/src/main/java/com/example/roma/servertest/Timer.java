@@ -53,7 +53,7 @@ public class Timer   {
                     seconds+=(timeRemaining%60);
                     textView.setText(minutes+":"+seconds);
 
-                    Log.d("chess","timer:"+minutes+":"+seconds);
+                   // Log.d("chess","timer:"+minutes+":"+seconds);
                     timeRemaining--;
                     handler.postDelayed(this, 1000);
                 }

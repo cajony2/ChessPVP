@@ -17,6 +17,7 @@ public class Game {
     private String player2;
     private int status;
     private String turn;
+    private int gameId;
 
     //constructor
     public Game (String _player1){
@@ -33,10 +34,12 @@ public class Game {
         try {
             player1 = gameJson.getString("player1");
             Log.d("name:",player1);
-            player2 = null;
+            player2=gameJson.getString("player2");
             status = gameJson.getInt("status");
             turn = gameJson.getString("turn");
             tiles = new Piece[64];
+            gameId = gameJson.getInt("gameid");
+            Log.d("chess","game object created player1="+player1+" player2: "+player2);
             JSONArray piecesJson = gameJson.getJSONArray("pieces");
             getPiecesFromJson(piecesJson);
         } catch (JSONException e) {
@@ -162,6 +165,7 @@ public class Game {
             json.put("player2", player2);
             json.put("status", status);
             json.put("turn", turn);
+            json.put("gameid",gameId);
             json.put("pieces", getPiecesJson());
         } catch (JSONException e) {
             Log.d("chess","fucking error creatinf json player name="+player1);
@@ -177,5 +181,8 @@ public class Game {
             pieces.put(tiles[i].toJson());
 
         return pieces;
+    }
+    public int getGameId(){
+        return gameId;
     }
 }
