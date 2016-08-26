@@ -50,8 +50,8 @@ public class InitGame extends Activity{
         spinner.setVisibility(View.GONE);
 
         Intent intent = getIntent();
-        userName = intent.getStringExtra(Login.USERNAME);
-        String action = intent.getStringExtra(Login.ACTION);
+        userName = intent.getStringExtra("userName");
+        String action = intent.getStringExtra("ACTION");
 
         if(action.equals("createNewGame")) {
             status.setText("Creating Game...");
@@ -157,7 +157,7 @@ public class InitGame extends Activity{
                     Intent intent = new Intent(activity, GameBoard.class);
 
                     intent.putExtra("game",message );
-                    intent.putExtra("action","fullGame" );
+                    intent.putExtra("ACTION","fullGame" );
                     //intent.putExtra(ACTION,"createNewGame");
                     startActivity(intent);
                 }

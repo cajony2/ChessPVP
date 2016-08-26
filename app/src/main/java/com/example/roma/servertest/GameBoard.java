@@ -61,12 +61,12 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         pieces = null;
         game=null;
 
-        userName = intent.getStringExtra(Login.USERNAME);
+        userName = intent.getStringExtra("userName");
 
         String gameJson = intent.getStringExtra("game");
-        String action  = intent.getStringExtra("action");
+        String action  = intent.getStringExtra("ACTION");
 
-        Log.d("chess","gameBoard created , action: "+action);
+        Log.i("chess","gameBoard created , action: "+action);
 
         gv = (GridView) findViewById(R.id.chessboard);
         submit = (Button) findViewById(R.id.submit);
@@ -95,8 +95,8 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     adapter.notifyDataSetChanged();
                     player1.setText(game.getPlayer1());
                     player2.setText(game.getPlayer2());
-                    Log.d("chess", "game created shpud work");
-                    Log.d("chess", "player1: " + game.getPlayer1());
+                    Log.i("chess", "game created shpud work");
+                    Log.i("chess", "player1: " + game.getPlayer1());
 
                 }
                 break;
@@ -116,7 +116,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     //THIS METHOD CREATED ONLY FOR TESTING NEED ALOT OF CHANGING!!!!!!!!!!
     //TODO finish this method :)
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("ITEMCLICKED","item number "+position);
+        Log.i("ITEMCLICKED","item number "+position);
 
         Game game = adapter.getGame();
         Piece[] pieces = game.getBoard2();
@@ -125,7 +125,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         ArrayList<Integer> moves ;
         // do only if the square clicked is the users color
         if (!isSelected) {
-            Log.d("debug","username: "+userName+" player1: "+game.getPlayer1());
+            Log.i("chess","username: "+userName+" player1: "+game.getPlayer1());
             if(!(game.getPlayer1().equals(userName) ^ pieces[position].getColor().equals("white"))) {         //then this user is white
                 isSelected = true;
                 moves = pieces[position].getLegalMoves(game);
@@ -148,7 +148,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
 
                     adapter.setGame(game);
                     moveMade = true;
-                    Log.d("chess","move made");
+                    Log.i("chess","move made");
                     adapter.setSelectedTile(-1);
                 }
 
