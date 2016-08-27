@@ -97,6 +97,8 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     player2.setText(game.getPlayer2());
                     Log.i("chess", "game created shpud work");
                     Log.i("chess", "player1: " + game.getPlayer1());
+                    Timer timer = new Timer(60,timerTextView);
+                    timer.start();
 
                 }
                 break;
@@ -248,10 +250,9 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                         adapter.notifyDataSetChanged();
                         player1.setText(game.getPlayer1());
 
-                        Log.d("chess","gameStarted with id:"+game.getGameId());
+                        Log.i("chess","gameStarted with id:"+game.getGameId());
 
-                        Timer timer = new Timer(60,timerTextView);
-                        timer.start();
+
 
                         if (game.getPlayer2() != null) {
                             player2.setText(game.getPlayer2());

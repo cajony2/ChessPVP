@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="redText1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12pt</item>
+        <item name="android:textColor">#ef4444</item>/>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="redText2">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12pt</item>
+        <item name="android:textColor">#efff00</item>/>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

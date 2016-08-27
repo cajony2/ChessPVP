@@ -2,47 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/loginbackground">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Name: "
         android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="52dp" />
+        style="@style/redText1"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/createGameBtn"
+        android:layout_alignStart="@+id/createGameBtn"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/redText1"
         android:text="Score:"
         android:id="@+id/textView2"
         android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="41dp" />
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/redText1"
         android:text="Wins:"
         android:id="@+id/textView3"
         android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="34dp" />
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
 
 
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/redText2"
         android:id="@+id/name"
         android:layout_above="@+id/textView2"
         android:layout_toRightOf="@+id/textView"
@@ -51,18 +40,14 @@
         android:layout_marginStart="18dp" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/redText2"
         android:id="@+id/score"
         android:layout_alignTop="@+id/textView2"
         android:layout_alignLeft="@+id/name"
         android:layout_alignStart="@+id/name" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/redText2"
         android:id="@+id/wins"
         android:layout_alignBottom="@+id/textView3"
         android:layout_alignLeft="@+id/score"
@@ -74,16 +59,28 @@
         android:text="Join Game"
         android:id="@+id/joinGameBtn"
         android:layout_marginBottom="53dp"
-        android:minWidth="160dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:minWidth="300dp"
+        android:layout_below="@+id/re_psw"
+        android:layout_marginTop="15dp"
+        android:layout_centerVertical="true"
+        android:textAllCaps="false"
+        android:background="@drawable/red_button"
+        style="@style/button_text"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Game"
         android:id="@+id/createGameBtn"
-        android:minWidth="160dp"
         android:layout_above="@+id/joinGameBtn"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:minWidth="300dp"
+        android:layout_below="@+id/re_psw"
+        android:layout_marginTop="15dp"
+        android:layout_centerVertical="true"
+        android:textAllCaps="false"
+        android:background="@drawable/red_button"
+        style="@style/button_text"/>
 </RelativeLayout>

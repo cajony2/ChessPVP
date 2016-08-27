@@ -24,7 +24,7 @@ public class Timer   {
         canceled=false;
         done=false;
         textView=_textView;
-        Log.d("chess","timer created");
+        Log.i("chess","timer created");
     }
 
     public Timer(){
@@ -52,8 +52,6 @@ public class Timer   {
                         seconds="0";
                     seconds+=(timeRemaining%60);
                     textView.setText(minutes+":"+seconds);
-
-                   // Log.d("chess","timer:"+minutes+":"+seconds);
                     timeRemaining--;
                     handler.postDelayed(this, 1000);
                 }
