@@ -2,7 +2,6 @@ package com.example.roma.servertest;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +20,11 @@ import java.net.URLConnection;
 
 /**
  * Created by Roma on 8/27/2016.
+ * create new account  get  user name and psw from user send to server and parse response
+ *  server response:
+ *  "user name taken" -> user name taken :/
+ *  "userCreated"  -> all good user created!
+ *  else -> something went wrong.
  */
 public class CreateAccount extends Activity implements View.OnClickListener{
 
@@ -133,14 +137,17 @@ public class CreateAccount extends Activity implements View.OnClickListener{
             Log.i("chess",message);
             progressDialog.dismiss();
             //check returend msg from server
-            if(message.equals("user name taken")){                // is message is error then account no such account
-                Toast.makeText(activity, "User name \""+name+"\" is taken.",Toast.LENGTH_LONG).show();
-            }else if(message.equals("userCreated")){                                      // else msg is json with use info show personal info activity
-                Toast.makeText(activity, "User Created",Toast.LENGTH_LONG).show();
-                activity.finish();
-            }
-            else {
-                Toast.makeText(activity, "Oops somthing whent wrong :(",Toast.LENGTH_LONG).show();
+            switch (message) {
+                case "user name taken":                 // is message is error then account no such account
+                    Toast.makeText(activity, "User name \"" + name + "\" is taken.", Toast.LENGTH_LONG).show();
+                    break;
+                case "userCreated":                                       // else msg is json with use info show personal info activity
+                    Toast.makeText(activity, "User Created", Toast.LENGTH_LONG).show();
+                    activity.finish();
+                    break;
+                default:
+                    Toast.makeText(activity, "Oops somthing whent wrong :(", Toast.LENGTH_LONG).show();
+                    break;
             }
 
         }
