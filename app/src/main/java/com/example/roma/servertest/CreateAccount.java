@@ -5,72 +5,65 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class Login extends Activity implements View.OnClickListener {
 
-    public final static String USERNAME = "com.example.roma.servletTest.USERNAME";
-    public final static String ACTION = "com.example.roma.servletTest.FIRST";
+/**
+ * Created by Roma on 8/27/2016.
+ */
+public class CreateAccount extends Activity implements View.OnClickListener{
 
-    EditText userName = null;
-    EditText pswField = null;
-    TextView createAccount;
-
-    Button logIn;
-
-
+    TextView userName;
+    TextView psw;
+    TextView rePsw;
+    Button createBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.create_account);
 
-        userName = (EditText) findViewById(R.id.firstName);
-        pswField = (EditText) findViewById(R.id.psw);
-        createAccount = (TextView) findViewById(R.id.createAccount);
+        userName = (TextView) findViewById(R.id.userName);
+        psw = (TextView) findViewById(R.id.psw);
+        rePsw = (TextView) findViewById(R.id.re_psw);
 
-        logIn = (Button) findViewById(R.id.logIn);
-        logIn.setOnClickListener(this);
-        createAccount.setOnClickListener(this);
+        createBtn = (Button) findViewById(R.id.create_account);
+
+        createBtn.setOnClickListener(this);
+
     }
 
-    public void onClick(View v){
-        switch (v.getId()){
-            case R.id.logIn:
-                Log.i("chess","button clicked, logIn");
-                logIn();
-                break;
-            case R.id.createAccount:
-                Intent intent = new Intent(this, CreateAccount.class);
-                startActivity(intent);
-                break;
+    @Override
+    public void onClick(View v) {
+        String nameString = userName.getText().toString();
+        String pswString = psw.getText().toString();
+        String rePswString = rePsw.getText().toString();
+
+        if(TextUtils.isEmpty(nameString))
+            userName.setError("Cant be empty");
+        else if(TextUtils.isEmpty(pswString))
+            psw.setError("Cant be empty");
+        else if (TextUtils.isEmpty(rePswString))
+            rePsw.setError("Cant be empty");
+        else if (!pswString.equals(rePswString))
+            rePsw.setError("Password do not match");
+        else{
+            ReadFromDB readFromDB = new ReadFromDB(this,nameString,pswString);
+            readFromDB.execute();
 
         }
     }
-    private void logIn(){
-        String name = userName.getText().toString();
-        String psw = pswField.getText().toString();
-
-        ReadFromDB readFromDB = new ReadFromDB(this,name,psw);
-
-        readFromDB.execute();
-    }
-
-
 
     class ReadFromDB extends AsyncTask< Void, Void, String> {
 
@@ -90,7 +83,7 @@ public class Login extends Activity implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(activity, "", "Loading...");
+            progressDialog = ProgressDialog.show(activity, "", "Creating User...");
         }
 
 
@@ -102,8 +95,8 @@ public class Login extends Activity implements View.OnClickListener {
                 // URL url = new URL("http://10.0.2.2:8080/Chess/ChessServlet");
 
                 URLConnection connection = url.openConnection();
-                connection.setRequestProperty("Action","logIn");
-                Log.d("chess", "connecting to db: LogIn");
+                connection.setRequestProperty("Action","createUser");
+                Log.d("chess", "connecting to db: createUser");
 
                 connection.setRequestProperty("UserName", name);
                 connection.setRequestProperty("Password", psw);
@@ -133,21 +126,23 @@ public class Login extends Activity implements View.OnClickListener {
 
         @Override
 
-
+        /*
+        check the msg from server  if msg is "user name taken"
+         */
         public void onPostExecute(String message){
             Log.i("chess",message);
             progressDialog.dismiss();
             //check returend msg from server
-            if(message.equals("error")){                // is message is error then account no such account
-                Toast.makeText(activity, "No such Account",Toast.LENGTH_LONG).show();
-            }else{                                      // else msg is json with use info show personal info activity
-                Intent intent = new Intent(activity, PersonalInfo.class);
-
-                intent.putExtra("JSON",message);
-                startActivity(intent);
+            if(message.equals("user name taken")){                // is message is error then account no such account
+                Toast.makeText(activity, "User name \""+name+"\" is taken.",Toast.LENGTH_LONG).show();
+            }else if(message.equals("userCreated")){                                      // else msg is json with use info show personal info activity
+                Toast.makeText(activity, "User Created",Toast.LENGTH_LONG).show();
+                activity.finish();
+            }
+            else {
+                Toast.makeText(activity, "Oops somthing whent wrong :(",Toast.LENGTH_LONG).show();
             }
 
         }
     }//end of inner class ReadFromDB
-
 }
