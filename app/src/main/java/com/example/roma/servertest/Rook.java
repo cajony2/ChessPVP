@@ -1,5 +1,7 @@
 package com.example.roma.servertest;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 /**
@@ -8,8 +10,14 @@ import java.util.ArrayList;
 
 public class Rook extends Piece {
 
-    public Rook(String name, String color,int pos) {
-        super(name,  color,pos);
+    //constructor - added by jony
+    public  Rook(Context context, int color, Tile tile){
+        super(context, color, tile);
+    }
+
+
+    public Rook(Context context, String name, String color,int pos) {
+        super(context, name, color, pos);
         // TODO Auto-generated constructor stub
         if (color.equals("white")){
             this.image = R.drawable.rlt60;

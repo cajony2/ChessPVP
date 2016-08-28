@@ -1,5 +1,7 @@
 package com.example.roma.servertest;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 /**
@@ -8,9 +10,13 @@ import java.util.ArrayList;
 
 public class Empty extends Piece {
 
+    //constructor - added by jony
+    public Empty(Context context, int color, Tile tile){
+        super(context, color, tile);
+    }
 
-    public Empty(String name, String color,int pos) {
-        super(name, color,pos);
+    public Empty(Context context, String name, String color, int pos) {
+        super(context, name, color, pos);
         // TODO Auto-generated constructor stub
         if(color=="white")
             this.image=R.drawable.white;
