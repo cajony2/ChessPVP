@@ -35,7 +35,8 @@ public class Tile extends FrameLayout {
 
 	public void setPiece(Piece piece){
 		_piece = piece;
-		addView(_piece);
+		if (piece != null)
+			this.setBackgroundResource(_piece.image);
 	}
 
 	//inner class that represents a white tile

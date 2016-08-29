@@ -12,18 +12,18 @@ import java.util.ArrayList;
 public class Knight extends Piece {
 
     //constructor - added by jony
-    public  Knight(Context context, int color, Tile tile){
-        super(context, color, tile);
+    public  Knight(int color, Tile tile){
+        super(color, tile);
     }
 
-    public Knight(Context context, String name, String color, int pos) {
-        super(context, name, color, pos);
+    public Knight(String name, String color, int pos) {
+        super(name, color, pos);
         // TODO Auto-generated constructor stub
         if (color.equals("white")){
-            this.image = R.drawable.nlt60;
+            image = R.drawable.nlt60;
         }
         else
-            this.image=R.drawable.ndt60;
+            image=R.drawable.ndt60;
     }
 
     @Override

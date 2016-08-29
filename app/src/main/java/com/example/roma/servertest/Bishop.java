@@ -11,18 +11,18 @@ import java.util.ArrayList;
 public class Bishop extends Piece {
 
     //constructor - added by jony
-    public Bishop(Context context, int color, Tile tile){
-        super(context, color, tile);
+    public Bishop(int color, Tile tile){
+        super(color, tile);
     }
 
-    public Bishop(Context context, String name, String color, int pos) {
-        super(context, name, color, pos);
+    public Bishop(String name, String color, int pos) {
+        super(name, color, pos);
         // TODO Auto-generated constructor stub
         if (color.equals("white")){
-            this.image = R.drawable.blt60;
+            image = R.drawable.blt60;
         }
         else
-            this.image= R.drawable.bdt60;
+            image= R.drawable.bdt60;
     }
 
     @Override

@@ -11,18 +11,18 @@ import java.util.ArrayList;
 public class Pawn extends Piece {
 
     //constructor - added by jony
-    public  Pawn(Context context, int color, Tile tile){
-        super(context, color, tile);
+    public  Pawn(int color, Tile tile){
+        super(color, tile);
     }
 
-    public Pawn(Context context, String name, String color, int pos) {
-        super(context, name, color, pos);
+    public Pawn(String name, String color, int pos) {
+        super(name, color, pos);
         // TODO Auto-generated constructor stub
         if (color.equals("white")){
-            this.image = R.drawable.plt60;
+            image = R.drawable.plt60;
         }
         else
-            this.image=R.drawable.pdt60;
+            image=R.drawable.pdt60;
     }
 
     @Override

@@ -39,8 +39,6 @@ public class Adapter extends BaseAdapter {
         isSelected = new ArrayList<Boolean>();
         possibleMove = new boolean[64];
         selectedTile=-1;
-
-
     }
 
     public void setSelectedTile(int pos){

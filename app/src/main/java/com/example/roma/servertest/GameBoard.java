@@ -145,7 +145,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     pieces[position] = pieces[selectedTile];
                     pieces[position].setPosition(position);
 
-                    pieces[selectedTile] = new Empty(this.getBaseContext(), "empty","white",selectedTile);
+                    pieces[selectedTile] = new Empty("empty","white",selectedTile);
                     pieces[selectedTile].setEmpty(true);
 
                     adapter.setGame(game);

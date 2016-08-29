@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,19 +12,20 @@ import java.util.ArrayList;
 public class Rook extends Piece {
 
     //constructor - added by jony
-    public  Rook(Context context, int color, Tile tile){
-        super(context, color, tile);
+    public  Rook(int color, Tile tile){
+        super(color, tile);
     }
 
 
-    public Rook(Context context, String name, String color,int pos) {
-        super(context, name, color, pos);
+    public Rook(String name, String color,int pos) {
+        super(name, color, pos);
         // TODO Auto-generated constructor stub
+        Log.i("chess","creating new piece "+name+" color:"+color+" pos "+pos );
         if (color.equals("white")){
-            this.image = R.drawable.rlt60;
+            image = R.drawable.rlt60;
         }
         else
-            this.image=R.drawable.rdt60;
+            image=R.drawable.rdt60;
     }
 
     @Override

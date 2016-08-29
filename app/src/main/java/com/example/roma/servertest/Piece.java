@@ -15,35 +15,32 @@ import java.util.ArrayList;
  * Created by Roma on 8/2/2016.
  */
 
-public abstract class Piece extends View{//Jony added the View extension
+public abstract class Piece{//Jony added the View extension
 
-    protected int _color;//added by jony
-    protected Tile _tile;//added by jony
-    //protected Point _pointPosition;//added by jony
-    protected boolean _isActive;//added by jony
-    protected String name;
-    protected String color;
-    protected int image;
-    protected int position;
-    protected boolean isEmpty;
+          protected int _color;//added by jony
+        protected Tile _tile;//added by jony
+        //protected Point _pointPosition;//added by jony
+        protected boolean _isActive;//added by jony
+        protected String name;
+        protected String color;
+        protected int image;
+        protected int position;
+        protected boolean isEmpty;
 
-    //default constructor added by jony
-    public Piece(Context context, int color, Tile tile) {
-        super(context);
-        _color = color;
-        _tile = tile;
-        _isActive = true;
+        //default constructor added by jony
+        public Piece(int color, Tile tile) {
 
+            _color = color;
+            _tile = tile;
+            _isActive = true;
     }
 
-    //jony added the context for the view class
-    public Piece (Context context, String name , String color, int pos){
-        super(context);//added by jony
+    public Piece (String name , String color, int pos){
 
-        this.name = name;
-        this.color = color;
-        this.position=pos;
-        isEmpty = name.equals("empty") ? true : false ;
+            this.name = name;
+            this.color = color;
+            this.position = pos;
+            isEmpty = name.equals("empty") ? true : false;
     }
 
     public int getImg(){

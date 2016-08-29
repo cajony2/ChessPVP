@@ -11,18 +11,18 @@ import java.util.ArrayList;
 public class King extends Piece {
 
     //constructor - added by jony
-    public  King(Context context, int color, Tile tile){
-        super(context, color, tile);
+    public  King(int color, Tile tile){
+        super(color, tile);
     }
 
-    public King(Context context, String name, String color, int pos) {
-        super(context, name, color, pos);
+    public King(String name, String color, int pos) {
+        super(name, color, pos);
         // TODO Auto-generated constructor stub
         if (color.equals("white")){
-            this.image =R.drawable.klt60;
+            image =R.drawable.klt60;
         }
         else
-            this.image=R.drawable.kdt60;
+            image=R.drawable.kdt60;
     }
 
     @Override

@@ -29,6 +29,7 @@ public class Game {
 
     //constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
     public Game (Context context, String _player1){
+        Log.i("chess", "creating game");
         _context = context;
         whitePlayer=_player1;
         blackPlayer="";
@@ -77,36 +78,36 @@ public class Game {
     //added by jony - setting the pieces on board (beginning of a game)
     private void setPieces() {
         //filling first row from the top with black chess pieces
-        _tiles[0][0].setPiece(new Rook(_context, Color.BLACK, _tiles[0][0]));
-        _tiles[0][1].setPiece(new Knight(_context, Color.BLACK, _tiles[0][0]));
-        _tiles[0][2].setPiece(new Bishop(_context, Color.BLACK, _tiles[0][0]));
-        _tiles[0][3].setPiece(new Queen(_context, Color.BLACK, _tiles[0][0]));
-        _tiles[0][4].setPiece(new King(_context, Color.BLACK, _tiles[0][0]));
-        _tiles[0][5].setPiece(new Bishop(_context, Color.BLACK, _tiles[0][0]));
-        _tiles[0][6].setPiece(new Knight(_context, Color.BLACK, _tiles[0][0]));
-        _tiles[0][7].setPiece(new Rook(_context, Color.BLACK, _tiles[0][0]));
+        _tiles[0][0].setPiece(new Rook(Color.BLACK, _tiles[0][0]));
+        _tiles[0][1].setPiece(new Knight(Color.BLACK, _tiles[0][0]));
+        _tiles[0][2].setPiece(new Bishop(Color.BLACK, _tiles[0][0]));
+        _tiles[0][3].setPiece(new Queen(Color.BLACK, _tiles[0][0]));
+        _tiles[0][4].setPiece(new King(Color.BLACK, _tiles[0][0]));
+        _tiles[0][5].setPiece(new Bishop(Color.BLACK, _tiles[0][0]));
+        _tiles[0][6].setPiece(new Knight(Color.BLACK, _tiles[0][0]));
+        _tiles[0][7].setPiece(new Rook(Color.BLACK, _tiles[0][0]));
 
         //filling second row from the top with black pawns
         for (int i = 0; i < TILES_NUMBER_IN_A_ROW; i++)
         {
-            _tiles[1][i].setPiece(new Pawn(_context, Color.BLACK, _tiles[1][i]));
+            _tiles[1][i].setPiece(new Pawn(Color.BLACK, _tiles[1][i]));
         }
 
         //filling second row from the bottom with white pawns
         for (int i = 0; i < TILES_NUMBER_IN_A_ROW; i++)
         {
-            _tiles[6][i].setPiece(new Pawn(_context, Color.WHITE, _tiles[6][i]));
+            _tiles[6][i].setPiece(new Pawn(Color.WHITE, _tiles[6][i]));
         }
 
         //filling first row from the bottom with white chess pieces
-        _tiles[7][0].setPiece(new Rook(_context, Color.WHITE, _tiles[7][0]));
-        _tiles[7][1].setPiece(new Knight(_context, Color.WHITE, _tiles[7][1]));
-        _tiles[7][2].setPiece(new Bishop(_context, Color.WHITE, _tiles[7][2]));
-        _tiles[7][3].setPiece(new Queen(_context, Color.WHITE, _tiles[7][3]));
-        _tiles[7][4].setPiece(new King(_context, Color.WHITE, _tiles[7][4]));
-        _tiles[7][5].setPiece(new Bishop(_context, Color.WHITE, _tiles[7][5]));
-        _tiles[7][6].setPiece(new Knight(_context, Color.WHITE, _tiles[7][6]));
-        _tiles[7][7].setPiece(new Rook(_context, Color.WHITE, _tiles[7][7]));
+        _tiles[7][0].setPiece(new Rook(Color.WHITE, _tiles[7][0]));
+        _tiles[7][1].setPiece(new Knight(Color.WHITE, _tiles[7][1]));
+        _tiles[7][2].setPiece(new Bishop(Color.WHITE, _tiles[7][2]));
+        _tiles[7][3].setPiece(new Queen(Color.WHITE, _tiles[7][3]));
+        _tiles[7][4].setPiece(new King(Color.WHITE, _tiles[7][4]));
+        _tiles[7][5].setPiece(new Bishop(Color.WHITE, _tiles[7][5]));
+        _tiles[7][6].setPiece(new Knight(Color.WHITE, _tiles[7][6]));
+        _tiles[7][7].setPiece(new Rook(Color.WHITE, _tiles[7][7]));
     }
 
     //receiving json from server and create new game object
@@ -136,41 +137,41 @@ public class Game {
         for(int i=0 ; i<tiles.length ; i++){
             if(i%16 < 8){
                 if(i%2 != 0)
-                    tiles[i]=new Empty(_context, "empty" ,"black",i);
+                    tiles[i]=new Empty("empty" ,"black",i);
                 else
-                    tiles[i]=new Empty(_context, "empty" ,"white",i);
+                    tiles[i]=new Empty("empty" ,"white",i);
             }else
             if(i%2 != 0)
-                tiles[i]=new Empty(_context, "empty" ,"white",i);
+                tiles[i]=new Empty("empty" ,"white",i);
             else
-                tiles[i]=new Empty(_context, "empty" ,"black",i);
+                tiles[i]=new Empty("empty" ,"black",i);
         }
 
         // add the pawns
         for(int i =8 ; i<16 ;i++){
-            tiles[i] = new Pawn(_context, "pawn", "white", i);
-            tiles[i+40]= new Pawn(_context, "pawn", "black", i+40);
+            tiles[i] = new Pawn("pawn", "white", i);
+            tiles[i+40]= new Pawn("pawn", "black", i+40);
         }
 
         // add white pieces
-        tiles[56]=(new Rook(_context, "rook" , "white", 56));
-        tiles[57]=(new Knight(_context, "Knight" , "white", 57));
-        tiles[58]=(new Bishop(_context, "Bishop" , "white", 58));
-        tiles[59]=(new Queen(_context, "queen" , "white", 59));
-        tiles[60]=(new King(_context, "king" , "white", 60));
-        tiles[61]=(new Bishop(_context, "Bishop" , "white", 61));
-        tiles[62]=(new Knight(_context, "Knight" , "white", 62));
-        tiles[63]=(new Rook(_context, "rook" , "white", 63));
+        tiles[56]=(new Rook("rook" , "white", 56));
+        tiles[57]=(new Knight("Knight" , "white", 57));
+        tiles[58]=(new Bishop("Bishop" , "white", 58));
+        tiles[59]=(new Queen("queen" , "white", 59));
+        tiles[60]=(new King("king" , "white", 60));
+        tiles[61]=(new Bishop("Bishop" , "white", 61));
+        tiles[62]=(new Knight("Knight" , "white", 62));
+        tiles[63]=(new Rook("rook" , "white", 63));
 
         // add black pieces
-        tiles[0]=(new Rook(_context, "rook", "black", 0));
-        tiles[1]=(new Knight(_context, "Knight", "black", 1));
-        tiles[2]=(new Bishop(_context, "Bishop", "black", 2));
-        tiles[3]=(new Queen(_context, "queen", "black", 3));
-        tiles[4]=(new King(_context, "king", "black", 4));
-        tiles[5]=(new Bishop(_context, "Bishop", "black", 5));
-        tiles[6]=(new Knight(_context, "Knight", "black", 6));
-        tiles[7]=(new Rook(_context, "rook", "black", 7));
+        tiles[0]=(new Rook("rook", "black", 0));
+        tiles[1]=(new Knight("Knight", "black", 1));
+        tiles[2]=(new Bishop("Bishop", "black", 2));
+        tiles[3]=(new Queen("queen", "black", 3));
+        tiles[4]=(new King("king", "black", 4));
+        tiles[5]=(new Bishop("Bishop", "black", 5));
+        tiles[6]=(new Knight("Knight", "black", 6));
+        tiles[7]=(new Rook("rook", "black", 7));
     }
 
     public String getPlayer1(){
@@ -211,25 +212,25 @@ public class Game {
 
             switch (piece){
                 case "empty":
-                    tiles[i] = new Empty(_context, piece, color, position);
+                    tiles[i] = new Empty(piece, color, position);
                     break;
                 case "bishop":
-                    tiles[i] = new Bishop(_context, piece, color, position);
+                    tiles[i] = new Bishop(piece, color, position);
                     break;
                 case "king":
-                    tiles[i] = new King(_context, piece, color, position);
+                    tiles[i] = new King(piece, color, position);
                     break;
                 case "queen":
-                    tiles[i] = new Queen(_context, piece, color, position);
+                    tiles[i] = new Queen(piece, color, position);
                     break;
                 case "knight":
-                    tiles[i] = new Knight(_context, piece, color, position);
+                    tiles[i] = new Knight(piece, color, position);
                     break;
                 case "pawn":
-                    tiles[i] = new Pawn(_context, piece, color, position);
+                    tiles[i] = new Pawn(piece, color, position);
                     break;
                 case "rook":
-                    tiles[i] = new Rook(_context, piece, color, position);
+                    tiles[i] = new Rook(piece, color, position);
                     break;
                 default:
                     Log.d("error","in default: "+piece);
