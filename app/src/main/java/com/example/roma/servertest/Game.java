@@ -12,45 +12,40 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.example.roma.servertest.Player.*;
-
 public class Game {
 
     //jony added
     private Tile[][] _tiles;
     private final int TILES_NUMBER_IN_A_ROW = 8;
     private Context _context;
-    private Player _whitePlayer;
-    private Player _blackPlayer;
 
     //variables
     private Piece[] tiles;
-    //private String whitePlayer;
-    //private String blackPlayer;
+    private String whitePlayer;
+    private String blackPlayer;
     private int status;
-    private String turn;//should be changed into int (Color.WHITE / Color.BLACK)
+    private String turn;
     private int gameId;
-
-
+    private ArrayList<Piece> eatenPieces;
+    private int eatenPiecesSize;
 
     //constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
-    public Game (Context context, String player1){
+    public Game (Context context, String _player1){
+        Log.i("chess", "creating game");
         _context = context;
-        //whitePlayer=_player1;
-		_whitePlayer = new WhitePlayer(player1);
-        //blackPlayer="";
-		_blackPlayer = new BlackPlayer("");
-        status = 0 ;      //0 =  create new game;
-        turn = _whitePlayer.getName();
+        whitePlayer=_player1;
+        blackPlayer="";
+        status = 0 ;      // 0=  create new game;
+        turn = whitePlayer;
         newCreateBoard();//jony added
     }
 
     //constructor
-    public Game (String player1){
-		_whitePlayer = new WhitePlayer(player1);
-		_blackPlayer = new BlackPlayer("");
+    public Game (String _player1){
+        whitePlayer=_player1;
+        blackPlayer="";
         status = 0 ;      // 0=  create new game;
-        turn = _whitePlayer.getName();
+        turn = whitePlayer;
         createBoard();
     }
 
@@ -117,20 +112,20 @@ public class Game {
         _tiles[7][7].setPiece(new Rook(Color.WHITE, _tiles[7][7]));
     }
 
-    //Constructor receiving json from server and create new game object
+    //receiving json from server and create new game object
     public Game (JSONObject gameJson){
         Log.d("ingameConstructor","creating new game from, json");
         try {
-            _whitePlayer = new WhitePlayer(gameJson.getString("player1"));
-            //whitePlayer = gameJson.getString("player1");
-            Log.d("name:", _whitePlayer.getName());
-            //blackPlayer = gameJson.getString("player2");
-            _blackPlayer = new BlackPlayer(gameJson.getString("player2"));
+            whitePlayer = gameJson.getString("player1");
+            Log.d("name:",whitePlayer);
+            blackPlayer=gameJson.getString("player2");
             status = gameJson.getInt("status");
             turn = gameJson.getString("turn");
             tiles = new Piece[64];
             gameId = gameJson.getInt("gameid");
-            Log.d("chess","game object created player1=" + _whitePlayer.getName() + " player2: " + _blackPlayer.getName());
+            eatenPiecesSize=gameJson.getInt("eatenpiecessize");
+            setEatenPieces(gameJson.getJSONArray("eatenpieces"));       //create eatenpieces array list
+            Log.d("chess","game object created player1="+whitePlayer+" player2: "+blackPlayer);
             JSONArray piecesJson = gameJson.getJSONArray("pieces");
             getPiecesFromJson(piecesJson);
         } catch (JSONException e) {
@@ -184,10 +179,10 @@ public class Game {
     }
 
     public String getPlayer1(){
-        return _whitePlayer.getName();
+        return whitePlayer;
     }
     public String getPlayer2(){
-        return _blackPlayer.getName();
+        return blackPlayer;
     }
     public int getStatus(){
         return status;
@@ -251,14 +246,14 @@ public class Game {
 
         JSONObject json = new JSONObject();
         try {
-            json.put("player1", _whitePlayer.getName());
-            json.put("player2", _blackPlayer.getName());
+            json.put("player1", whitePlayer);
+            json.put("player2", blackPlayer);
             json.put("status", status);
             json.put("turn", turn);
             json.put("gameid",gameId);
             json.put("pieces", getPiecesJson());
         } catch (JSONException e) {
-            Log.d("chess","fucking error creatinf json player name=" + _whitePlayer.getName());
+            Log.d("chess","fucking error creatinf json player name="+whitePlayer);
             e.printStackTrace();
         }
         return json;
@@ -274,5 +269,57 @@ public class Game {
     }
     public int getGameId(){
         return gameId;
+    }
+
+    public ArrayList<Piece> getEatenPieces() {
+        return eatenPieces;
+    }
+    /*
+    Added by Roma
+    create the eaten pieces arraylist from a jason array
+     */
+    private void setEatenPieces(JSONArray eatenPiecesJson) {
+        eatenPieces = new ArrayList<Piece>();
+        JSONObject temp;
+        Log.i("chess","eaten pieces "+eatenPiecesJson.toString());
+        for(int i =0 ; i<eatenPiecesSize ; i++){
+            try {
+                temp = eatenPiecesJson.getJSONObject(i);
+                String piece = temp.getString("name");
+                String color = temp.getString("color");
+                int position = temp.getInt("position");
+
+                switch (piece){
+                    case "empty":
+                        eatenPieces.add(new Empty(piece, color, position));
+                        break;
+                    case "bishop":
+                        eatenPieces.add(new Bishop(piece, color, position));
+                        break;
+                    case "king":
+                        eatenPieces.add(new King(piece, color, position));
+                        break;
+                    case "queen":
+                        eatenPieces.add(new Queen(piece, color, position));
+                        break;
+                    case "knight":
+                        eatenPieces.add(new Knight(piece, color, position));
+                        break;
+                    case "pawn":
+                        eatenPieces.add(new Pawn(piece, color, position));
+                        break;
+                    case "rook":
+                        eatenPieces.add(new Rook(piece, color, position));
+                        break;
+                    default:
+                        Log.d("error","in default: "+piece);
+                }
+                Log.i("chess","created new eatenPiece");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 }
