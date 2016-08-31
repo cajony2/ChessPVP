@@ -31,7 +31,7 @@ import java.util.ArrayList;
  */
 public class GameBoard extends Activity implements AdapterView.OnItemClickListener ,View.OnClickListener {
 
-    ArrayList<Piece> pieces;
+//    ArrayList<Piece> pieces;
     boolean[] possibleMove;
     String color;
     String userName;
@@ -58,7 +58,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         timerTextView = (TextView) findViewById(R.id.timer);
 
         Intent intent = getIntent();
-        pieces = null;
+//        pieces = null;
         game=null;
 
         userName = intent.getStringExtra("userName");

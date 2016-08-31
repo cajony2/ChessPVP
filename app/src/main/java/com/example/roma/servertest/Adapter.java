@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.Image;
+import android.media.ToneGenerator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +31,7 @@ public class Adapter extends BaseAdapter {
     int selectedTile;
     Game game;
 
-    public Adapter(Context c , Game _game,JSONArray piecesJson){
+    public Adapter(Context c , Game _game, JSONArray piecesJson){
         this.c=c;
         this.game = _game;
         this.piecesJson=piecesJson;
@@ -65,6 +67,15 @@ public class Adapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Piece piece = game.getPiece(position);
+        Piece[] allPieces = game.getBoard2();
+        if (game.getTurn().equals("jonjony"))//should be replaced with Color.WHITE
+        {
+            piece = allPieces[63 - position];//white pieces at the bottom
+        }
+        else// name == roma
+        {
+            piece = allPieces[position];//black pieces at the bottom
+        }
 
         if(convertView == null){
             convertView=inflate.inflate(R.layout.singlesquare, parent, false);

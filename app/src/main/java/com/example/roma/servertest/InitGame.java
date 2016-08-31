@@ -43,7 +43,6 @@ public class InitGame extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.init_game_activity);
 
-
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         status  = (TextView)findViewById(R.id.status);
         status.setTextColor(Color.RED);
