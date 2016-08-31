@@ -31,7 +31,6 @@ public class Adapter extends BaseAdapter {
 
     public Adapter(Context c , Game _game,JSONArray piecesJson){
         this.c=c;
-        this.squares=null;
         this.game = _game;
         this.piecesJson=piecesJson;
         isSelected = new ArrayList<Boolean>();
