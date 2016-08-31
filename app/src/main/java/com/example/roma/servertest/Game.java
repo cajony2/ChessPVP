@@ -18,11 +18,13 @@ public class Game {
     private Tile[][] _tiles;
     private final int TILES_NUMBER_IN_A_ROW = 8;
     private Context _context;
+	private Player _whitePlayer;
+	private Player _blackPlayer;
 
     //variables
     private Piece[] tiles;
-    private String whitePlayer;
-    private String blackPlayer;
+    /*private String whitePlayer;
+    private String blackPlayer;*/
     private int status;
     private String turn;
     private int gameId;
@@ -30,22 +32,22 @@ public class Game {
     private int eatenPiecesSize;
 
     //constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
-    public Game (Context context, String _player1){
+    public Game (Context context, String player1){
         Log.i("chess", "creating game");
         _context = context;
-        whitePlayer=_player1;
-        blackPlayer="";
+        _whitePlayer = new Player.WhitePlayer(player1);
+        _blackPlayer = new Player.BlackPlayer(player1);
         status = 0 ;      // 0=  create new game;
-        turn = whitePlayer;
+        turn = _whitePlayer.getName();
         newCreateBoard();//jony added
     }
 
     //constructor
-    public Game (String _player1){
-        whitePlayer=_player1;
-        blackPlayer="";
+    public Game (String player1){
+		_whitePlayer = new Player.WhitePlayer(player1);
+		_blackPlayer = new Player.BlackPlayer(player1);
         status = 0 ;      // 0=  create new game;
-        turn = whitePlayer;
+        turn = _whitePlayer.getName();
         createBoard();
     }
 
@@ -116,16 +118,18 @@ public class Game {
     public Game (JSONObject gameJson){
         Log.d("ingameConstructor","creating new game from, json");
         try {
-            whitePlayer = gameJson.getString("player1");
-            Log.d("name:",whitePlayer);
-            blackPlayer=gameJson.getString("player2");
+			_whitePlayer = new Player.WhitePlayer(gameJson.getString("player1"));
+            //whitePlayer = gameJson.getString("player1");
+            Log.d("name:", _whitePlayer.getName());
+			_blackPlayer = new Player.BlackPlayer(gameJson.getString("player2"));
+            //blackPlayer=gameJson.getString("player2");
             status = gameJson.getInt("status");
             turn = gameJson.getString("turn");
             tiles = new Piece[64];
             gameId = gameJson.getInt("gameid");
             eatenPiecesSize=gameJson.getInt("eatenpiecessize");
             setEatenPieces(gameJson.getJSONArray("eatenpieces"));       //create eatenpieces array list
-            Log.d("chess","game object created player1="+whitePlayer+" player2: "+blackPlayer);
+            Log.d("chess","game object created player1=" + _whitePlayer.getName() + " player2: " + _blackPlayer.getName());
             JSONArray piecesJson = gameJson.getJSONArray("pieces");
             getPiecesFromJson(piecesJson);
         } catch (JSONException e) {
@@ -179,10 +183,10 @@ public class Game {
     }
 
     public String getPlayer1(){
-        return whitePlayer;
+        return _whitePlayer.getName();
     }
     public String getPlayer2(){
-        return blackPlayer;
+        return _blackPlayer.getName();
     }
     public int getStatus(){
         return status;
@@ -246,14 +250,14 @@ public class Game {
 
         JSONObject json = new JSONObject();
         try {
-            json.put("player1", whitePlayer);
-            json.put("player2", blackPlayer);
+            json.put("player1", _whitePlayer.getName());
+            json.put("player2", _blackPlayer.getName());
             json.put("status", status);
             json.put("turn", turn);
             json.put("gameid",gameId);
             json.put("pieces", getPiecesJson());
         } catch (JSONException e) {
-            Log.d("chess","fucking error creatinf json player name="+whitePlayer);
+            Log.d("chess","fucking error creatinf json player name=" + _whitePlayer.getName());
             e.printStackTrace();
         }
         return json;
