@@ -23,8 +23,6 @@ import java.util.ArrayList;
 public class Adapter extends BaseAdapter {
 
     Context c;
-    Piece[][] pieces;
-    ArrayList<Square> squares ;
     JSONArray piecesJson;
     ArrayList<Boolean> isSelected;
     boolean[] possibleMove;
