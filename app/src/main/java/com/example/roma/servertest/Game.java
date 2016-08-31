@@ -26,6 +26,8 @@ public class Game {
     private int status;
     private String turn;
     private int gameId;
+    private ArrayList<Piece> eatenPieces;
+    private int eatenPiecesSize;
 
     //constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
     public Game (Context context, String _player1){
@@ -121,6 +123,8 @@ public class Game {
             turn = gameJson.getString("turn");
             tiles = new Piece[64];
             gameId = gameJson.getInt("gameid");
+            eatenPiecesSize=gameJson.getInt("eatenpiecessize");
+            setEatenPieces(gameJson.getJSONArray("eatenpieces"));       //create eatenpieces array list
             Log.d("chess","game object created player1="+whitePlayer+" player2: "+blackPlayer);
             JSONArray piecesJson = gameJson.getJSONArray("pieces");
             getPiecesFromJson(piecesJson);
@@ -265,5 +269,57 @@ public class Game {
     }
     public int getGameId(){
         return gameId;
+    }
+
+    public ArrayList<Piece> getEatenPieces() {
+        return eatenPieces;
+    }
+    /*
+    Added by Roma
+    create the eaten pieces arraylist from a jason array
+     */
+    private void setEatenPieces(JSONArray eatenPiecesJson) {
+        eatenPieces = new ArrayList<Piece>();
+        JSONObject temp;
+        Log.i("chess","eaten pieces "+eatenPiecesJson.toString());
+        for(int i =0 ; i<eatenPiecesSize ; i++){
+            try {
+                temp = eatenPiecesJson.getJSONObject(i);
+                String piece = temp.getString("name");
+                String color = temp.getString("color");
+                int position = temp.getInt("position");
+
+                switch (piece){
+                    case "empty":
+                        eatenPieces.add(new Empty(piece, color, position));
+                        break;
+                    case "bishop":
+                        eatenPieces.add(new Bishop(piece, color, position));
+                        break;
+                    case "king":
+                        eatenPieces.add(new King(piece, color, position));
+                        break;
+                    case "queen":
+                        eatenPieces.add(new Queen(piece, color, position));
+                        break;
+                    case "knight":
+                        eatenPieces.add(new Knight(piece, color, position));
+                        break;
+                    case "pawn":
+                        eatenPieces.add(new Pawn(piece, color, position));
+                        break;
+                    case "rook":
+                        eatenPieces.add(new Rook(piece, color, position));
+                        break;
+                    default:
+                        Log.d("error","in default: "+piece);
+                }
+                Log.i("chess","created new eatenPiece");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 }

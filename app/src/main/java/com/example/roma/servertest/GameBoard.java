@@ -31,6 +31,12 @@ import java.util.ArrayList;
  */
 public class GameBoard extends Activity implements AdapterView.OnItemClickListener ,View.OnClickListener {
 
+    ArrayList<Piece> whiteEaten;
+    ArrayList<Piece> blackEaten;
+    EatenAdapter eatenAdapter;
+    EatenAdapter eatenAdapterUp;
+    GridView whiteEatenPieces;
+    GridView blackEatenPieces;
     ArrayList<Piece> pieces;
     boolean[] possibleMove;
     String color;
@@ -56,6 +62,8 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         player1 = (TextView) findViewById(R.id.player1);
         player2 = (TextView) findViewById(R.id.player2);
         timerTextView = (TextView) findViewById(R.id.timer);
+        whiteEatenPieces = (GridView) findViewById(R.id.eatenpieces);
+        blackEatenPieces = (GridView) findViewById(R.id.eatenpiecesup) ;
 
         Intent intent = getIntent();
         pieces = null;
@@ -97,6 +105,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     player2.setText(game.getPlayer2());
                     Log.i("chess", "game created shpud work");
                     Log.i("chess", "player1: " + game.getPlayer1());
+                    addEatenPieces(game.getEatenPieces());
                     Timer timer = new Timer(60,timerTextView);
                     timer.start();
 
@@ -110,6 +119,28 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     }
 
 
+    private void addEatenPieces(ArrayList<Piece> eatenPieces) {
+        // set eaten pieces
+
+        whiteEaten = new ArrayList<Piece>();
+        blackEaten = new ArrayList<Piece>();
+
+            for (Piece eaten : eatenPieces) {
+                if (eaten.getColor().equals("black"))
+                    blackEaten.add(eaten);
+                else
+                    whiteEaten.add(eaten);
+            }
+
+        //TODO check the color of the player and set eaten adapter appropriate , for no show white in the bottom
+        eatenAdapter = new EatenAdapter(this,blackEaten);
+        eatenAdapterUp = new EatenAdapter(this,whiteEaten);
+
+
+        whiteEatenPieces.setAdapter(eatenAdapter);
+        blackEatenPieces.setAdapter(eatenAdapterUp);
+    }
+
     @Override
     // listener  for the gridview when the user clicks a tile check if the tile contains a piece and
     // the piece is of the legal color and create a legalmoves array and update adapter and UI
@@ -118,7 +149,6 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     //THIS METHOD CREATED ONLY FOR TESTING NEED ALOT OF CHANGING!!!!!!!!!!
     //TODO finish this method :)
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("ITEMCLICKED","item number "+position);
 
         Game game = adapter.getGame();
         Piece[] pieces = game.getBoard2();
@@ -128,7 +158,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         // do only if the square clicked is the users color
         if (!isSelected) {
             Log.i("chess","username: "+userName+" player1: "+game.getPlayer1());
-            if(!(game.getPlayer1().equals(userName) ^ pieces[position].getColor().equals("white"))) {         //then this user is white
+            if(!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white"))) {         //then this user is white
                 isSelected = true;
                 moves = pieces[position].getLegalMoves(game);
                 if (moves != null) {
