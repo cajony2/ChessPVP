@@ -31,6 +31,7 @@ public class Game {
     private ArrayList<Piece> eatenPieces;
     private int eatenPiecesSize;
 
+
     //constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
     public Game (Context context, String player1){
         Log.i("chess", "creating game");
@@ -120,7 +121,7 @@ public class Game {
         try {
 			_whitePlayer = new Player.WhitePlayer(gameJson.getString("player1"));
             //whitePlayer = gameJson.getString("player1");
-            Log.d("name:", _whitePlayer.getName());
+            Log.i("name:", _whitePlayer.getName());
 			_blackPlayer = new Player.BlackPlayer(gameJson.getString("player2"));
             //blackPlayer=gameJson.getString("player2");
             status = gameJson.getInt("status");
@@ -129,7 +130,7 @@ public class Game {
             gameId = gameJson.getInt("gameid");
             eatenPiecesSize=gameJson.getInt("eatenpiecessize");
             setEatenPieces(gameJson.getJSONArray("eatenpieces"));       //create eatenpieces array list
-            Log.d("chess","game object created player1=" + _whitePlayer.getName() + " player2: " + _blackPlayer.getName());
+            Log.i("chess","game object created player1=" + _whitePlayer.getName() + " player2: " + _blackPlayer.getName());
             JSONArray piecesJson = gameJson.getJSONArray("pieces");
             getPiecesFromJson(piecesJson);
         } catch (JSONException e) {
@@ -208,7 +209,7 @@ public class Game {
         return tiles;
     }
 
-    private void getPiecesFromJson(JSONArray array) throws JSONException {
+    public void getPiecesFromJson(JSONArray array) throws JSONException {
         int size = array.length();
         Log.d("numberOfPieces"," "+size);
         JSONObject temp ;
@@ -285,7 +286,7 @@ public class Game {
     private void setEatenPieces(JSONArray eatenPiecesJson) {
         eatenPieces = new ArrayList<Piece>();
         JSONObject temp;
-        Log.i("chess","eaten pieces "+eatenPiecesJson.toString());
+        //Log.i("chess","eaten pieces "+eatenPiecesJson.toString());
         for(int i =0 ; i<eatenPiecesSize ; i++){
             try {
                 temp = eatenPiecesJson.getJSONObject(i);
@@ -316,9 +317,9 @@ public class Game {
                         eatenPieces.add(new Rook(piece, color, position));
                         break;
                     default:
-                        Log.d("error","in default: "+piece);
+                        Log.i("chess","in default: "+piece);
                 }
-                Log.i("chess","created new eatenPiece");
+                //Log.i("chess","created new eatenPiece");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

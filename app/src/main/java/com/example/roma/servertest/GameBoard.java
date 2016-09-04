@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,8 +52,11 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     TextView timerTextView;
     Button submit;
     boolean moveMade;
+    boolean canClick;   // ca the user select some tiles in chess board
 
-
+    public static final String MAKE_MOVE = "makeMove";
+    public static final String GAME_READY = "isGameReady";
+    public static final String MOVE_MADE = "moveMade";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -64,6 +68,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         timerTextView = (TextView) findViewById(R.id.timer);
         whiteEatenPieces = (GridView) findViewById(R.id.eatenpieces);
         blackEatenPieces = (GridView) findViewById(R.id.eatenpiecesup) ;
+        canClick=true;
 
         Intent intent = getIntent();
         pieces = null;
@@ -108,14 +113,15 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     addEatenPieces(game.getEatenPieces());
                     Timer timer = new Timer(60,timerTextView);
                     timer.start();
+                    gv.setOnItemClickListener(this);
+                    submit.setOnClickListener(this);
 
                 }
                 break;
         }
 
 
-        gv.setOnItemClickListener(this);
-        submit.setOnClickListener(this);
+
     }
 
 
@@ -156,50 +162,61 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
 
         ArrayList<Integer> moves ;
         // do only if the square clicked is the users color
-        if (!isSelected) {
-            Log.i("chess","username: "+userName+" player1: "+game.getPlayer1());
-            if(!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white"))) {         //then this user is white
-                isSelected = true;
-                moves = pieces[position].getLegalMoves(game);
-                if (moves != null) {
-                    for (int pos : moves) {
-                        possibleMove[pos] = true;
+        if(canClick) {
+            if (!isSelected) {
+                Log.i("chess", "username: " + userName + " player1: " + game.getPlayer1());
+                if (!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white"))) {         //then this user is white
+                    isSelected = true;
+                    moves = pieces[position].getLegalMoves(game);
+                    if (moves != null) {
+                        for (int pos : moves) {
+                            possibleMove[pos] = true;
+                        }
+                        adapter.setSelectedTile(position);
+                        adapter.setPossibleMoves(possibleMove);
                     }
-                    adapter.setSelectedTile(position);
-                    adapter.setPossibleMoves(possibleMove);
                 }
-            }
-        } else {                        //selected maybe a move
-            if(selectedTile>=0){   //making a move
-                if(possibleMove[position]) {    // this move is legal
-                    pieces[position] = pieces[selectedTile];
-                    pieces[position].setPosition(position);
+            } else {                        //selected maybe a move
+                if (selectedTile >= 0) {   //making a move
+                    if (possibleMove[position]) {    // this move is legal
+                        pieces[position] = pieces[selectedTile];
+                        pieces[position].setPosition(position);
 
-                    pieces[selectedTile] = new Empty("empty","white",selectedTile);
-                    pieces[selectedTile].setEmpty(true);
+                        pieces[selectedTile] = new Empty("empty", "white", selectedTile);
+                        pieces[selectedTile].setEmpty(true);
 
-                    adapter.setGame(game);
-                    moveMade = true;
-                    Log.i("chess","move made");
-                    adapter.setSelectedTile(-1);
+                        adapter.setGame(game);
+                        moveMade = true;
+                        Log.i("chess", "move made");
+                        adapter.setSelectedTile(-1);
+                    }
+
                 }
-
+                isSelected = false;
+                for (int i = 0; i < possibleMove.length; i++)
+                    possibleMove[i] = false;
             }
-            isSelected = false;
-            for (int i = 0; i < possibleMove.length; i++)
-                possibleMove[i] = false;
         }
 
         adapter.notifyDataSetChanged();
     }
 
-    @Override
 
+    public void test(){
+
+    }
     //if the user clicks the SUBMIT button send a move to the server and disable the touch
+    /*
+    TODO CANT ACCESS GAME OBJECT FROM ONCLICK NEED TO FIX THIS !!!!!
+     */
+    @Override
     public void onClick(View v) {
+        if(game==null){
+            Log.i("chess","*******chess******");
+        }
         if(moveMade){
-            Log.d("chess","clicked submit");
-            new ReadFromDB(this,"makeMove").execute();
+            Log.i("chess","clicked make move");
+            new ReadFromDB(this , MAKE_MOVE,game).execute();
             //lock all click listeners
             for(int i =0 ; i<63 ; i++ )
                 adapter.isEnabled(i);
@@ -208,13 +225,58 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
             Toast toast = Toast.makeText(this, "Make a move", Toast.LENGTH_LONG);
             toast.show();
         }
-    }
 
-    // since we have the the middle layer "initgame" we won't be needing these for now
-    // i leave it for other server connections (make a move get newBoard end game and so on...)
+    }
+    /* TODO
+        after receiving the new game object  after the opponent made his move
+        if check then player must get out of check
+        if checkMate  end game update score, send server that u r a looser
+
+        if regular move
+        update UI -     tiles( the pieces the opponent move and/or ate)
+                        eatenPieces - update eaten adapters
+                        reset timer
+
+     */
+   public void refreshGame(String str)  {
+       JSONObject gameJson = null;
+       int status=-1;
+       try {
+            gameJson = new JSONObject(str);
+           status = gameJson.getInt("status");
+       } catch (JSONException e) {
+           e.printStackTrace();
+       }
+
+       switch (status){
+           case 1:                      // opponent made a move, just update UI, enable back the adapter and reset timer
+
+               break;
+           case 2:                      //check , player must get out of check , update UI enable back the adapter resert timer SET POSSIBLE MOVES!!!!!
+
+               break;
+           case 3:                      // checkMate , finish game
+
+               break;
+           default:                      // error
+               break;
+
+       }
+   }
+    /*
+             TODO check if checkMate if so end game.
+     */
+
+
+    /*
+        Created by Roma
+        send request to server
+
+     */
     class ReadFromDB extends AsyncTask< Void, Void, String> {
         Activity activity;
         String action;
+        Game g;
 
         //constructor
         public ReadFromDB(Activity _e, String _action){
@@ -222,31 +284,43 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
             action = _action;
         }
 
+        public ReadFromDB(Activity _e, String _action, Game _game){
+            activity=_e;
+            action = _action;
+            g=_game;
+            if(game==null)
+                Log.i("chess","game is null god knows why");
+
+        }
+
         @Override
         protected String doInBackground(Void... params) {
             String message="";
             try{
                 URL url = new URL("http://5.29.207.103:8080/Chess/ChessServlet");
-                // URL url = new URL("http://10.0.2.2:8080/Chess/ChessServlet");
 
                 URLConnection connection = url.openConnection();
                 connection.setRequestProperty("Action",action);
-                Log.d("chess", "connecting to db:"+action);
+                Log.i("chess", "connecting to db:"+action);
 
                 connection.setRequestProperty("UserName", userName);
-                connection.setRequestProperty("Password", psw);
                 connection.setDoOutput(true);
 
                 OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-                if (action.equals("makeMove")) {
-                    JSONObject jsonsss = game.toJson();
-                    Log.d("chess" , "json:"+jsonsss.toString()) ;
-                    out.write(jsonsss.toString());
+                if (action.equals(MAKE_MOVE)) {
+                    if(g!=null) {
+                        JSONObject json = g.toJson();
+                        Log.i("chess", "json:" + json.toString());
+                        out.write(json.toString());
+                    }else
+                        Log.i("chess", "game is null");
                 }
                 else
-                    out.write("no body");
+                    out.write("");
 
                 out.close();
+
+                // get response
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String nextLine;
 
@@ -254,7 +328,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     message += nextLine;
                 }
 
-                //Log.d("chess","the return message "+message);
+                Log.d("chess","the return message "+message);
                 in.close();
             }
             catch (Exception e1)
@@ -269,40 +343,51 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
 
         public void onPostExecute(String message){
 
-            if(!action.equals("makeMove")) {
-                try
-                {
-                    game = new Game(new JSONObject(message));
-
-                    if (game != null) {
-                        adapter = new Adapter(activity, game, null);
-                        gv.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-                        player1.setText(game.getPlayer1());
-
-                        Log.i("chess","gameStarted with id:"+game.getGameId());
-
-
-
-                        if (game.getPlayer2() != null) {
-                            player2.setText(game.getPlayer2());
-                        } else
-                            player2.setText("Searching for Player");
-
-
-                        //TO DO - set eaten pieces
-
-                        //TO DO - log to server an get game json object
-                    }
-                }
-                catch (JSONException ex)
-                {
-                    ex.printStackTrace();
-                }
+            if(action.equals(MAKE_MOVE)) {
+                makeMoveOnPostExecute(message);
             }
-            //TO DO - set players name
+            else if(action.equals("No")){           //opponent didnt made his move yet , ask again in 1000 ms
+                askAgainOnPostExecute();
+            }else{                                  // else the msg is json with the new game
+                refreshGame(message);
+            }
+
+
         }
+
+        private void askAgainOnPostExecute(){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            new ReadFromDB(activity , GAME_READY).execute();
+
+        }
+
+        /*
+       Created By Roma
+           check the servers response
+           if response is moveMade start a loop of requests to get the game object after the
+           opponent made his move by executing a new ReadFromDB thread with action "isGameReady"
+        */
+        private void makeMoveOnPostExecute(String msg){
+            if (msg.equals(MOVE_MADE)){
+                //freeze UI in main thread TODO
+                canClick=false;
+
+                //start new Thread ReadFromDB
+                new ReadFromDB(activity , GAME_READY).execute();
+            }
+            else{
+                //TODO check Error
+            }
+        }
+
     }//end of inner class ReadFromDB
+
+
+
 }
 
 

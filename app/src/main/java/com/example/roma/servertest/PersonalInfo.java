@@ -75,6 +75,7 @@ public class PersonalInfo extends Activity implements View.OnClickListener {
             case R.id.createGameBtn:
                 Log.i("chess","button clicked, create new Game");
                 intent.putExtra("ACTION","createNewGame");
+                intent.putExtra("userName",userName);
                 break;
             case R.id.joinGameBtn:
                 Log.i("chess","button clicked, create new Game");

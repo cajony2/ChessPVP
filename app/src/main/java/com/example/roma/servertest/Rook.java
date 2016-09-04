@@ -20,7 +20,7 @@ public class Rook extends Piece {
     public Rook(String name, String color,int pos) {
         super(name, color, pos);
         // TODO Auto-generated constructor stub
-        Log.i("chess","creating new piece "+name+" color:"+color+" pos "+pos );
+        //Log.i("chess","creating new piece "+name+" color:"+color+" pos "+pos );
         if (color.equals("white")){
             image = R.drawable.rlt60;
         }

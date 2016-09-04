@@ -157,7 +157,7 @@ public class InitGame extends Activity{
 
                     intent.putExtra("game",message );
                     intent.putExtra("ACTION","fullGame" );
-                    //intent.putExtra(ACTION,"createNewGame");
+                    intent.putExtra("userName", userName);
                     startActivity(intent);
                 }
             }

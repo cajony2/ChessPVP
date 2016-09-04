@@ -41,7 +41,7 @@ public class EatenAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Log.i("chess","in eatenAdapter pos:"+position);
+        //Log.i("chess","in eatenAdapter pos:"+position);
         if(convertView == null){
             convertView=inflate.inflate(R.layout.eaten_image, parent, false);
         }

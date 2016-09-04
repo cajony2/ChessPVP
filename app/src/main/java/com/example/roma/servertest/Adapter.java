@@ -68,7 +68,7 @@ public class Adapter extends BaseAdapter {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Piece piece = game.getPiece(position);
         Piece[] allPieces = game.getBoard2();
-        if (game.getTurn().equals("jonjony"))//should be replaced with Color.WHITE
+        if (game.getTurn().equals("jonjony"))// TODO should be replaced with Color.WHITE
         {
             piece = allPieces[63 - position];//white pieces at the bottom
         }
