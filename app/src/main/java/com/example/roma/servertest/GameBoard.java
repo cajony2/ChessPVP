@@ -69,13 +69,11 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         whiteEatenPieces = (GridView) findViewById(R.id.eatenpieces);
         blackEatenPieces = (GridView) findViewById(R.id.eatenpiecesup) ;
         canClick=true;
-
-        Intent intent = getIntent();
         pieces = null;
         game=null;
+        Intent intent = getIntent();
 
         userName = intent.getStringExtra("userName");
-
         String gameJson = intent.getStringExtra("game");
         String action  = intent.getStringExtra("ACTION");
 
@@ -83,45 +81,37 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
 
         gv = (GridView) findViewById(R.id.chessboard);
         submit = (Button) findViewById(R.id.submit);
-
         moveMade = false;
         isSelected =false;
+        possibleMove = new boolean[64];
 
-        possibleMove = new boolean[64];//i think it gets false values at initialization (default values)
-
-        //maybe unnecessary
-        for(int i=0 ; i<possibleMove.length ; i++){
-            possibleMove[i]=false;
+        /*switch (action){
+            case "fullGame":*/
+        if (action.equals("fullGame")) {
+            Game game = null;
+            try {
+                game = new Game(new JSONObject(gameJson));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (game != null) {
+                adapter = new Adapter(this, game, null);
+                gv.setAdapter(adapter);
+                //gv.setRotationX(180);
+                adapter.notifyDataSetChanged();
+                player1.setText(game.getPlayer1());
+                player2.setText(game.getPlayer2());
+                Log.i("chess", "game created shpud work");
+                Log.i("chess", "player1: " + game.getPlayer1());
+                addEatenPieces(game.getEatenPieces());
+                Timer timer = new Timer(60, timerTextView);
+                timer.start();
+                gv.setOnItemClickListener(this);
+                submit.setOnClickListener(this);
+            }
         }
-
-        switch (action){
-            case "fullGame":
-                Game game = null;
-                try {
-                    game = new Game(new JSONObject(gameJson));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if(game!=null) {
-                    adapter = new Adapter(this, game, null);
-                    gv.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    player1.setText(game.getPlayer1());
-                    player2.setText(game.getPlayer2());
-                    Log.i("chess", "game created shpud work");
-                    Log.i("chess", "player1: " + game.getPlayer1());
-                    addEatenPieces(game.getEatenPieces());
-                    Timer timer = new Timer(60,timerTextView);
-                    timer.start();
-                    gv.setOnItemClickListener(this);
-                    submit.setOnClickListener(this);
-
-                }
-                break;
-        }
-
-
-
+               /* break;
+        }*/
     }
 
 

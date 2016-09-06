@@ -18,18 +18,16 @@ public class Game {
     private Tile[][] _tiles;
     private final int TILES_NUMBER_IN_A_ROW = 8;
     private Context _context;
-	private Player _whitePlayer;
-	private Player _blackPlayer;
 
     //variables
-    private Piece[] tiles;
-    /*private String whitePlayer;
-    private String blackPlayer;*/
+    private Piece[] _pieces;
     private int status;
     private String turn;
     private int gameId;
     private ArrayList<Piece> eatenPieces;
     private int eatenPiecesSize;
+    private Player _whitePlayer;
+    private Player _blackPlayer;
 
 
     //constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
@@ -120,13 +118,11 @@ public class Game {
         Log.d("ingameConstructor","creating new game from, json");
         try {
 			_whitePlayer = new Player.WhitePlayer(gameJson.getString("player1"));
-            //whitePlayer = gameJson.getString("player1");
             Log.i("name:", _whitePlayer.getName());
 			_blackPlayer = new Player.BlackPlayer(gameJson.getString("player2"));
-            //blackPlayer=gameJson.getString("player2");
             status = gameJson.getInt("status");
             turn = gameJson.getString("turn");
-            tiles = new Piece[64];
+			_pieces = new Piece[64];
             gameId = gameJson.getInt("gameid");
             eatenPiecesSize=gameJson.getInt("eatenpiecessize");
             setEatenPieces(gameJson.getJSONArray("eatenpieces"));       //create eatenpieces array list
@@ -139,48 +135,48 @@ public class Game {
     }
 
     private void createBoard(){
-        tiles =  new Piece[64];
+		_pieces =  new Piece[64];
 
         //insert the starting pieces
         // init the one dim array  fill in the black and white tiles
-        for(int i=0 ; i<tiles.length ; i++){
+        for(int i=0 ; i<_pieces.length ; i++){
             if(i%16 < 8){
                 if(i%2 != 0)
-                    tiles[i]=new Empty("empty" ,"black",i);
+					_pieces[i]=new Empty("empty" ,"black",i);
                 else
-                    tiles[i]=new Empty("empty" ,"white",i);
+					_pieces[i]=new Empty("empty" ,"white",i);
             }else
             if(i%2 != 0)
-                tiles[i]=new Empty("empty" ,"white",i);
+				_pieces[i]=new Empty("empty" ,"white",i);
             else
-                tiles[i]=new Empty("empty" ,"black",i);
+				_pieces[i]=new Empty("empty" ,"black",i);
         }
 
         // add the pawns
         for(int i =8 ; i<16 ;i++){
-            tiles[i] = new Pawn("pawn", "white", i);
-            tiles[i+40]= new Pawn("pawn", "black", i+40);
+			_pieces[i] = new Pawn("pawn", "white", i);
+			_pieces[i+40]= new Pawn("pawn", "black", i+40);
         }
 
         // add white pieces
-        tiles[56]=(new Rook("rook" , "white", 56));
-        tiles[57]=(new Knight("Knight" , "white", 57));
-        tiles[58]=(new Bishop("Bishop" , "white", 58));
-        tiles[59]=(new Queen("queen" , "white", 59));
-        tiles[60]=(new King("king" , "white", 60));
-        tiles[61]=(new Bishop("Bishop" , "white", 61));
-        tiles[62]=(new Knight("Knight" , "white", 62));
-        tiles[63]=(new Rook("rook" , "white", 63));
+		_pieces[56]=(new Rook("rook" , "white", 56));
+		_pieces[57]=(new Knight("Knight" , "white", 57));
+		_pieces[58]=(new Bishop("Bishop" , "white", 58));
+		_pieces[59]=(new Queen("queen" , "white", 59));
+		_pieces[60]=(new King("king" , "white", 60));
+		_pieces[61]=(new Bishop("Bishop" , "white", 61));
+		_pieces[62]=(new Knight("Knight" , "white", 62));
+		_pieces[63]=(new Rook("rook" , "white", 63));
 
         // add black pieces
-        tiles[0]=(new Rook("rook", "black", 0));
-        tiles[1]=(new Knight("Knight", "black", 1));
-        tiles[2]=(new Bishop("Bishop", "black", 2));
-        tiles[3]=(new Queen("queen", "black", 3));
-        tiles[4]=(new King("king", "black", 4));
-        tiles[5]=(new Bishop("Bishop", "black", 5));
-        tiles[6]=(new Knight("Knight", "black", 6));
-        tiles[7]=(new Rook("rook", "black", 7));
+		_pieces[0]=(new Rook("rook", "black", 0));
+		_pieces[1]=(new Knight("Knight", "black", 1));
+		_pieces[2]=(new Bishop("Bishop", "black", 2));
+		_pieces[3]=(new Queen("queen", "black", 3));
+		_pieces[4]=(new King("king", "black", 4));
+		_pieces[5]=(new Bishop("Bishop", "black", 5));
+		_pieces[6]=(new Knight("Knight", "black", 6));
+		_pieces[7]=(new Rook("rook", "black", 7));
     }
 
     public String getPlayer1(){
@@ -198,7 +194,7 @@ public class Game {
 
     public Piece getPiece(int pos){
         if(pos<64)
-            return tiles[pos];
+            return _pieces[pos];
         else {
             Log.d("getPiece", "no piece at " + pos);
             return null;
@@ -206,7 +202,7 @@ public class Game {
     }
 
     public Piece[] getBoard2(){
-        return tiles;
+        return _pieces;
     }
 
     public void getPiecesFromJson(JSONArray array) throws JSONException {
@@ -221,25 +217,25 @@ public class Game {
 
             switch (piece){
                 case "empty":
-                    tiles[i] = new Empty(piece, color, position);
+					_pieces[i] = new Empty(piece, color, position);
                     break;
                 case "bishop":
-                    tiles[i] = new Bishop(piece, color, position);
+					_pieces[i] = new Bishop(piece, color, position);
                     break;
                 case "king":
-                    tiles[i] = new King(piece, color, position);
+					_pieces[i] = new King(piece, color, position);
                     break;
                 case "queen":
-                    tiles[i] = new Queen(piece, color, position);
+					_pieces[i] = new Queen(piece, color, position);
                     break;
                 case "knight":
-                    tiles[i] = new Knight(piece, color, position);
+					_pieces[i] = new Knight(piece, color, position);
                     break;
                 case "pawn":
-                    tiles[i] = new Pawn(piece, color, position);
+					_pieces[i] = new Pawn(piece, color, position);
                     break;
                 case "rook":
-                    tiles[i] = new Rook(piece, color, position);
+					_pieces[i] = new Rook(piece, color, position);
                     break;
                 default:
                     Log.d("error","in default: "+piece);
@@ -267,11 +263,12 @@ public class Game {
     public JSONArray getPiecesJson() throws JSONException{
         JSONArray pieces = new JSONArray();
 
-        for(int i=0; i<tiles.length ;i++)
-            pieces.put(tiles[i].toJson());
+        for(int i=0; i < _pieces.length; i++)
+            pieces.put(_pieces[i].toJson());
 
         return pieces;
     }
+
     public int getGameId(){
         return gameId;
     }

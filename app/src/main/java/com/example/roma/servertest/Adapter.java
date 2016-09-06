@@ -43,6 +43,7 @@ public class Adapter extends BaseAdapter {
     public void setSelectedTile(int pos){
         selectedTile=pos;
     }
+
     public int getSelectedTile(){
         return selectedTile;
     }
@@ -66,7 +67,7 @@ public class Adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Piece piece = game.getPiece(position);
+        Piece piece;
         Piece[] allPieces = game.getBoard2();
         if (game.getTurn().equals("jonjony"))// TODO should be replaced with Color.WHITE
         {

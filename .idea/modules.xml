@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ChessPVP.iml" filepath="$PROJECT_DIR$/ChessPVP.iml" />
       <module fileurl="file://$PROJECT_DIR$/ServerTest.iml" filepath="$PROJECT_DIR$/ServerTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/chessPVP123123.iml" filepath="$PROJECT_DIR$/chessPVP123123.iml" />
     </modules>
   </component>
 </project>
