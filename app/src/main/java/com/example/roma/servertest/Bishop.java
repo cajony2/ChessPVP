@@ -3,6 +3,7 @@ package com.example.roma.servertest;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Roma on 8/2/2016.
@@ -88,6 +89,11 @@ public class Bishop extends Piece {
 
 
         return legalMoves;
+    }
+
+    @Override
+    ArrayList<Piece> possibleMoves(Game game) {
+        return null;
     }
 
 }

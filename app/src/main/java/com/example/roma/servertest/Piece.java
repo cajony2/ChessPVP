@@ -10,17 +10,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Roma on 8/2/2016.
  */
 
-public abstract class Piece{//Jony added the View extension
+public abstract class Piece{
 
-          protected int _color;//added by jony
+        protected int _color;//added by jony
         protected Tile _tile;//added by jony
         protected Point _pointPosition;//added by jony
         protected boolean _isActive;//added by jony
+        protected boolean _checksKing;
+        protected final int TILES_NUMBER_IN_A_ROW = 8;
+
         protected boolean _isFlipped;
         protected String name;
         protected String color;
@@ -43,6 +47,16 @@ public abstract class Piece{//Jony added the View extension
         this.position = pos;
         isEmpty = name.equals("empty") ? true : false;
         _pointPosition = new Point();
+    }
+
+    public boolean isCheck()
+    {
+        return _checksKing;
+    }
+
+    public void setCheck(boolean bool)
+    {
+        _checksKing = bool;
     }
 
     public int getImg(){
@@ -80,6 +94,8 @@ public abstract class Piece{//Jony added the View extension
 
     // each peace should override this method and return  the legal moves from the piece location according to the games piece layout
     abstract  ArrayList<Integer> getLegalMoves(Game game);
+
+    abstract ArrayList<Piece> possibleMoves(Game game);
 
     public JSONObject toJson() throws JSONException {
         JSONObject json = new JSONObject();

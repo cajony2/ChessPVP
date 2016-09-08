@@ -225,6 +225,11 @@ public class Game {
         }
     }
 
+	public Piece[][] getGridPieces()
+	{
+		return _gridPieces;
+	}
+
     public Piece[] getBoard2(){
         return _pieces;
     }

@@ -76,6 +76,11 @@ public class King extends Piece {
         return legalMoves;
     }
 
+    @Override
+    ArrayList<Piece> possibleMoves(Game game) {
+        return null;
+    }
+
 
 }
 

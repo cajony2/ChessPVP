@@ -29,5 +29,10 @@ public class Empty extends Piece {
         return null;
     }
 
+    @Override
+    ArrayList<Piece> possibleMoves(Game game) {
+        return null;
+    }
+
 
 }
