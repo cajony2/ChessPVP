@@ -19,8 +19,9 @@ public abstract class Piece{//Jony added the View extension
 
           protected int _color;//added by jony
         protected Tile _tile;//added by jony
-        //protected Point _pointPosition;//added by jony
+        protected Point _pointPosition;//added by jony
         protected boolean _isActive;//added by jony
+        protected boolean _isFlipped;
         protected String name;
         protected String color;
         protected int image;
@@ -37,10 +38,11 @@ public abstract class Piece{//Jony added the View extension
 
     public Piece (String name , String color, int pos){
 
-            this.name = name;
-            this.color = color;
-            this.position = pos;
-            isEmpty = name.equals("empty") ? true : false;
+        this.name = name;
+        this.color = color;
+        this.position = pos;
+        isEmpty = name.equals("empty") ? true : false;
+        _pointPosition = new Point();
     }
 
     public int getImg(){
@@ -65,6 +67,11 @@ public abstract class Piece{//Jony added the View extension
 
     public boolean isEmpty(){
         return isEmpty;
+    }
+
+    public void setPointPosition(int x, int y)
+    {
+        _pointPosition.set(x, y);
     }
 
     public void setPosition(int pos){

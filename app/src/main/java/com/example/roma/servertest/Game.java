@@ -18,6 +18,7 @@ public class Game {
     private Tile[][] _tiles;
     private final int TILES_NUMBER_IN_A_ROW = 8;
     private Context _context;
+    private Piece[][] _gridPieces;
 
     //variables
     private Piece[] _pieces;
@@ -41,7 +42,7 @@ public class Game {
         newCreateBoard();//jony added
     }
 
-    //constructor
+    //constructor NOT IN USE!!!
     public Game (String player1){
 		_whitePlayer = new Player.WhitePlayer(player1);
 		_blackPlayer = new Player.BlackPlayer(player1);
@@ -123,14 +124,34 @@ public class Game {
             status = gameJson.getInt("status");
             turn = gameJson.getString("turn");
 			_pieces = new Piece[64];
+            _gridPieces = new Piece[8][8];//jony added
             gameId = gameJson.getInt("gameid");
             eatenPiecesSize=gameJson.getInt("eatenpiecessize");
             setEatenPieces(gameJson.getJSONArray("eatenpieces"));       //create eatenpieces array list
             Log.i("chess","game object created player1=" + _whitePlayer.getName() + " player2: " + _blackPlayer.getName());
             JSONArray piecesJson = gameJson.getJSONArray("pieces");
             getPiecesFromJson(piecesJson);
+
+            //jony added
+            fillDoubleArrayFromSingle(_pieces, _gridPieces);
+
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    //filling the double array of Pieces from a single array
+    private void fillDoubleArrayFromSingle(Piece[] singleArray, Piece[][] doubleArray)
+    {
+        int counter = 0;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                doubleArray[row][col] = singleArray[counter];
+				doubleArray[row][col].setPointPosition(row, col);
+                counter++;
+            }
         }
     }
 
@@ -177,6 +198,9 @@ public class Game {
 		_pieces[5]=(new Bishop("Bishop", "black", 5));
 		_pieces[6]=(new Knight("Knight", "black", 6));
 		_pieces[7]=(new Rook("rook", "black", 7));
+
+        //added by jony, not tested yet. suppose to fill the double array from the single array
+        fillDoubleArrayFromSingle(_pieces, _gridPieces);
     }
 
     public String getPlayer1(){

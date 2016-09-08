@@ -95,9 +95,13 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                 e.printStackTrace();
             }
             if (game != null) {
+
+                //jony added. flipps board and pieces accordingly
+                if (game.getTurn().equals("jonjony"))//getTurn should return int
+                    flipBoard(game);
+
                 adapter = new Adapter(this, game, null);
                 gv.setAdapter(adapter);
-                //gv.setRotationX(180);
                 adapter.notifyDataSetChanged();
                 player1.setText(game.getPlayer1());
                 player2.setText(game.getPlayer2());
@@ -112,6 +116,21 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         }
                /* break;
         }*/
+    }
+
+    private void flipBoard(Game game)
+    {
+        View v = findViewById(R.id.linearlayountchessboard);//the view in which the board is in
+        v.setRotationX(180);
+        rotatePieces(game);
+    }
+
+    private void rotatePieces(Game game) {
+        Piece[] pieces = game.getBoard2();
+        for (Piece p : pieces)
+        {
+            p._isFlipped = true;
+        }
     }
 
 
@@ -131,7 +150,6 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         //TODO check the color of the player and set eaten adapter appropriate , for no show white in the bottom
         eatenAdapter = new EatenAdapter(this,blackEaten);
         eatenAdapterUp = new EatenAdapter(this,whiteEaten);
-
 
         whiteEatenPieces.setAdapter(eatenAdapter);
         blackEatenPieces.setAdapter(eatenAdapterUp);
@@ -180,14 +198,12 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                         Log.i("chess", "move made");
                         adapter.setSelectedTile(-1);
                     }
-
                 }
                 isSelected = false;
                 for (int i = 0; i < possibleMove.length; i++)
                     possibleMove[i] = false;
             }
         }
-
         adapter.notifyDataSetChanged();
     }
 

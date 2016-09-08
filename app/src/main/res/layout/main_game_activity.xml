@@ -53,7 +53,7 @@
 
         <GridView
             android:id="@+id/chessboard"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="370dp"
             android:numColumns="8"
             android:gravity="center_horizontal">

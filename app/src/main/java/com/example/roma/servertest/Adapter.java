@@ -33,7 +33,7 @@ public class Adapter extends BaseAdapter {
 
     public Adapter(Context c , Game _game, JSONArray piecesJson){
         this.c=c;
-        this.game = _game;
+        game = _game;
         this.piecesJson=piecesJson;
         isSelected = new ArrayList<Boolean>();
         possibleMove = new boolean[64];
@@ -69,14 +69,7 @@ public class Adapter extends BaseAdapter {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Piece piece;
         Piece[] allPieces = game.getBoard2();
-        if (game.getTurn().equals("jonjony"))// TODO should be replaced with Color.WHITE
-        {
-            piece = allPieces[63 - position];//white pieces at the bottom
-        }
-        else// name == roma
-        {
-            piece = allPieces[position];//black pieces at the bottom
-        }
+        piece = allPieces[position];
 
         if(convertView == null){
             convertView=inflate.inflate(R.layout.singlesquare, parent, false);
@@ -86,6 +79,7 @@ public class Adapter extends BaseAdapter {
         ImageView tileColor = (ImageView) convertView.findViewById(R.id.blacknwhite);
         ImageView pieceImage = (ImageView) convertView.findViewById(R.id.piece);
         pieceImage.setImageDrawable(null);
+
 
             int resID = piece.getImg();
 
@@ -99,29 +93,25 @@ public class Adapter extends BaseAdapter {
                 black = R.drawable.black;
                 white = R.drawable.white;
             }
-
                 if (position % 16 < 8) {
                     if (position % 2 == 0) {
-                        //tileColor.setImageResource(R.drawable.black);
                         tileColor.setImageResource(black);
                     } else {
-                        //tileColor.setImageResource(R.drawable.white);
                         tileColor.setImageResource(white);
                     }
                 } else if (position % 2 == 0) {
-                    //tileColor.setImageResource(R.drawable.white);
                     tileColor.setImageResource(white);
                 } else {
-                    //tileColor.setImageResource(R.drawable.black);
                     tileColor.setImageResource(black);
                 }
-
 
             //TODO:  selected tiles get info from some global list object
 
             if(!piece.isEmpty){
 
                 pieceImage.setImageResource(resID);
+                if (piece._isFlipped)
+                    pieceImage.setRotationX(180);
             }
 
         return convertView;
