@@ -91,8 +91,8 @@ public class Bishop extends Piece {
         return legalMoves;
     }
 
-    @Override
     ArrayList<Piece> possibleMoves(Game game) {
+        ArrayList<Integer> intList = getLegalMoves(game);
         return null;
     }
 

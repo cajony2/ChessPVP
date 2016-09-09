@@ -49,7 +49,7 @@ public abstract class Piece{
         _pointPosition = new Point();
     }
 
-    public boolean isCheck()
+    public boolean checks()
     {
         return _checksKing;
     }
@@ -95,7 +95,7 @@ public abstract class Piece{
     // each peace should override this method and return  the legal moves from the piece location according to the games piece layout
     abstract  ArrayList<Integer> getLegalMoves(Game game);
 
-    abstract ArrayList<Piece> possibleMoves(Game game);
+//    abstract ArrayList<Piece> possibleMoves(Game game);
 
     public JSONObject toJson() throws JSONException {
         JSONObject json = new JSONObject();

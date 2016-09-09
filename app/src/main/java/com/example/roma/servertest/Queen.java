@@ -30,15 +30,19 @@ public class Queen extends Piece {
             image=R.drawable.qdt60;
     }
 
+    //done by Jony
     @Override
     ArrayList<Integer> getLegalMoves(Game game) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        Piece[] pieces = game.getBoard2();
-        return null;
+        ArrayList<Piece> pieceArr = possibleMoves(game);
+        for (Piece p : pieceArr)
+        {
+            legalMoves.add(p.getPosition());
+        }
+        return legalMoves;
     }
 
-    @Override
-    ArrayList<Piece> possibleMoves(Game game) {
+    private ArrayList<Piece> possibleMoves(Game game) {
 
         ArrayList<Piece> result = new ArrayList<Piece>();
         Piece[][] pieces = game.getGridPieces();
@@ -46,7 +50,7 @@ public class Queen extends Piece {
         int col = _pointPosition.y;
 
         //moving downward
-        for (int r = row; r < TILES_NUMBER_IN_A_ROW; r++)
+        for (int r = row+1; r < TILES_NUMBER_IN_A_ROW; r++)
         {
             if (!(pieces[r][col] instanceof Empty))//piece is not empty
             {
@@ -68,7 +72,7 @@ public class Queen extends Piece {
             }
         }
         //moving upward
-        for (int r = row; r > 0; r--)
+        for (int r = row-1; r >= 0; r--)
         {
             if (!(pieces[r][col] instanceof Empty))//piece is not empty
             {
@@ -90,7 +94,7 @@ public class Queen extends Piece {
             }
         }
         //moving left
-        for (int c = col; c > 0; c--)
+        for (int c = col-1; c >= 0; c--)
         {
             if (!(pieces[row][c] instanceof Empty))//piece is not empty
             {
@@ -112,7 +116,7 @@ public class Queen extends Piece {
             }
         }
         //moving right
-        for (int c = col; c < TILES_NUMBER_IN_A_ROW; c++)
+        for (int c = col+1; c < TILES_NUMBER_IN_A_ROW; c++)
         {
             if (!(pieces[row][c] instanceof Empty))//piece is not empty
             {
@@ -133,6 +137,144 @@ public class Queen extends Piece {
                 result.add(pieces[row][c]);
             }
         }
+        //moving up right
+        int r = row-1;
+        int c = col+1;
+        while (r >= 0 && c < TILES_NUMBER_IN_A_ROW)
+        {
+            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c] instanceof King)
+                        setCheck(true);
+                    result.add(pieces[r][c]);
+                    break;
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r--;
+                c++;
+            }
+        }
+
+        //moving up left
+        r = row-1;
+        c = col-1;
+        while (r >= 0 && c >= 0)
+        {
+            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c] instanceof King)
+                        setCheck(true);
+                    result.add(pieces[r][c]);
+                    break;
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r--;
+                c--;
+            }
+        }
+
+        //moving down left
+        r = row+1;
+        c = col-1;
+        while (r < TILES_NUMBER_IN_A_ROW && c >= 0)
+        {
+            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c] instanceof King)
+                        setCheck(true);
+                    result.add(pieces[r][c]);
+                    break;
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r++;
+                c--;
+            }
+        }
+
+        //moving down right
+        r = row+1;
+        c = col+1;
+        while (r < TILES_NUMBER_IN_A_ROW && c < TILES_NUMBER_IN_A_ROW)
+        {
+            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c] instanceof King)
+                        setCheck(true);
+                    result.add(pieces[r][c]);
+                    break;
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r++;
+                c++;
+            }
+        }
+
+        /*boolean endMove = false;
+        int counter = 1;
+        for (int r = row-1; r > 0; r--)
+        {
+            if (endMove)
+                break;
+            for (int c = col+1; c < TILES_NUMBER_IN_A_ROW; c++)
+            {
+                if (!(pieces[r][c] instanceof Empty))//piece is not empty
+                {
+                    if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                    {
+                        endMove = true;
+                        break;
+                    }
+                    else//piece is in different color
+                    {
+                        if (pieces[r][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        endMove = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    result.add(pieces[r][c]);
+                }
+            }
+        }*/
         return result;
     }
 
