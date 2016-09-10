@@ -31,7 +31,7 @@ public class Game {
     private Player _blackPlayer;
 
 
-    //constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
+    /*//constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
     public Game (Context context, String player1){
         Log.i("chess", "creating game");
         _context = context;
@@ -40,7 +40,7 @@ public class Game {
         status = 0 ;      // 0=  create new game;
         turn = _whitePlayer.getName();
         newCreateBoard();//jony added
-    }
+    }*/
 
     //constructor NOT IN USE!!!
     public Game (String player1){
@@ -51,7 +51,7 @@ public class Game {
         createBoard();
     }
 
-    //added by jony - this method fills the Tile[][]
+    /*//added by jony - this method fills the Tile[][]
     private void newCreateBoard() {
         _tiles = new Tile[TILES_NUMBER_IN_A_ROW][TILES_NUMBER_IN_A_ROW];
         for (int i = 0; i < TILES_NUMBER_IN_A_ROW; i++){
@@ -77,9 +77,9 @@ public class Game {
             }
         }
         setPieces();
-    }
+    }*/
 
-    //added by jony - setting the pieces on board (beginning of a game)
+    /*//added by jony - setting the pieces on board (beginning of a game)
     private void setPieces() {
         //filling first row from the top with black chess pieces
         _tiles[0][0].setPiece(new Rook(Color.BLACK, _tiles[0][0]));
@@ -112,7 +112,7 @@ public class Game {
         _tiles[7][5].setPiece(new Bishop(Color.WHITE, _tiles[7][5]));
         _tiles[7][6].setPiece(new Knight(Color.WHITE, _tiles[7][6]));
         _tiles[7][7].setPiece(new Rook(Color.WHITE, _tiles[7][7]));
-    }
+    }*/
 
     //receiving json from server and create new game object
     public Game (JSONObject gameJson){

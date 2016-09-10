@@ -13,10 +13,10 @@ public class Rook extends Piece {
 
     boolean hasNotMovedYet;
 
-    //constructor - added by jony
+    /*//constructor - added by jony
     public  Rook(int color, Tile tile){
         super(color, tile);
-    }
+    }*/
 
     public Rook(String name, String color,int pos) {
         super(name, color, pos);
@@ -42,6 +42,11 @@ public class Rook extends Piece {
         return legalMoves;
     }
 
+    @Override
+    protected boolean canMove(Game game) {
+        return false;
+    }
+
     private ArrayList<Piece> possibleMoves(Game game) {
         ArrayList<Piece> result = new ArrayList<Piece>();
         Piece[][] pieces = game.getGridPieces();
@@ -59,13 +64,20 @@ public class Rook extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][col] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][col]);
-                    break;
+                    if (pieces[r][col].getActive())//piece is active
+                    {
+                        if (pieces[r][col] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][col]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][col]);
+                    }
                 }
             }
-            else
+            else//piece is empty
             {
                 result.add(pieces[r][col]);
             }
@@ -81,13 +93,20 @@ public class Rook extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][col] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][col]);
-                    break;
+                    if (pieces[r][col].getActive())//piece is active
+                    {
+                        if (pieces[r][col] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][col]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][col]);
+                    }
                 }
             }
-            else
+            else//piece is empty
             {
                 result.add(pieces[r][col]);
             }
@@ -103,13 +122,20 @@ public class Rook extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[row][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[row][c]);
-                    break;
+                    if (pieces[row][c].getActive())//piece is active
+                    {
+                        if (pieces[row][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[row][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[row][c]);
+                    }
                 }
             }
-            else
+            else//piece is empty
             {
                 result.add(pieces[row][c]);
             }
@@ -125,10 +151,17 @@ public class Rook extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[row][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[row][c]);
-                    break;
+                    if (pieces[row][c].getActive())//piece is active
+                    {
+                        if (pieces[row][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[row][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[row][c]);
+                    }
                 }
             }
             else

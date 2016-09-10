@@ -18,7 +18,7 @@ import java.util.List;
 
 public abstract class Piece{
 
-        protected int _color;//added by jony
+        protected final int _color;//added by jony
         protected Tile _tile;//added by jony
         protected Point _pointPosition;//added by jony
         protected boolean _isActive;//added by jony
@@ -32,13 +32,13 @@ public abstract class Piece{
         protected int position;
         protected boolean isEmpty;
 
-        //default constructor added by jony
+       /* //default constructor added by jony
         public Piece(int color, Tile tile) {
 
             _color = color;
             _tile = tile;
             _isActive = true;
-    }
+    }*/
 
     public Piece (String name , String color, int pos){
 
@@ -47,6 +47,22 @@ public abstract class Piece{
         this.position = pos;
         isEmpty = name.equals("empty") ? true : false;
         _pointPosition = new Point();
+        _isActive = true;
+        if (color.equals("white"))
+            _color = Color.WHITE;
+        else
+            _color = Color.BLACK;
+
+    }
+
+    public boolean getActive()
+    {
+        return _isActive;
+    }
+
+    public void setActive(boolean bool)
+    {
+        _isActive = bool;
     }
 
     public boolean checks()
@@ -75,6 +91,15 @@ public abstract class Piece{
         return color;
     }
 
+    public int getIntColor()
+    {
+        return _color;
+    }
+
+    public Point getPointPosition(){
+        return _pointPosition;
+    }
+
     public int getPosition(){
         return position;
     }
@@ -88,6 +113,11 @@ public abstract class Piece{
         _pointPosition.set(x, y);
     }
 
+    public void setPointPosition(Point point)
+    {
+        _pointPosition = point;
+    }
+
     public void setPosition(int pos){
         position=pos;
     }
@@ -95,7 +125,49 @@ public abstract class Piece{
     // each peace should override this method and return  the legal moves from the piece location according to the games piece layout
     abstract  ArrayList<Integer> getLegalMoves(Game game);
 
-//    abstract ArrayList<Piece> possibleMoves(Game game);
+    protected boolean canMove(Game game)
+    {
+        Piece[] pieces = game.getBoard2();
+        /*Piece theKing = null;
+        for (Piece p : pieces)
+        {
+            if (p.getIntColor() == getIntColor() && p instanceof King)
+            {
+                theKing = p;
+            }
+        }*/
+
+        //extracting only opponent pieces
+        ArrayList<Piece> opponentPieces = new ArrayList<Piece>();
+        for (Piece p : pieces)
+        {
+            if (p.getIntColor() != _color && !(p instanceof Empty))// add piece if not empty and with opponent color
+                opponentPieces.add(p);
+        }
+
+        setActive(false);//set this piece as inactive (hollow) to see if opponent pieces check the king if it moves
+
+        for (Piece p : opponentPieces)//looping through opponent pieces
+        {
+            p.getLegalMoves(game);
+            if (p.checks())
+            {
+                setActive(true);
+                return false;
+            }
+            /*ArrayList<Integer> legalMoves = p.getLegalMoves(game);
+            for (Integer i : legalMoves)//looping through the pieces legalMoves to see if they check the king
+            {
+                if (i == theKing.getPosition())//if check then this piece can`t move
+                {
+                    setActive(true);
+                    return false;
+                }
+            }*/
+        }
+        setActive(true);
+        return true;
+    }
 
     public JSONObject toJson() throws JSONException {
         JSONObject json = new JSONObject();

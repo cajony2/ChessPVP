@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 public class Knight extends Piece {
 
-    //constructor - added by jony
+    /*//constructor - added by jony
     public  Knight(int color, Tile tile){
         super(color, tile);
-    }
+    }*/
 
     public Knight(String name, String color, int pos) {
         super(name, color, pos);
@@ -191,5 +191,6 @@ public class Knight extends Piece {
         }
         return result;
     }
+
 }
 

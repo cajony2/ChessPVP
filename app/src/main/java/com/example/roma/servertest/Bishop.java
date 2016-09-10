@@ -11,10 +11,10 @@ import java.util.List;
 
 public class Bishop extends Piece {
 
-    //constructor - added by jony
+    /*//constructor - added by jony
     public Bishop(int color, Tile tile){
         super(color, tile);
-    }
+    }*/
 
     public Bishop(String name, String color, int pos) {
         super(name, color, pos);
@@ -89,6 +89,11 @@ public class Bishop extends Piece {
 
 
         return legalMoves;
+    }
+
+    @Override
+    protected boolean canMove(Game game) {
+        return false;
     }
 
     ArrayList<Piece> possibleMoves(Game game) {

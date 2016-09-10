@@ -15,10 +15,10 @@ import java.util.ListIterator;
 
 public class Queen extends Piece {
 
-    //constructor - added by jony
+    /*//constructor - added by jony
     public  Queen(int color, Tile tile){
         super(color, tile);
-    }
+    }*/
 
     public Queen(String name, String color,int pos) {
         super(name, color, pos);
@@ -42,6 +42,7 @@ public class Queen extends Piece {
         return legalMoves;
     }
 
+
     private ArrayList<Piece> possibleMoves(Game game) {
 
         ArrayList<Piece> result = new ArrayList<Piece>();
@@ -60,10 +61,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][col] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][col]);
-                    break;
+                    if (pieces[r][col].getActive())//piece is active
+                    {
+                        if (pieces[r][col] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][col]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][col]);
+                    }
                 }
             }
             else
@@ -82,10 +90,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][col] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][col]);
-                    break;
+                    if (pieces[r][col].getActive())//piece is active
+                    {
+                        if (pieces[r][col] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][col]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][col]);
+                    }
                 }
             }
             else
@@ -104,10 +119,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[row][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[row][c]);
-                    break;
+                    if (pieces[row][c].getActive())//piece is active
+                    {
+                        if (pieces[row][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[row][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[row][c]);
+                    }
                 }
             }
             else
@@ -126,10 +148,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[row][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[row][c]);
-                    break;
+                    if (pieces[row][c].getActive())//piece is active
+                    {
+                        if (pieces[row][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[row][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[row][c]);
+                    }
                 }
             }
             else
@@ -150,10 +179,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][c]);
-                    break;
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
                 }
             }
             else
@@ -177,10 +213,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][c]);
-                    break;
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
                 }
             }
             else
@@ -204,10 +247,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][c]);
-                    break;
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
                 }
             }
             else
@@ -231,10 +281,17 @@ public class Queen extends Piece {
                 }
                 else//piece is in different color
                 {
-                    if (pieces[r][c] instanceof King)
-                        setCheck(true);
-                    result.add(pieces[r][c]);
-                    break;
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c] instanceof King)
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
                 }
             }
             else
@@ -244,37 +301,6 @@ public class Queen extends Piece {
                 c++;
             }
         }
-
-        /*boolean endMove = false;
-        int counter = 1;
-        for (int r = row-1; r > 0; r--)
-        {
-            if (endMove)
-                break;
-            for (int c = col+1; c < TILES_NUMBER_IN_A_ROW; c++)
-            {
-                if (!(pieces[r][c] instanceof Empty))//piece is not empty
-                {
-                    if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
-                    {
-                        endMove = true;
-                        break;
-                    }
-                    else//piece is in different color
-                    {
-                        if (pieces[r][c] instanceof King)
-                            setCheck(true);
-                        result.add(pieces[r][c]);
-                        endMove = true;
-                        break;
-                    }
-                }
-                else
-                {
-                    result.add(pieces[r][c]);
-                }
-            }
-        }*/
         return result;
     }
 

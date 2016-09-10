@@ -2,6 +2,8 @@ package com.example.roma.servertest;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,7 +54,10 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     TextView timerTextView;
     Button submit;
     boolean moveMade;
-    boolean canClick;   // ca the user select some tiles in chess board
+    boolean canClick;   // ca the user select some tiles in chess boa
+    int myColor;
+
+
 
     public static final String MAKE_MOVE = "makeMove";
     public static final String GAME_READY = "isGameReady";
@@ -72,8 +77,9 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         pieces = null;
         game=null;
         Intent intent = getIntent();
+        //this is the name of the player that playes this game
+        userName = intent.getStringExtra("userName");           // username ==player1 - this player is playing the white pieces
 
-        userName = intent.getStringExtra("userName");
         String gameJson = intent.getStringExtra("game");
         String action  = intent.getStringExtra("ACTION");
 
@@ -85,6 +91,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         isSelected =false;
         possibleMove = new boolean[64];
 
+
         /*switch (action){
             case "fullGame":*/
         if (action.equals("fullGame")) {
@@ -95,9 +102,9 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                 e.printStackTrace();
             }
             if (game != null) {
-
-                //jony added. flipps board and pieces accordingly
-                if (game.getTurn().equals("jonjony"))//getTurn should return int
+                            // TODO insert all ui ujpdate to some method
+                myColor = (userName.equals(game.getPlayer1())) ? Color.WHITE : Color.BLACK;
+                if (myColor == Color.WHITE )//getTurn should return int
                     flipBoard(game);
 
                 adapter = new Adapter(this, game, null);
@@ -112,6 +119,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                 timer.start();
                 gv.setOnItemClickListener(this);
                 submit.setOnClickListener(this);
+
             }
         }
                /* break;
@@ -172,11 +180,14 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         // do only if the square clicked is the users color
         if(canClick) {
             if (!isSelected) {
-                Log.i("chess", "username: " + userName + " player1: " + game.getPlayer1());
-                if (!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white"))) {         //then this user is white
+                Log.i("chess", "username: " + userName + " color:"+myColor +" pieceColor= "+pieces[position].getIntColor());
+                //if (!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white")))
+                if (pieces[position].getIntColor() == myColor)      // selected his own color
+                {//then this user is white. needs to be changed to pieces[position].getColor == Player.getColor
                     isSelected = true;
                     moves = pieces[position].getLegalMoves(game);
-                    if (moves != null) {
+                    if (moves != null && moves.size() != 0)//jony added moves.size() != 0
+                    {
                         for (int pos : moves) {
                             possibleMove[pos] = true;
                         }
@@ -187,11 +198,21 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
             } else {                        //selected maybe a move
                 if (selectedTile >= 0) {   //making a move
                     if (possibleMove[position]) {    // this move is legal
+                        //should add if piece canMove (so he would not expose the king)        יש טלפון של בית?
+
+
+                        //pieces[position].setPosition(pieces[selectedTile].getPosition());
+
                         pieces[position] = pieces[selectedTile];
                         pieces[position].setPosition(position);
+                        Point p = pieces[selectedTile].getPointPosition();
+                        pieces[position].setPointPosition(p);
 
                         pieces[selectedTile] = new Empty("empty", "white", selectedTile);
                         pieces[selectedTile].setEmpty(true);
+                        pieces[selectedTile].setPosition(position);
+                        /*pieces[selectedTile].setPointPosition(tempPointPosition);
+                        pieces[selectedTile].setPosition(tempPosition);*/
 
                         adapter.setGame(game);
                         moveMade = true;
@@ -218,7 +239,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
     @Override
     public void onClick(View v) {
         if(game==null){
-            Log.i("chess","*******chess******");
+                Log.i("chess","*******chess******");
         }
         if(moveMade){
             Log.i("chess","clicked make move");
@@ -352,7 +373,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
             if(action.equals(MAKE_MOVE)) {
                 makeMoveOnPostExecute(message);
             }
-            else if(action.equals("No")){           //opponent didnt made his move yet , ask again in 1000 ms
+            else if(action.equals("No")){           //opponent didn`t make his move yet , ask again in 1000 ms
                 askAgainOnPostExecute();
             }else{                                  // else the msg is json with the new game
                 refreshGame(message);

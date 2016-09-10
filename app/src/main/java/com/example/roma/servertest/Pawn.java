@@ -12,10 +12,10 @@ public class Pawn extends Piece {
 
     boolean hasNotMovedYet;
 
-    //constructor - added by jony
+    /*//constructor - added by jony
     public  Pawn(int color, Tile tile){
         super(color, tile);
-    }
+    }*/
 
     public Pawn(String name, String color, int pos) {
         super(name, color, pos);
@@ -105,6 +105,7 @@ public class Pawn extends Piece {
         }
         return legalMoves;
     }
+
 
     /*ArrayList<Piece> possibleMoves(Game game) {
         return null;

@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class Empty extends Piece {
 
-    //constructor - added by jony
+    /*//constructor - added by jony
     public Empty(int color, Tile tile){
         super(color, tile);
-    }
+    }*/
 
     public Empty(String name, String color, int pos) {
         super(name, color, pos);
@@ -29,7 +29,6 @@ public class Empty extends Piece {
         return null;
     }
 
-    @Override
     ArrayList<Piece> possibleMoves(Game game) {
         return null;
     }
