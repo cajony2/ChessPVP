@@ -52,7 +52,12 @@ public abstract class Piece{
             _color = Color.WHITE;
         else
             _color = Color.BLACK;
-
+    }
+    
+    //constructor that copies the piece`s contents
+    public Piece (Piece piece)
+    {
+            
     }
 
     public boolean getActive()
