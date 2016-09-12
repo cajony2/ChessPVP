@@ -198,8 +198,7 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
             } else {                        //selected maybe a move
                 if (selectedTile >= 0) {   //making a move
                     if (possibleMove[position]) {    // this move is legal
-                        //should add if piece canMove (so he would not expose the king)        יש טלפון של בית?
-
+                        //should add if piece canMove (so he would not expose the king)        
 
                         //pieces[position].setPosition(pieces[selectedTile].getPosition());
 
