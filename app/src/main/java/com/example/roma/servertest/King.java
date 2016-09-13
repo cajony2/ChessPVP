@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Point;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,22 @@ public class King extends Piece {
         }
         else
             image=R.drawable.kdt60;
+    }
+
+    public King(){}
+
+    public King (Piece piece)
+    {
+        super(piece.getIntColor());
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = piece.getActive();
+        _checksKing = piece.checks();
+        _isFlipped = piece._isFlipped;
+        name = piece.getName();
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = piece.isEmpty();
     }
 
     @Override

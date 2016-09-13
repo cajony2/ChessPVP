@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,68 +27,31 @@ public class Bishop extends Piece {
             image= R.drawable.bdt60;
     }
 
+    public Bishop(){}
+
+    public Bishop (Piece piece)
+    {
+        super(piece.getIntColor());
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = piece.getActive();
+        _checksKing = piece.checks();
+        _isFlipped = piece._isFlipped;
+        name = piece.getName();
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = piece.isEmpty();
+    }
+
+    //done by Jony
     @Override
     ArrayList<Integer> getLegalMoves(Game game) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        Piece[] pieces = game.getBoard2();
-        int temp = position-7;
-
-        //up right
-
-        while(temp%8 != 0 && temp>0){
-            if(!pieces[temp].getName().equals("empty")) {
-                if (!pieces[temp].getColor().equals(pieces[position].getColor()))
-                    legalMoves.add(temp);
-                break;
-            }
-            legalMoves.add(temp);
-            temp-=7;
+        ArrayList<Piece> pieceArr = possibleMoves(game);
+        for (Piece p : pieceArr)
+        {
+            legalMoves.add(p.getPosition());
         }
-
-        //up left
-
-        temp=position-9;
-
-        while( ( temp%8 != 7 ) && ( temp>0 ) ){
-            if(!pieces[temp].getName().equals("empty")) {
-                if (pieces[temp].getColor().equals(pieces[position].getColor()))
-                    legalMoves.add(temp);
-                break;
-            }
-            legalMoves.add(temp);
-            temp -= 9;
-        }
-
-        //down right
-
-        temp=position+9;
-
-        while( ( temp%8 != 0 ) && ( temp<64 ) ){
-            if(!pieces[temp].getName().equals("empty")) {
-                if (!pieces[temp].getColor().equals(pieces[position].getColor()))
-                    legalMoves.add(temp);
-                break;
-            }
-            legalMoves.add(temp);
-            temp+=9;
-        }
-
-        //down left
-
-        temp=position+7;
-
-        while( ( temp%8 != 7 ) && ( temp<64 )){
-            if(!pieces[temp].getName().equals("empty")) {
-                if (!pieces[temp].getColor().equals(pieces[position].getColor()))
-                    legalMoves.add(temp);
-                break;
-            }
-            legalMoves.add(temp);
-            temp+=7;
-        }
-
-
-
         return legalMoves;
     }
 
@@ -96,9 +60,149 @@ public class Bishop extends Piece {
         return false;
     }
 
-    ArrayList<Piece> possibleMoves(Game game) {
-        ArrayList<Integer> intList = getLegalMoves(game);
-        return null;
+    private ArrayList<Piece> possibleMoves(Game game) {
+
+        ArrayList<Piece> result = new ArrayList<Piece>();
+        Piece[][] pieces = game.getGridPieces();
+        int row = _pointPosition.x;
+        int col = _pointPosition.y;
+
+        //moving up right
+        int r = row-1;
+        int c = col+1;
+        while (r >= 0 && c < TILES_NUMBER_IN_A_ROW)
+        {
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c].getName().equals("king"))
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r--;
+                c++;
+            }
+        }
+
+        //moving up left
+        r = row-1;
+        c = col-1;
+        while (r >= 0 && c >= 0)
+        {
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c].getName().equals("king"))
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r--;
+                c--;
+            }
+        }
+
+        //moving down left
+        r = row+1;
+        c = col-1;
+        while (r < TILES_NUMBER_IN_A_ROW && c >= 0)
+        {
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c].getName().equals("king"))
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r++;
+                c--;
+            }
+        }
+
+        //moving down right
+        r = row+1;
+        c = col+1;
+        while (r < TILES_NUMBER_IN_A_ROW && c < TILES_NUMBER_IN_A_ROW)
+        {
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
+            {
+                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                {
+                    break;
+                }
+                else//piece is in different color
+                {
+                    if (pieces[r][c].getActive())//piece is active
+                    {
+                        if (pieces[r][c].getName().equals("king"))
+                            setCheck(true);
+                        result.add(pieces[r][c]);
+                        break;
+                    }
+                    else
+                    {
+                        result.add(pieces[r][c]);
+                    }
+                }
+            }
+            else
+            {
+                result.add(pieces[r][c]);
+                r++;
+                c++;
+            }
+        }
+        return result;
     }
 
 }

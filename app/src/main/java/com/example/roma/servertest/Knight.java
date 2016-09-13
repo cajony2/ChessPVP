@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Point;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,22 @@ public class Knight extends Piece {
         }
         else
             image=R.drawable.ndt60;
+    }
+
+    public Knight(){}
+
+    public Knight (Piece piece)
+    {
+        super(piece.getIntColor());
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = piece.getActive();
+        _checksKing = piece.checks();
+        _isFlipped = piece._isFlipped;
+        name = piece.getName();
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = piece.isEmpty();
     }
 
     //done by Jony
@@ -50,11 +67,11 @@ public class Knight extends Piece {
         {
             if (col-1 >= 0)//turn left
             {
-                if (!(pieces[row-2][col-1] instanceof Empty))//piece is not empty
+                if (!(pieces[row-2][col-1].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row-2][col-1].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row-2][col-1] instanceof King)
+                        if (pieces[row-2][col-1].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row-2][col-1]);
                     }
@@ -66,11 +83,11 @@ public class Knight extends Piece {
             }
             if (col+1 < TILES_NUMBER_IN_A_ROW)//turn right
             {
-                if (!(pieces[row-2][col+1] instanceof Empty))//piece is not empty
+                if (!(pieces[row-2][col+1].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row-2][col+1].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row-2][col+1] instanceof King)
+                        if (pieces[row-2][col+1].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row-2][col+1]);
                     }
@@ -86,11 +103,11 @@ public class Knight extends Piece {
         {
             if (col-1 >= 0)//turn right
             {
-                if (!(pieces[row+2][col-1] instanceof Empty))//piece is not empty
+                if (!(pieces[row+2][col-1].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row+2][col-1].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row+2][col-1] instanceof King)
+                        if (pieces[row+2][col-1].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row+2][col-1]);
                     }
@@ -102,11 +119,11 @@ public class Knight extends Piece {
             }
             if (col+1 < TILES_NUMBER_IN_A_ROW)//turn left
             {
-                if (!(pieces[row+2][col+1] instanceof Empty))//piece is not empty
+                if (!(pieces[row+2][col+1].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row+2][col+1].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row+2][col+1] instanceof King)
+                        if (pieces[row+2][col+1].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row+2][col+1]);
                     }
@@ -122,11 +139,11 @@ public class Knight extends Piece {
         {
             if (row-1 >= 0)//turn left
             {
-                if (!(pieces[row-1][col+2] instanceof Empty))//piece is not empty
+                if (!(pieces[row-1][col+2].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row-1][col+2].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row-1][col+2] instanceof King)
+                        if (pieces[row-1][col+2].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row-1][col+2]);
                     }
@@ -138,11 +155,11 @@ public class Knight extends Piece {
             }
             if (row+1 < TILES_NUMBER_IN_A_ROW)//turn right
             {
-                if (!(pieces[row+1][col+2] instanceof Empty))//piece is not empty
+                if (!(pieces[row+1][col+2].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row+1][col+2].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row+1][col+2] instanceof King)
+                        if (pieces[row+1][col+2].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row+1][col+2]);
                     }
@@ -158,11 +175,11 @@ public class Knight extends Piece {
         {
             if (row-1 >= 0)//turn right
             {
-                if (!(pieces[row-1][col-2] instanceof Empty))//piece is not empty
+                if (!(pieces[row-1][col-2].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row-1][col-2].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row-1][col-2] instanceof King)
+                        if (pieces[row-1][col-2].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row-1][col-2]);
                     }
@@ -174,11 +191,11 @@ public class Knight extends Piece {
             }
             if (row+1 < TILES_NUMBER_IN_A_ROW)//turn left
             {
-                if (!(pieces[row+1][col-2] instanceof Empty))//piece is not empty
+                if (!(pieces[row+1][col-2].getName().equals("empty")))//piece is not empty
                 {
                     if (!(pieces[row+1][col-2].getColor().equals(color)))//piece is not the same color as the knight
                     {
-                        if (pieces[row+1][col-2] instanceof King)
+                        if (pieces[row+1][col-2].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row+1][col-2]);
                     }

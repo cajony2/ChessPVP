@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -30,6 +31,26 @@ public class Queen extends Piece {
             image=R.drawable.qdt60;
     }
 
+
+    public Queen()
+    {
+
+    }
+
+    public Queen (Piece piece)
+    {
+        super(piece.getIntColor());
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = piece.getActive();
+        _checksKing = piece.checks();
+        _isFlipped = piece._isFlipped;
+        name = piece.getName();
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = piece.isEmpty();
+    }
+
     //done by Jony
     @Override
     ArrayList<Integer> getLegalMoves(Game game) {
@@ -53,7 +74,7 @@ public class Queen extends Piece {
         //moving downward
         for (int r = row+1; r < TILES_NUMBER_IN_A_ROW; r++)
         {
-            if (!(pieces[r][col] instanceof Empty))//piece is not empty
+            if (!(pieces[r][col].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[r][col].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -63,7 +84,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[r][col].getActive())//piece is active
                     {
-                        if (pieces[r][col] instanceof King)
+                        if (pieces[r][col].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][col]);
                         break;
@@ -82,7 +103,7 @@ public class Queen extends Piece {
         //moving upward
         for (int r = row-1; r >= 0; r--)
         {
-            if (!(pieces[r][col] instanceof Empty))//piece is not empty
+            if (!(pieces[r][col].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[r][col].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -92,7 +113,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[r][col].getActive())//piece is active
                     {
-                        if (pieces[r][col] instanceof King)
+                        if (pieces[r][col].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][col]);
                         break;
@@ -111,7 +132,7 @@ public class Queen extends Piece {
         //moving left
         for (int c = col-1; c >= 0; c--)
         {
-            if (!(pieces[row][c] instanceof Empty))//piece is not empty
+            if (!(pieces[row][c].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[row][c].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -121,7 +142,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[row][c].getActive())//piece is active
                     {
-                        if (pieces[row][c] instanceof King)
+                        if (pieces[row][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row][c]);
                         break;
@@ -140,7 +161,7 @@ public class Queen extends Piece {
         //moving right
         for (int c = col+1; c < TILES_NUMBER_IN_A_ROW; c++)
         {
-            if (!(pieces[row][c] instanceof Empty))//piece is not empty
+            if (!(pieces[row][c].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[row][c].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -150,7 +171,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[row][c].getActive())//piece is active
                     {
-                        if (pieces[row][c] instanceof King)
+                        if (pieces[row][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row][c]);
                         break;
@@ -171,7 +192,7 @@ public class Queen extends Piece {
         int c = col+1;
         while (r >= 0 && c < TILES_NUMBER_IN_A_ROW)
         {
-            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -181,7 +202,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[r][c].getActive())//piece is active
                     {
-                        if (pieces[r][c] instanceof King)
+                        if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;
@@ -205,7 +226,7 @@ public class Queen extends Piece {
         c = col-1;
         while (r >= 0 && c >= 0)
         {
-            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -215,7 +236,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[r][c].getActive())//piece is active
                     {
-                        if (pieces[r][c] instanceof King)
+                        if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;
@@ -239,7 +260,7 @@ public class Queen extends Piece {
         c = col-1;
         while (r < TILES_NUMBER_IN_A_ROW && c >= 0)
         {
-            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -249,7 +270,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[r][c].getActive())//piece is active
                     {
-                        if (pieces[r][c] instanceof King)
+                        if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;
@@ -273,7 +294,7 @@ public class Queen extends Piece {
         c = col+1;
         while (r < TILES_NUMBER_IN_A_ROW && c < TILES_NUMBER_IN_A_ROW)
         {
-            if (!(pieces[r][c] instanceof Empty))//piece is not empty
+            if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
@@ -283,7 +304,7 @@ public class Queen extends Piece {
                 {
                     if (pieces[r][c].getActive())//piece is active
                     {
-                        if (pieces[r][c] instanceof King)
+                        if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;

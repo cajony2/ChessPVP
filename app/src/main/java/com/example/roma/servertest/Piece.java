@@ -18,13 +18,12 @@ import java.util.List;
 
 public abstract class Piece{
 
-        protected final int _color;//added by jony
-        protected Tile _tile;//added by jony
+        protected final int TILES_NUMBER_IN_A_ROW = 8;
+
+        protected int _color;//added by jony
         protected Point _pointPosition;//added by jony
         protected boolean _isActive;//added by jony
         protected boolean _checksKing;
-        protected final int TILES_NUMBER_IN_A_ROW = 8;
-
         protected boolean _isFlipped;
         protected String name;
         protected String color;
@@ -40,7 +39,7 @@ public abstract class Piece{
             _isActive = true;
     }*/
 
-    public Piece (String name , String color, int pos){
+    public Piece (String name, String color, int pos){
 
         this.name = name;
         this.color = color;
@@ -53,11 +52,43 @@ public abstract class Piece{
         else
             _color = Color.BLACK;
     }
+
+    //empty Ctor
+    public Piece()
+    {
+
+    }
+
+    //default constructor
+    public Piece(int color)
+    {
+        _color = color;
+    }
     
-    //constructor that copies the piece`s contents
+    /*//constructor that copies the piece`s contents
     public Piece (Piece piece)
     {
-            
+         _color = piece.getIntColor();
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = piece.getActive();
+        _checksKing = piece.checks();
+        _isFlipped = piece._isFlipped;
+        name = piece.getName();
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = piece.isEmpty();
+    }*/
+
+
+    public boolean getIsFliped()
+    {
+        return _isFlipped;
+    }
+
+    public void  setIsFliped(boolean bool)
+    {
+        _isFlipped = bool;
     }
 
     public boolean getActive()
@@ -84,12 +115,22 @@ public abstract class Piece{
         return image;
     }
 
+    public void setImg(int img)
+    {
+        image = img;
+    }
+
     public void setEmpty(boolean b){
         isEmpty=b;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName (String name)
+    {
+        this.name = name;
     }
 
     public String getColor(){
@@ -99,6 +140,16 @@ public abstract class Piece{
     public int getIntColor()
     {
         return _color;
+    }
+
+    public void setColor(String color)
+    {
+        this.color = color;
+    }
+
+    public void setIntColor(int color)
+    {
+        _color = color;
     }
 
     public Point getPointPosition(){
@@ -120,7 +171,8 @@ public abstract class Piece{
 
     public void setPointPosition(Point point)
     {
-        _pointPosition = point;
+        _pointPosition.x = point.x;
+        _pointPosition.y = point.y;
     }
 
     public void setPosition(int pos){

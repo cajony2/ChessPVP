@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Point;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,22 @@ public class Pawn extends Piece {
         }
         else
             image=R.drawable.pdt60;
+    }
+
+    public Pawn(){}
+
+    public Pawn (Piece piece)
+    {
+        super(piece.getIntColor());
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = piece.getActive();
+        _checksKing = piece.checks();
+        _isFlipped = piece._isFlipped;
+        name = piece.getName();
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = piece.isEmpty();
     }
 
     //Jony added: pawn can move 2 squares at the beginning and setCheck if can eat the king(not tested yet)
@@ -55,7 +72,7 @@ public class Pawn extends Piece {
             if(temp%8 != 0 && temp<64 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
             {
                 legalMoves.add(temp);
-                if (pieces[temp] instanceof King)
+                if (pieces[temp].getName().equals("king"))
                 {
                     setCheck(true);
                 }
@@ -65,7 +82,7 @@ public class Pawn extends Piece {
             if(temp%8 != 7 && temp<64 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
             {
                 legalMoves.add(temp);
-                if (pieces[temp] instanceof King)
+                if (pieces[temp].getName().equals("king"))
                 {
                     setCheck(true);
                 }
@@ -87,7 +104,7 @@ public class Pawn extends Piece {
             if(temp%8 != 0 && temp>=0 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
             {
                 legalMoves.add(temp);
-                if (pieces[temp] instanceof King)
+                if (pieces[temp].getName().equals("king"))
                 {
                     setCheck(true);
                 }
@@ -97,7 +114,7 @@ public class Pawn extends Piece {
             if(temp%8 != 7 &&  temp>=0 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
             {
                 legalMoves.add(temp);
-                if (pieces[temp] instanceof King)
+                if (pieces[temp].getName().equals("king"))
                 {
                     setCheck(true);
                 }

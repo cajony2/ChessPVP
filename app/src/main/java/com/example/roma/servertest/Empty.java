@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Point;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,22 @@ public class Empty extends Piece {
             image=R.drawable.white;
         else
             image=R.drawable.black;
+    }
+
+    public Empty(){}
+
+    public Empty (Piece piece)
+    {
+        super(piece.getIntColor());
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = true;
+        _checksKing = false;
+        _isFlipped = piece._isFlipped;
+        name = "empty";
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = true;
     }
 
     @Override

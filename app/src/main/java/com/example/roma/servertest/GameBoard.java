@@ -200,16 +200,63 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
                     if (possibleMove[position]) {    // this move is legal
                         //should add if piece canMove (so he would not expose the king)        
 
-                        //pieces[position].setPosition(pieces[selectedTile].getPosition());
 
-                        pieces[position] = pieces[selectedTile];
+                        //if pieces[selectedTile] is an opponent piece, set it as inactive and add to eaten pieces
+                        /*if (!(pieces[position] instanceof Empty))
+                            pieces[position] = new Empty(pieces[position]);*/
+
+                        /*Piece pos = pieces[position];
+                        Piece sel = pieces[selectedTile];
+                        swapPieces(pieces[position], pieces[selectedTile]);*/
+
+
+                        //pieces[position] = new Empty(pieces[selectedTile]);
+                        //Point p = pieces[position].getPointPosition();
+                        //Piece temp1 = null;
+                        Point tempPoint = new Point(pieces[position].getPointPosition().x, pieces[position].getPointPosition().y);
+                        int tempPosition = pieces[position].getPosition();
+
+                        switch (pieces[selectedTile].getName()){
+                            case "rook":
+                                pieces[position] = new Rook(pieces[selectedTile]);
+                                break;
+                            case "queen":
+                                pieces[position] = new Queen(pieces[selectedTile]);
+                                break;
+                            case "pawn":
+                                pieces[position] = new Pawn(pieces[selectedTile]);
+                                break;
+                            case "Knight":
+                                pieces[position] = new Knight(pieces[selectedTile]);
+                                break;
+                            case "king":
+                                pieces[position] = new King(pieces[selectedTile]);
+                                break;
+                            case "empty":
+                                pieces[position] = new Empty(pieces[selectedTile]);
+                                break;
+                            case "bishop":
+                                pieces[position] = new Bishop(pieces[selectedTile]);
+                                break;
+                        }
+                        pieces[position].setPointPosition(tempPoint);
+                        pieces[position].setPosition(tempPosition);
+
+                        pieces[selectedTile] = new Empty("empty", "white", selectedTile);
+                        pieces[selectedTile].setEmpty(true);
+                        //pieces[selectedTile].setPosition(position);
+                        //pieces[selectedTile].setPointPosition(pieces[position].getPointPosition().x, pieces[position].getPointPosition().y);
+
+                        /*pieces[position] = pieces[selectedTile];
                         pieces[position].setPosition(position);
+                        pieces[position].setPointPosition(pieces[selectedTile].getPointPosition());
                         Point p = pieces[selectedTile].getPointPosition();
                         pieces[position].setPointPosition(p);
 
                         pieces[selectedTile] = new Empty("empty", "white", selectedTile);
                         pieces[selectedTile].setEmpty(true);
                         pieces[selectedTile].setPosition(position);
+                        pieces[selectedTile].setPointPosition(p);*/
                         /*pieces[selectedTile].setPointPosition(tempPointPosition);
                         pieces[selectedTile].setPosition(tempPosition);*/
 
@@ -227,6 +274,97 @@ public class GameBoard extends Activity implements AdapterView.OnItemClickListen
         adapter.notifyDataSetChanged();
     }
 
+    private void swapPieces(Piece piece1, Piece piece2)
+    {
+        Piece temp1 = null;
+        switch (piece1.getName()){
+            case "rook":
+                temp1 = new Rook(piece1);
+                break;
+            case "queen":
+                temp1 = new Queen(piece1);
+                break;
+            case "pawn":
+                temp1 = new Pawn(piece1);
+                break;
+            case "knight":
+                temp1 = new Knight(piece1);
+                break;
+            case "king":
+                temp1 = new King(piece1);
+                break;
+            case "empty":
+                temp1 = new Empty(piece1);
+                break;
+            case "bishop":
+                temp1 = new Bishop(piece1);
+                break;
+        }
+        /*Piece temp2 = null;
+        switch (piece2.getName()){
+            case "rook":
+                temp2 = new Rook();
+                break;
+            case "queen":
+                temp2 = new Queen();
+                break;
+            case "pawn":
+                temp2 = new Pawn();
+                break;
+            case "knight":
+                temp2 = new Knight();
+                break;
+            case "king":
+                temp2 = new King();
+                break;
+            case "empty":
+                temp2 = new Empty();
+                break;
+            case "bishop":
+                temp2 = new Bishop();
+                break;
+        }*/
+
+        //int tempIntColor = (piece1.getIntColor());
+        piece1.setIntColor(piece2.getIntColor());
+        piece2.setIntColor(temp1.getIntColor());
+
+        //temp.setPointPosition(piece1.getPointPosition().x, piece1.getPointPosition().y);
+        /*piece1.setPointPosition(piece2.getPointPosition().x, piece2.getPointPosition().y);
+        piece2.setPointPosition(temp.getPointPosition().x, temp.getPointPosition().y);*/
+
+        //boolean tempActive = piece1.getActive();
+        piece1.setActive(piece2.getActive());
+        piece2.setActive(temp1.getActive());
+
+        //boolean tempCheck = (piece1.checks());
+        piece1.setCheck(piece2.checks());
+        piece2.setCheck(temp1.checks());
+
+        //boolean tempFliped = (piece1.getIsFliped());
+        piece1.setIsFliped(piece2.getIsFliped());
+        piece2.setIsFliped(temp1.getIsFliped());
+
+        //String tempName = (piece1.getName());
+        piece1.setName(piece2.getName());
+        piece2.setName(temp1.getName());
+
+        //String tempColor = (piece1.getColor());
+        piece1.setColor(piece2.getColor());
+        piece2.setColor(temp1.getColor());
+
+        //int tempImg = (piece1.getImg());
+        piece1.setImg(piece2.getImg());
+        piece2.setImg(temp1.getImg());
+
+        /*//int tempPosition = (piece1.getPosition());
+        piece1.setPosition(piece2.getPosition());
+        piece2.setPosition(tempPosition);*/
+
+        //boolean tempEmpty = (piece1.isEmpty());
+        piece1.setEmpty(piece2.isEmpty());
+        piece2.setEmpty(temp1.isEmpty());
+    }
 
     public void test(){
 
