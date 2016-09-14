@@ -42,7 +42,7 @@ public class Empty extends Piece {
     }
 
     @Override
-    ArrayList<Integer> getLegalMoves(Game game) {
+    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         return null;
     }
 

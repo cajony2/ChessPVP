@@ -1,133 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:orientation="vertical"
     tools:context=".GameBoard"
     android:weightSum="1">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <fragment
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:id="@+id/topFragment"
+    android:name="layout.TopInfo" />
+
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/linearLayout"
-        android:background="@drawable/bottom2"
-        android:paddingTop="20dp"
-        android:paddingLeft="20dp">
+        android:layout_height="360dp"
+        android:id="@+id/board"
+        android:name="layout.Board"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/player2"
-            style="@style/redText1"
-            android:minWidth="70dp"/>
-        <GridView
-            android:id="@+id/eatenpiecesup"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:gravity="center_horizontal"
-            android:numColumns="8"
-            android:background="@drawable/bottom2"
-            >
-        </GridView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="365dp"
-        android:paddingLeft="18dp"
-        android:paddingRight="18dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:background="@drawable/main_frame"
-        android:id="@+id/linearlayountchessboard"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <GridView
-            android:id="@+id/chessboard"
-            android:layout_width="fill_parent"
-            android:layout_height="370dp"
-            android:numColumns="8"
-            android:gravity="center_horizontal">
-        </GridView>
-    </LinearLayout>
-
-    <LinearLayout
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/bottom2"
-        android:layout_below="@+id/linearlayountchessboard"
-        android:layout_alignParentBottom="true"
-        android:paddingTop="20dp"
-        android:layout_gravity="center_horizontal|center_vertical">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:id="@+id/linearLayout2"
-            android:paddingLeft="20dp"
-            android:gravity="center">
-
-            <TextView
-                style="@style/blackBold"
-                android:id="@+id/player1"
-                android:paddingLeft="20dp"
-                android:minWidth="70dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/blackBold"
-                android:id="@+id/timer"
-                android:gravity="center"/>
-
-        </LinearLayout>
+        android:id="@+id/bottomFragment"
+        android:name="layout.BottomInfo"/>
 
 
-        <GridView
-            android:id="@+id/eatenpieces"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:gravity="center_horizontal"
-            android:numColumns="8"
-            android:background="@drawable/bottom2"
-            >
-        </GridView>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingRight="15dp">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Make Move"
-                android:id="@+id/submit"
-                android:background="@drawable/red_button"
-                style="@style/button_text_small"
-                android:textAllCaps="false"
-                android:layout_gravity="center_vertical|center_horizontal" />
-
-        </FrameLayout>
-
-
-    </LinearLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

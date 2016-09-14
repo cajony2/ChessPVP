@@ -46,13 +46,12 @@ public class King extends Piece {
     }
 
     @Override
-    ArrayList<Integer> getLegalMoves(Game game) {
+    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        Piece[] pieces = game.getBoard2();
 
         //castling option should be added
 
-        if (!(canMove(game)))
+        if (!(canMove(pieces)))
         {
             return legalMoves;//if the king can`t move it`ll return empty List
         }
@@ -103,9 +102,9 @@ public class King extends Piece {
     }
 
     @Override
-    protected boolean canMove(Game game)
+    protected boolean canMove(Piece[] pieces)
     {
-        Piece[] pieces = game.getBoard2();
+
 
         //extracting only opponent pieces
         ArrayList<Piece> opponentPieces = new ArrayList<Piece>();
@@ -116,10 +115,10 @@ public class King extends Piece {
         }
 
         boolean canMove;
-        ArrayList<Integer> kingPossibleMoves = getLegalMoves(game);
+        ArrayList<Integer> kingPossibleMoves = getLegalMoves(pieces);
         for (Integer i : kingPossibleMoves)
         {
-            if (kingCanMoveThere(game, opponentPieces, i))
+            if (kingCanMoveThere(pieces, opponentPieces, i))
             {
                 return true;
             }
@@ -144,12 +143,12 @@ public class King extends Piece {
         return false;
     }
 
-    private boolean kingCanMoveThere(Game game, ArrayList<Piece> opponentPieces, int tileLocation) {
-        Piece[] pieces = game.getBoard2();
+    private boolean kingCanMoveThere(Piece[] pieces, ArrayList<Piece> opponentPieces, int tileLocation) {
+
 
         for (Piece p : opponentPieces)
         {
-            if (p.getLegalMoves(game).contains(pieces[tileLocation]))
+            if (p.getLegalMoves(pieces).contains(pieces[tileLocation]))
             {
                 return false;
             }

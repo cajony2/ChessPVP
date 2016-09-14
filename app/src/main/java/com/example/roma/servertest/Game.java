@@ -282,13 +282,22 @@ public class Game {
             json.put("turn", turn);
             json.put("gameid",gameId);
             json.put("pieces", getPiecesJson());
+            json.put("eatenpieces",getEatenPiecesJson());
+            json.put("eatenpiecessize",eatenPieces.size());
         } catch (JSONException e) {
             Log.d("chess","fucking error creatinf json player name=" + _whitePlayer.getName());
             e.printStackTrace();
         }
         return json;
     }
+    public JSONArray getEatenPiecesJson() throws JSONException{
+        JSONArray pieces = new JSONArray();
 
+        for(int i=0; i < eatenPieces.size(); i++)
+            pieces.put(eatenPieces.get(i).toJson());
+
+        return pieces;
+    }
     public JSONArray getPiecesJson() throws JSONException{
         JSONArray pieces = new JSONArray();
 
@@ -312,7 +321,7 @@ public class Game {
     private void setEatenPieces(JSONArray eatenPiecesJson) {
         eatenPieces = new ArrayList<Piece>();
         JSONObject temp;
-        //Log.i("chess","eaten pieces "+eatenPiecesJson.toString());
+        Log.i("chess","eaten pieces "+eatenPiecesJson.toString());
         for(int i =0 ; i<eatenPiecesSize ; i++){
             try {
                 temp = eatenPiecesJson.getJSONObject(i);
@@ -352,5 +361,11 @@ public class Game {
 
 
         }
+    }
+
+    public void addEatenPiece(Piece p) {
+        eatenPieces.add(p);
+        eatenPiecesSize++;
+        Log.i("chess","eaten piece added");
     }
 }

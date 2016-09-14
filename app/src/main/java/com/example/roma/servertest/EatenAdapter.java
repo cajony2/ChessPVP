@@ -51,4 +51,8 @@ public class EatenAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public void setEatenPieces(ArrayList<Piece> eatenPieces) {
+        this.eatenPieces = eatenPieces;
+    }
 }

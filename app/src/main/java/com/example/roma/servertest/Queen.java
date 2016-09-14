@@ -3,6 +3,7 @@ package com.example.roma.servertest;
 import android.content.Context;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,9 +54,9 @@ public class Queen extends Piece {
 
     //done by Jony
     @Override
-    ArrayList<Integer> getLegalMoves(Game game) {
+    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> pieceArr = possibleMoves(game);
+        ArrayList<Piece> pieceArr = possibleMoves(toDoubleArray(pieces));
         for (Piece p : pieceArr)
         {
             legalMoves.add(p.getPosition());
@@ -64,13 +65,12 @@ public class Queen extends Piece {
     }
 
 
-    private ArrayList<Piece> possibleMoves(Game game) {
+    private ArrayList<Piece> possibleMoves(Piece[][] pieces) {
 
         ArrayList<Piece> result = new ArrayList<Piece>();
-        Piece[][] pieces = game.getGridPieces();
         int row = _pointPosition.x;
         int col = _pointPosition.y;
-
+        Log.i("chess","in queen possibleMoves");
         //moving downward
         for (int r = row+1; r < TILES_NUMBER_IN_A_ROW; r++)
         {

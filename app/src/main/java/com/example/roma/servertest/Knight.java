@@ -45,9 +45,9 @@ public class Knight extends Piece {
 
     //done by Jony
     @Override
-    ArrayList<Integer> getLegalMoves(Game game) {
+    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> pieceArr = possibleMoves(game);
+        ArrayList<Piece> pieceArr = possibleMoves(toDoubleArray(pieces));
         for (Piece p : pieceArr)
         {
             legalMoves.add(p.getPosition());
@@ -55,10 +55,9 @@ public class Knight extends Piece {
         return legalMoves;
     }
 
-    private ArrayList<Piece> possibleMoves(Game game)
+    private ArrayList<Piece> possibleMoves(Piece[][] pieces)
     {
         ArrayList<Piece> result = new ArrayList<Piece>();
-        Piece[][] pieces = game.getGridPieces();
         int row = _pointPosition.x;
         int col = _pointPosition.y;
 

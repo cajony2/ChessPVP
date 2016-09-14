@@ -86,7 +86,7 @@ public abstract class Piece{
         return _isFlipped;
     }
 
-    public void  setIsFliped(boolean bool)
+    public void  setIsFlipped(boolean bool)
     {
         _isFlipped = bool;
     }
@@ -180,11 +180,10 @@ public abstract class Piece{
     }
 
     // each peace should override this method and return  the legal moves from the piece location according to the games piece layout
-    abstract  ArrayList<Integer> getLegalMoves(Game game);
+    public abstract  ArrayList<Integer> getLegalMoves(Piece[] pieces);
 
-    protected boolean canMove(Game game)
+    protected boolean canMove(Piece[] pieces)
     {
-        Piece[] pieces = game.getBoard2();
         /*Piece theKing = null;
         for (Piece p : pieces)
         {
@@ -206,7 +205,7 @@ public abstract class Piece{
 
         for (Piece p : opponentPieces)//looping through opponent pieces
         {
-            p.getLegalMoves(game);
+            p.getLegalMoves(pieces);
             if (p.checks())
             {
                 setActive(true);
@@ -234,5 +233,14 @@ public abstract class Piece{
         json.put("image", image);
         json.put("position", position);
         return json;
+    }
+
+    protected static Piece[][] toDoubleArray(Piece[] pieces){
+        Piece[][] doublePieces = new Piece[8][8];
+        for(int i = 0 ; i<8 ; i++)
+            for(int j = 0 ; j<8 ; j++){
+                doublePieces[i][j]=pieces[i+j];
+            }
+        return doublePieces;
     }
 }

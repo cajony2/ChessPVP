@@ -47,9 +47,8 @@ public class Pawn extends Piece {
 
     //Jony added: pawn can move 2 squares at the beginning and setCheck if can eat the king(not tested yet)
     @Override
-    ArrayList<Integer> getLegalMoves(Game game) {
+    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        Piece[] pieces = game.getBoard2();
         int temp = position;
         int beginTemp = position;
         String color = pieces[position].getColor();

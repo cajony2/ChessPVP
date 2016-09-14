@@ -1,41 +1,29 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
-import android.media.Image;
-import android.media.ToneGenerator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
 
 /**
  * Created by Roma on 8/1/2016.
+ *
  */
 public class Adapter extends BaseAdapter {
 
     Context c;
-    JSONArray piecesJson;
     ArrayList<Boolean> isSelected;
     boolean[] possibleMove;
     int selectedTile;
-    Game game;
+    Piece[] pieces;
 
-    public Adapter(Context c , Game _game, JSONArray piecesJson){
+    public Adapter(Context c , Piece[] _pieces){
         this.c=c;
-        game = _game;
-        this.piecesJson=piecesJson;
-        isSelected = new ArrayList<Boolean>();
+        pieces=_pieces;
+        isSelected = new ArrayList<>();
         possibleMove = new boolean[64];
         selectedTile=-1;
     }
@@ -56,7 +44,7 @@ public class Adapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
 
-        return game.getPiece(position);
+        return pieces[position];
     }
 
     @Override
@@ -67,10 +55,7 @@ public class Adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Piece piece;
-        Piece[] allPieces = game.getBoard2();
-        piece = allPieces[position];
-
+        Piece piece = pieces[position];
         if(convertView == null){
             convertView=inflate.inflate(R.layout.singlesquare, parent, false);
         }
@@ -81,38 +66,38 @@ public class Adapter extends BaseAdapter {
         pieceImage.setImageDrawable(null);
 
 
-            int resID = piece.getImg();
+        int resID = piece.getImg();
 
-            //color black and white tiles
-            int black , white;
-            if(possibleMove[position]){
-                black = R.drawable.blacksel;
-                white = R.drawable.whitesel;
+        //color black and white tiles
+        int black , white;
+        if(possibleMove[position]){
+            black = R.drawable.blacksel;
+            white = R.drawable.whitesel;
+        }
+        else {
+            black = R.drawable.black;
+            white = R.drawable.white;
+        }
+        if (position % 16 < 8) {
+            if (position % 2 == 0) {
+                tileColor.setImageResource(black);
+            } else {
+                tileColor.setImageResource(white);
             }
-            else {
-                black = R.drawable.black;
-                white = R.drawable.white;
-            }
-                if (position % 16 < 8) {
-                    if (position % 2 == 0) {
-                        tileColor.setImageResource(black);
-                    } else {
-                        tileColor.setImageResource(white);
-                    }
-                } else if (position % 2 == 0) {
-                    tileColor.setImageResource(white);
-                } else {
-                    tileColor.setImageResource(black);
-                }
+        } else if (position % 2 == 0) {
+            tileColor.setImageResource(white);
+        } else {
+            tileColor.setImageResource(black);
+        }
 
-            //TODO:  selected tiles get info from some global list object
+        //TODO:  selected tiles get info from some global list object
 
-            if(!piece.isEmpty){
+        if(!piece.isEmpty){
 
-                pieceImage.setImageResource(resID);
-                if (piece._isFlipped)
-                    pieceImage.setRotationX(180);
-            }
+            pieceImage.setImageResource(resID);
+            if (piece._isFlipped)
+                pieceImage.setRotationX(180);
+        }
 
         return convertView;
     }
@@ -121,10 +106,8 @@ public class Adapter extends BaseAdapter {
         possibleMove=possibleMoves;
     }
 
-    public Game getGame(){
-        return game;
+    public void setPieces(Piece[] _pieces){
+        pieces=_pieces;
     }
-    public void setGame(Game _game){
-        this.game = _game;
-    }
+
 }
