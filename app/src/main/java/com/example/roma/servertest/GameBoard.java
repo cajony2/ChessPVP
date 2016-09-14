@@ -1,29 +1,15 @@
 package com.example.roma.servertest;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.Toast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-
 import layout.Board;
 import layout.BottomInfo;
 import layout.TopInfo;
@@ -47,7 +33,7 @@ public class GameBoard extends Activity implements Communicator {
 
 
 
-    public static final String MAKE_MOVE = "makeMove";
+
     public static final String GAME_READY = "isGameReady";
     public static final String MOVE_MADE = "moveMade";
     @Override
@@ -217,6 +203,38 @@ public class GameBoard extends Activity implements Communicator {
     public void setGame(String gameJson) {
         refreshGame(gameJson);
 
+    }
+
+    @Override
+    public void moveMade(String answerType, String message) {
+        switch (answerType) {
+            case MOVE_MADE:                                         //servlet received players move
+                Log.i("chess", "move make was successful");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                new ReadFromDB(this, GAME_READY, userName, game).execute();             // check if opponent made his move
+                break;
+            case ReadFromDB.GAME_NOT_READY:                                                                        //check if opponent made his move
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                new ReadFromDB(this, GAME_READY, userName, game).execute();
+                break;
+            case ReadFromDB.GAME_IS_READY:
+                Log.i("chess", "game is ready and gameJson is:" + game.toJson());
+                setGame(message);
+                break;
+        }
+    }
+
+    @Override
+    public void timerFinished() {
+        Log.i("chess","Times up!");
     }
 }
 

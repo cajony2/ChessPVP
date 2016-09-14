@@ -102,32 +102,8 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
 
     public void onPostExecute(String message){
         // after move was sent to database check if opponent made his move
-        switch(message) {
-            case MOVE_MADE:                                         //servlet received players move
-                Log.i("chess", "move make was successful");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                new ReadFromDB(comm, GAME_READY, userName, game,attempts++).execute();             // check if opponent made his move
-                break;
-            case GAME_NOT_READY:                                                                        //check if opponent made his move
-                if(attempts<5) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Log.i("chess","attempts:"+attempts);
-                    new ReadFromDB(comm, GAME_READY, userName, game,attempts++).execute();
-                }
-                break;
-            case GAME_IS_READY:
-                Log.i("chess","game is ready and gameJson is:"+game.toJson());
-                comm.setGame(returnMessage);
-                break;
-        }
+        comm.moveMade(message , returnMessage);
+
     }
 
 

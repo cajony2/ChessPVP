@@ -29,6 +29,7 @@
         <activity android:name=".InitGame"></activity>
         <activity android:name=".PersonalInfo"></activity>
         <activity android:name=".CreateAccount"></activity>
+        <activity android:name=".EndGamePopup"></activity>
     </application>
 
 </manifest>

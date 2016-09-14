@@ -10,7 +10,7 @@
 
     <fragment
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="95dp"
     android:id="@+id/topFragment"
     android:name="layout.TopInfo" />
 
@@ -22,10 +22,14 @@
 
     <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="125dp"
         android:id="@+id/bottomFragment"
         android:name="layout.BottomInfo"/>
-
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/timerBarFragment"
+        android:name="layout.TimerBar" />
 
 
 </LinearLayout>
