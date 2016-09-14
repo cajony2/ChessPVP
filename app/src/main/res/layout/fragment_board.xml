@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:background="@drawable/main_frame"
+    android:id="@+id/linearlayountchessboard"
+    tools:context="layout.Board">
+
+        <GridView
+            android:id="@+id/chessboard"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="8"
+            android:gravity="center_horizontal">
+        </GridView>
+
+</LinearLayout>
