@@ -10,17 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
 import com.example.roma.servertest.Adapter;
+import com.example.roma.servertest.Bishop;
 import com.example.roma.servertest.Empty;
+import com.example.roma.servertest.King;
+import com.example.roma.servertest.Knight;
+import com.example.roma.servertest.Pawn;
 import com.example.roma.servertest.Piece;
+import com.example.roma.servertest.Queen;
 import com.example.roma.servertest.R;
 import com.example.roma.servertest.Communicator;
-
+import com.example.roma.servertest.Rook;
 import java.util.ArrayList;
 
 
 public class Board extends Fragment implements AdapterView.OnItemClickListener {
+
+    private final int TILES_NUMBER_IN_A_ROW = 8;
 
     GridView gridView;
     Communicator comm;
@@ -80,6 +86,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             p.setIsFlipped(true);
         }
     }
+
     public void refresh(Piece[] _pieces){
         Log.i("chess","in refresh");
         piecesOld=_pieces;
@@ -130,14 +137,50 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                         if(!piecesOld[position].getName().equals("empty"))      //if player eats opponent piece
                                 comm.setEatenPiece(piecesOld[position]);
 
-                        piecesOld[position] = piecesOld[selectedTile];
+                        Point tempPoint = new Point(piecesOld[position].getPointPosition().x, piecesOld[position].getPointPosition().y);
+                        int tempPosition = piecesOld[position].getPosition();
+
+                        switch (piecesOld[selectedTile].getName()){
+                            case "rook":
+                                piecesOld[position] = new Rook(piecesOld[selectedTile]);
+                                break;
+                            case "queen":
+                                piecesOld[position] = new Queen(piecesOld[selectedTile]);
+                                break;
+                            case "pawn":
+                                piecesOld[position] = new Pawn(piecesOld[selectedTile]);
+                                break;
+                            case "knight":
+                                piecesOld[position] = new Knight(piecesOld[selectedTile]);
+                                break;
+                            case "king":
+                                piecesOld[position] = new King(piecesOld[selectedTile]);
+                                break;
+                            case "empty":
+                                piecesOld[position] = new Empty(piecesOld[selectedTile]);
+                                break;
+                            case "bishop":
+                                piecesOld[position] = new Bishop(piecesOld[selectedTile]);
+                                break;
+                        }
+                        piecesOld[position].setPointPosition(tempPoint);
+                        piecesOld[position].setPosition(tempPosition);
+
+                        int x = piecesOld[selectedTile].getPointPosition().x;
+                        int y = piecesOld[selectedTile].getPointPosition().y;
+                        piecesOld[selectedTile] = new Empty("empty", "white", selectedTile);
+                        piecesOld[selectedTile].setPointPosition(x, y);
+                        piecesOld[selectedTile].setEmpty(true);
+
+                        fillDoubleArrayFromSingle(piecesOld, pieces);
+                        /*piecesOld[position] = piecesOld[selectedTile];
                         piecesOld[position].setPosition(position);
                         Point p = piecesOld[selectedTile].getPointPosition();
                         piecesOld[position].setPointPosition(p);
 
                         piecesOld[selectedTile] = new Empty("empty", "white", selectedTile);
                         piecesOld[selectedTile].setEmpty(true);
-                        piecesOld[selectedTile].setPosition(position);
+                        piecesOld[selectedTile].setPosition(position);*/
                         /*
                         pieces[selectedTile].setPointPosition(tempPointPosition);
                         pieces[selectedTile].setPosition(tempPosition);
@@ -154,6 +197,21 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    //filling the double array of Pieces from a single array
+    private void fillDoubleArrayFromSingle(Piece[] singleArray, Piece[][] doubleArray)
+    {
+        int counter = 0;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                doubleArray[row][col] = singleArray[counter];
+                doubleArray[row][col].setPointPosition(row, col);
+                counter++;
+            }
+        }
     }
 
 }

@@ -23,6 +23,8 @@ import layout.TopInfo;
  */
 public class GameBoard extends Activity implements Communicator {
 
+    private final int TILES_NUMBER_IN_A_ROW = 8;
+
     ArrayList<Piece> whiteEaten;            // need to move this to game object
     ArrayList<Piece> blackEaten;            // need to move this to game object
     String color;
@@ -45,9 +47,9 @@ public class GameBoard extends Activity implements Communicator {
         //this is the name of the player that playes this game
         userName = intent.getStringExtra("userName");           // username ==player1 - this player is playing the white pieces
         String gameJson = intent.getStringExtra("game");
-        String action  = intent.getStringExtra("ACTION");
+        String action = intent.getStringExtra("ACTION");
 
-        Log.i("chess","gameBoard created , action: "+action);
+        Log.i("chess", "gameBoard created , action: " + action);
 
         if (action.equals("fullGame")) {
 
@@ -61,9 +63,22 @@ public class GameBoard extends Activity implements Communicator {
                 addEatenPieces(game.getEatenPieces());
             }
         }
-
     }
 
+    /*private void flipBoard(Game game)
+    {
+        View v = findViewById(R.id.linearlayountchessboard);//the view in which the board is in
+        v.setRotationX(180);
+        rotatePieces(game);
+    }
+
+    private void rotatePieces(Game game) {
+        Piece[] pieces = game.getBoard2();
+        for (Piece p : pieces)
+        {
+            p._isFlipped = true;
+        }
+    }*/
 
 
     private void addEatenPieces(ArrayList<Piece> eatenPieces) {

@@ -18,7 +18,7 @@ import java.util.List;
 
 public abstract class Piece{
 
-        protected final int TILES_NUMBER_IN_A_ROW = 8;
+        protected final static int TILES_NUMBER_IN_A_ROW = 8;
 
         protected int _color;//added by jony
         protected Point _pointPosition;//added by jony
@@ -31,13 +31,6 @@ public abstract class Piece{
         protected int position;
         protected boolean isEmpty;
 
-       /* //default constructor added by jony
-        public Piece(int color, Tile tile) {
-
-            _color = color;
-            _tile = tile;
-            _isActive = true;
-    }*/
 
     public Piece (String name, String color, int pos){
 
@@ -237,10 +230,16 @@ public abstract class Piece{
 
     protected static Piece[][] toDoubleArray(Piece[] pieces){
         Piece[][] doublePieces = new Piece[8][8];
-        for(int i = 0 ; i<8 ; i++)
-            for(int j = 0 ; j<8 ; j++){
-                doublePieces[i][j]=pieces[i+j];
+        int counter = 0;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                doublePieces[row][col] = pieces[counter];
+                doublePieces[row][col].setPointPosition(row, col);
+                counter++;
             }
+        }
         return doublePieces;
     }
 }

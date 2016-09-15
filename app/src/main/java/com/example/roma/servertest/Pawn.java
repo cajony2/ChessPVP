@@ -68,7 +68,7 @@ public class Pawn extends Piece {
 
             //eat right
             temp = position+9;
-            if(temp%8 != 0 && temp<64 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
+            if(temp%8 != 0 && temp<64 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
             {
                 legalMoves.add(temp);
                 if (pieces[temp].getName().equals("king"))
@@ -78,7 +78,7 @@ public class Pawn extends Piece {
             }
             //eat left
             temp = position+7;
-            if(temp%8 != 7 && temp<64 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
+            if(temp%8 != 7 && temp<64 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
             {
                 legalMoves.add(temp);
                 if (pieces[temp].getName().equals("king"))
@@ -100,7 +100,7 @@ public class Pawn extends Piece {
             }
             //eat right
             temp = position-7;
-            if(temp%8 != 0 && temp>=0 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
+            if(temp%8 != 0 && temp>=0 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
             {
                 legalMoves.add(temp);
                 if (pieces[temp].getName().equals("king"))
@@ -110,7 +110,7 @@ public class Pawn extends Piece {
             }
             //eat left
             temp = position-9;
-            if(temp%8 != 7 &&  temp>=0 && !(pieces[temp].isEmpty)  &&  !(pieces[temp].equals(color)))
+            if(temp%8 != 7 &&  temp>=0 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
             {
                 legalMoves.add(temp);
                 if (pieces[temp].getName().equals("king"))
