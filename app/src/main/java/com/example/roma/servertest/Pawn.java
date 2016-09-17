@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece {
 
-    boolean hasNotMovedYet;
+    //boolean hasNotMovedYet;
 
     /*//constructor - added by jony
     public  Pawn(int color, Tile tile){
@@ -20,7 +21,7 @@ public class Pawn extends Piece {
 
     public Pawn(String name, String color, int pos) {
         super(name, color, pos);
-        hasNotMovedYet = true;
+        //hasNotMovedYet = true;
         // TODO Auto-generated constructor stub
         if (color.equals("white")){
             image = R.drawable.plt60;
@@ -36,9 +37,9 @@ public class Pawn extends Piece {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
-        _checksKing = piece.checks();
+        //_checksKing = piece.checks();
         _isFlipped = piece._isFlipped;
-        name = piece.getName();
+        name = "pawn";
         color = piece.getColor();
         image = piece.getImg();
         position = piece.getPosition();
@@ -49,84 +50,115 @@ public class Pawn extends Piece {
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        int temp = position;
-        int beginTemp = position;
-        String color = pieces[position].getColor();
+        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        for (Piece p : possibleMoves)
+        {
+            legalMoves.add(p.getPosition());
+        }
+        return legalMoves;
+        /*ArrayList<Piece> obligatedTiles = obligativeTiles(pieces);//the tiles this piece have to go to in order to block check
+        if (obligativeTiles(pieces) == null)//if it moves the king is exposed, so can`t move
+        {
+            return legalMoves;
+        }
+        if (obligatedTiles.size() == 0)//no restrictions on the moves
+        {
+            for (Piece p : possibleMoves)
+            {
+                legalMoves.add(p.getPosition());
+            }
+            return legalMoves;
+        }
+        else//merge between obligatedTiles and possibleMoves to see where this piece can move
+        {
+            ArrayList<Piece> mergedList = new ArrayList<>();
+            for (Piece pm : possibleMoves)
+            {
+                for (Piece ot : obligatedTiles)
+                {
+                    if (pm.equals(ot))
+                    {
+                        mergedList.add(pm);
+                    }
+                }
+                //legalMoves.add(pm.getPosition());
+            }
+            for (Piece p : mergedList)
+            {
+                legalMoves.add(p.getPosition());
+            }
+            return legalMoves;
+        }*/
+    }
 
-        if(color.equals("white")) {
-            temp=position+8;
-            beginTemp = temp + 8;//at the beginning the pawn can move two squares
-            //move forward
-            if(pieces[temp].isEmpty)
-            {
-                if(hasNotMovedYet && pieces[beginTemp].isEmpty)
-                {
-                    legalMoves.add(beginTemp);
-                }
-                legalMoves.add(temp);
-            }
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces)
+    {
+        ArrayList<Piece> result = new ArrayList<Piece>();
+        if (!getActive())
+        {
+            return result;
+        }
+        int row = _pointPosition.x;
+        int col = _pointPosition.y;
 
-            //eat right
-            temp = position+9;
-            if(temp%8 != 0 && temp<64 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
+        if (getIntColor() == Color.WHITE)
+        {
+            if (pieces[row+1][col].getName().equals("empty"))
             {
-                legalMoves.add(temp);
-                if (pieces[temp].getName().equals("king"))
+                result.add(pieces[row+1][col]);
+            }
+            if (row == 1)//pawn hasn`t moved yet, can move 2 tiles
+            {
+                if (pieces[row+2][col].getName().equals("empty"))
                 {
-                    setCheck(true);
+                    result.add(pieces[row+2][col]);
                 }
             }
-            //eat left
-            temp = position+7;
-            if(temp%8 != 7 && temp<64 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
+            if (row+1 < TILES_NUMBER_IN_A_ROW && col+1 < TILES_NUMBER_IN_A_ROW)
             {
-                legalMoves.add(temp);
-                if (pieces[temp].getName().equals("king"))
+                if ((!pieces[row+1][col+1].getName().equals("empty") && pieces[row+1][col+1].getIntColor() != getIntColor()))
                 {
-                    setCheck(true);
+                    result.add(pieces[row+1][col+1]);
                 }
             }
-        }else{
-            temp=position-8;
-            beginTemp = temp - 8;//at the beginning the pawn can move two squares
-            //move forward
-            if(pieces[temp].isEmpty)
+            if (row+1 < TILES_NUMBER_IN_A_ROW && col-1 >= 0)
             {
-                if(hasNotMovedYet && pieces[beginTemp].isEmpty)
+                if ((!pieces[row+1][col-1].getName().equals("empty") && pieces[row+1][col-1].getIntColor() != getIntColor()))
                 {
-                    legalMoves.add(beginTemp);
-                }
-                legalMoves.add(temp);
-            }
-            //eat right
-            temp = position-7;
-            if(temp%8 != 0 && temp>=0 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
-            {
-                legalMoves.add(temp);
-                if (pieces[temp].getName().equals("king"))
-                {
-                    setCheck(true);
-                }
-            }
-            //eat left
-            temp = position-9;
-            if(temp%8 != 7 &&  temp>=0 && pieces[temp] instanceof Empty  &&  pieces[temp].getIntColor() != getIntColor())
-            {
-                legalMoves.add(temp);
-                if (pieces[temp].getName().equals("king"))
-                {
-                    setCheck(true);
+                    result.add(pieces[row+1][col-1]);
                 }
             }
         }
-        return legalMoves;
+        else//pawn is black
+        {
+            if (pieces[row-1][col].getName().equals("empty"))
+            {
+                result.add(pieces[row-1][col]);
+            }
+            if (row == 7)//pawn hasn`t moved yet, can move 2 tiles
+            {
+                if (pieces[row-2][col].getName().equals("empty"))
+                {
+                    result.add(pieces[row-2][col]);
+                }
+            }
+            if (col+1 < TILES_NUMBER_IN_A_ROW)
+            {
+                if ((!pieces[row-1][col+1].getName().equals("empty") && pieces[row-1][col+1].getIntColor() != getIntColor()) || (pieces[row-1][col+1].getActive()))
+                {
+                    result.add(pieces[row-1][col+1]);
+                }
+            }
+            if (col-1 >= 0)
+            {
+                if ((!pieces[row-1][col-1].getName().equals("empty") && pieces[row-1][col-1].getIntColor() != getIntColor()) || (pieces[row-1][col-1].getActive()))
+                {
+                    result.add(pieces[row-1][col-1]);
+                }
+            }
+        }
+        return result;
     }
-
-
-    /*ArrayList<Piece> possibleMoves(Game game) {
-        return null;
-    }*/
-
 
 }
 

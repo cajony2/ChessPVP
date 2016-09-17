@@ -46,7 +46,8 @@ public class Empty extends Piece {
         return null;
     }
 
-    ArrayList<Piece> possibleMoves(Game game) {
+    @Override
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces) {
         return null;
     }
 

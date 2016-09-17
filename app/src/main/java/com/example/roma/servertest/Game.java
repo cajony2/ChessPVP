@@ -14,13 +14,9 @@ import org.json.JSONObject;
 
 public class Game {
 
-    //jony added
-    private Tile[][] _tiles;
-    private final int TILES_NUMBER_IN_A_ROW = 8;
-    private Context _context;
-    private Piece[][] _gridPieces;
-
     //variables
+    private final int TILES_NUMBER_IN_A_ROW = 8;
+    private Piece[][] _gridPieces;
     private Piece[] _pieces;
     private int status;
     private String turn;
@@ -29,18 +25,6 @@ public class Game {
     private int eatenPiecesSize;
     private Player _whitePlayer;
     private Player _blackPlayer;
-
-
-    /*//constructor added by jony, it calls a different method (newCreateBoard) that fills Tile[][]
-    public Game (Context context, String player1){
-        Log.i("chess", "creating game");
-        _context = context;
-        _whitePlayer = new Player.WhitePlayer(player1);
-        _blackPlayer = new Player.BlackPlayer(player1);
-        status = 0 ;      // 0=  create new game;
-        turn = _whitePlayer.getName();
-        newCreateBoard();//jony added
-    }*/
 
     //constructor NOT IN USE!!!
     public Game (String player1){
@@ -51,70 +35,7 @@ public class Game {
         createBoard();
     }
 
-    /*//added by jony - this method fills the Tile[][]
-    private void newCreateBoard() {
-        _tiles = new Tile[TILES_NUMBER_IN_A_ROW][TILES_NUMBER_IN_A_ROW];
-        for (int i = 0; i < TILES_NUMBER_IN_A_ROW; i++){
-            int colorDivider = 0;
-            for (int j = 0; j < TILES_NUMBER_IN_A_ROW; j++){
-                if ((i % 2) == 0){
-                    if ((colorDivider % 2) == 0){
-                        _tiles[i][j] = new Tile.WhiteTile(_context, new Point(i, j));
-                    }
-                    else{
-                        _tiles[i][j] = new Tile.BlackTile(_context, new Point(i, j));
-                    }
-                }
-                else{
-                    if ((colorDivider % 2) == 0){
-                        _tiles[i][j] = new Tile.BlackTile(_context, new Point(i, j));
-                    }
-                    else{
-                        _tiles[i][j] = new Tile.WhiteTile(_context, new Point(i, j));
-                    }
-                }
-                colorDivider++;
-            }
-        }
-        setPieces();
-    }*/
-
-    /*//added by jony - setting the pieces on board (beginning of a game)
-    private void setPieces() {
-        //filling first row from the top with black chess pieces
-        _tiles[0][0].setPiece(new Rook(Color.BLACK, _tiles[0][0]));
-        _tiles[0][1].setPiece(new Knight(Color.BLACK, _tiles[0][0]));
-        _tiles[0][2].setPiece(new Bishop(Color.BLACK, _tiles[0][0]));
-        _tiles[0][3].setPiece(new Queen(Color.BLACK, _tiles[0][0]));
-        _tiles[0][4].setPiece(new King(Color.BLACK, _tiles[0][0]));
-        _tiles[0][5].setPiece(new Bishop(Color.BLACK, _tiles[0][0]));
-        _tiles[0][6].setPiece(new Knight(Color.BLACK, _tiles[0][0]));
-        _tiles[0][7].setPiece(new Rook(Color.BLACK, _tiles[0][0]));
-
-        //filling second row from the top with black pawns
-        for (int i = 0; i < TILES_NUMBER_IN_A_ROW; i++)
-        {
-            _tiles[1][i].setPiece(new Pawn(Color.BLACK, _tiles[1][i]));
-        }
-
-        //filling second row from the bottom with white pawns
-        for (int i = 0; i < TILES_NUMBER_IN_A_ROW; i++)
-        {
-            _tiles[6][i].setPiece(new Pawn(Color.WHITE, _tiles[6][i]));
-        }
-
-        //filling first row from the bottom with white chess pieces
-        _tiles[7][0].setPiece(new Rook(Color.WHITE, _tiles[7][0]));
-        _tiles[7][1].setPiece(new Knight(Color.WHITE, _tiles[7][1]));
-        _tiles[7][2].setPiece(new Bishop(Color.WHITE, _tiles[7][2]));
-        _tiles[7][3].setPiece(new Queen(Color.WHITE, _tiles[7][3]));
-        _tiles[7][4].setPiece(new King(Color.WHITE, _tiles[7][4]));
-        _tiles[7][5].setPiece(new Bishop(Color.WHITE, _tiles[7][5]));
-        _tiles[7][6].setPiece(new Knight(Color.WHITE, _tiles[7][6]));
-        _tiles[7][7].setPiece(new Rook(Color.WHITE, _tiles[7][7]));
-    }*/
-
-    //receiving json from server and create new game object
+    //Constructor receiving json from server and create new game object
     public Game (JSONObject gameJson){
         Log.d("ingameConstructor","creating new game from, json");
         try {
@@ -206,12 +127,15 @@ public class Game {
     public String getPlayer1(){
         return _whitePlayer.getName();
     }
+
     public String getPlayer2(){
         return _blackPlayer.getName();
     }
+
     public int getStatus(){
         return status;
     }
+
     public String getTurn(){
         return turn;
     }
@@ -290,6 +214,7 @@ public class Game {
         }
         return json;
     }
+
     public JSONArray getEatenPiecesJson() throws JSONException{
         JSONArray pieces = new JSONArray();
 
@@ -298,6 +223,7 @@ public class Game {
 
         return pieces;
     }
+
     public JSONArray getPiecesJson() throws JSONException{
         JSONArray pieces = new JSONArray();
 

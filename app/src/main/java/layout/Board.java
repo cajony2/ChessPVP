@@ -64,7 +64,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         comm = (Communicator) getActivity();
         piecesOld= comm.getPiecesOld();
         pieces = comm.getPieces();
-        myColor =comm.getColor();
+        myColor = comm.getColor();
         adapter  = new Adapter(getActivity(),piecesOld);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
@@ -77,6 +77,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     private void flipBoard()
     {
         chessBoardView.setRotationX(180);
+        //chessBoardView.setRotationY(180);
         rotatePieces();
     }
     private void rotatePieces() {
@@ -130,10 +131,8 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             } else {                        //selected maybe a move
                 if (selectedTile >= 0) {   //making a move
                     if (possibleMove[position]) {    // this move is legal
-                        //should add if piece canMove (so he would not expose the king)        יש טלפון של בית?
+                        //should add if piece canMove (so he would not expose the king)
 
-
-                        //pieces[position].setPosition(pieces[selectedTile].getPosition());
                         if(!piecesOld[position].getName().equals("empty"))      //if player eats opponent piece
                                 comm.setEatenPiece(piecesOld[position]);
 

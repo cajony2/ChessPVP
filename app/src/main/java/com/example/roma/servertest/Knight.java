@@ -34,9 +34,9 @@ public class Knight extends Piece {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
-        _checksKing = piece.checks();
+        //_checksKing = piece.checks();
         _isFlipped = piece._isFlipped;
-        name = piece.getName();
+        name = "knight";
         color = piece.getColor();
         image = piece.getImg();
         position = piece.getPosition();
@@ -47,21 +47,25 @@ public class Knight extends Piece {
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> pieceArr = possibleMoves(toDoubleArray(pieces));
-        for (Piece p : pieceArr)
+        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        for (Piece p : possibleMoves)
         {
             legalMoves.add(p.getPosition());
         }
         return legalMoves;
     }
 
-    private ArrayList<Piece> possibleMoves(Piece[][] pieces)
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces)
     {
         ArrayList<Piece> result = new ArrayList<Piece>();
+        if (!getActive())
+        {
+            return result;
+        }
         int row = _pointPosition.x;
         int col = _pointPosition.y;
 
-        //moving up
+        //moving down
         if (row-2 >= 0)
         {
             if (col-1 >= 0)//turn left
@@ -97,7 +101,7 @@ public class Knight extends Piece {
                 }
             }
         }
-        //moving down
+        //moving up
         if (row+2 < TILES_NUMBER_IN_A_ROW)
         {
             if (col-1 >= 0)//turn right

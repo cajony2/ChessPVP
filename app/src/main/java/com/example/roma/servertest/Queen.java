@@ -43,9 +43,9 @@ public class Queen extends Piece {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
-        _checksKing = piece.checks();
+        //_checksKing = piece.checks();
         _isFlipped = piece._isFlipped;
-        name = piece.getName();
+        name = "queen";
         color = piece.getColor();
         image = piece.getImg();
         position = piece.getPosition();
@@ -56,18 +56,35 @@ public class Queen extends Piece {
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> pieceArr = possibleMoves(toDoubleArray(pieces));
-        for (Piece p : pieceArr)
+        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        for (Piece p : possibleMoves)
         {
             legalMoves.add(p.getPosition());
         }
         return legalMoves;
+        /*ArrayList<Piece> opponentPieces = opponentPieces(pieces);
+        for (Piece p : opponentPieces)
+        {
+            if (p.checks(pieces))
+            {
+
+            }
+        }
+
+        for (Piece p : possibleMoves)
+        {
+
+        }*/
     }
 
 
-    private ArrayList<Piece> possibleMoves(Piece[][] pieces) {
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces) {
 
         ArrayList<Piece> result = new ArrayList<Piece>();
+        if (!getActive())
+        {
+            return result;
+        }
         int row = _pointPosition.x;
         int col = _pointPosition.y;
         Log.i("chess","in queen possibleMoves");
@@ -76,6 +93,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[r][col].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[r][col].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][col]);
                 if (pieces[r][col].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;
@@ -105,6 +124,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[r][col].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[r][col].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][col]);
                 if (pieces[r][col].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;
@@ -134,6 +155,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[row][c].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[row][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[row][c]);
                 if (pieces[row][c].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;
@@ -163,6 +186,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[row][c].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[row][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[row][c]);
                 if (pieces[row][c].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;
@@ -194,6 +219,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][c]);
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;
@@ -228,6 +255,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][c]);
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;
@@ -262,6 +291,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][c]);
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;
@@ -296,6 +327,8 @@ public class Queen extends Piece {
         {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
+                if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][c]);
                 if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
                 {
                     break;

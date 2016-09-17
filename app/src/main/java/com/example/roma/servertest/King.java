@@ -1,6 +1,7 @@
 package com.example.roma.servertest;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 
 import java.util.ArrayList;
@@ -36,9 +37,9 @@ public class King extends Piece {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
-        _checksKing = piece.checks();
+        //_checksKing = piece.checks();
         _isFlipped = piece._isFlipped;
-        name = piece.getName();
+        name = "king";
         color = piece.getColor();
         image = piece.getImg();
         position = piece.getPosition();
@@ -48,64 +49,16 @@ public class King extends Piece {
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-
-        //castling option should be added
-
-        if (!(canMove(pieces)))
-        {
-            return legalMoves;//if the king can`t move it`ll return empty List
-        }
-        int temp ;
-
-        // up
-        temp =position-8;
-        if (temp>=0 && (pieces[temp].isEmpty() || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-        // up left
-        temp =position-9;
-        if (temp>=0 && ( temp%8 != 7 ) && (pieces[temp].isEmpty() || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-        // up right
-        temp =position-7;
-        if (temp>=0 && ( temp%8 != 0 ) && ((pieces[temp].isEmpty()) || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-        //  right
-        temp =position+1;
-        if (temp>=0 && ( temp%8 != 0 ) && ((pieces[temp].isEmpty()) || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-        // left
-        temp =position-1;
-        if (temp>=0 && ( temp%8 != 7 ) && ((pieces[temp].isEmpty()) || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-        // down left
-        temp =position+7;
-        if (temp<64 && ( temp%8 != 7 ) && ((pieces[temp].isEmpty()) || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-        // left
-        temp =position+9;
-        if (temp<64 && ( temp%8 != 0 ) && ((pieces[temp].isEmpty()) || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-        // left
-        temp =position+8;
-        if (temp<64 && (temp%8 != 7) && ((pieces[temp].isEmpty()) || !pieces[temp].getColor().equals(pieces[position].getColor())) )
-            legalMoves.add(temp);
-
-
-        return legalMoves;
+        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+		for (Piece p : possibleMoves)
+		{
+			legalMoves.add(p.getPosition());
+		}
+		return legalMoves;
     }
 
-    @Override
     protected boolean canMove(Piece[] pieces)
     {
-
-
         //extracting only opponent pieces
         ArrayList<Piece> opponentPieces = new ArrayList<Piece>();
         for (Piece p : pieces)
@@ -156,11 +109,162 @@ public class King extends Piece {
         return true;
     }
 
+    @Override
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces){
+        ArrayList<Piece> result = new ArrayList<Piece>();
+		if (!getActive())
+		{
+			return result;
+		}
+        int row = _pointPosition.x;
+        int col = _pointPosition.y;
+        //getting the opposed color of this piece
+        int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
-    /*ArrayList<Piece> possibleMoves(Game game) {
-        return null;
+        if (row+1 < TILES_NUMBER_IN_A_ROW)//can move up
+        {
+            /*if (pieces[row+1][col].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row+1][col].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row+1][col]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row+1][col].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row+1][col]);
+                    }
+                }
+//            }
+        }
+        if (col+1 < TILES_NUMBER_IN_A_ROW)//can move right
+        {
+            /*if (pieces[row][col+1].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row][col+1].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row][col+1]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row][col+1].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row][col+1]);
+                    }
+                }
+//            }
+        }
+        if (col-1 >= 0)//can move left
+        {
+            /*if (pieces[row][col-1].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row][col-1].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row][col-1]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row][col-1].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row][col-1]);
+                    }
+                }
+//            }
+        }
+        if (row-1 >= 0)//can move down
+        {
+            /*if (pieces[row-1][col].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row-1][col].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row-1][col]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row-1][col].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row-1][col]);
+                    }
+                }
+//            }
+        }
+        if (row+1 < TILES_NUMBER_IN_A_ROW && col+1 < TILES_NUMBER_IN_A_ROW)//can move up right
+        {
+            /*if (pieces[row+1][col+1].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row+1][col+1].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row+1][col+1]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row+1][col+1].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row+1][col+1]);
+                    }
+                }
+//            }
+        }
+        if (row+1 < TILES_NUMBER_IN_A_ROW && col-1 >= 0)//can move up left
+        {
+            /*if (pieces[row+1][col-1].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row+1][col-1].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row+1][col-1]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row+1][col-1].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row+1][col-1]);
+                    }
+                }
+//            }
+        }
+        if (row-1 >= 0 && col-1 >= 0)//can move down left
+        {
+            /*if (pieces[row-1][col-1].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row-1][col-1].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row-1][col-1]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row-1][col-1].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row-1][col-1]);
+                    }
+                }
+//            }
+        }
+        if (row-1 >= 0 && col+1 < TILES_NUMBER_IN_A_ROW)//can move down right
+        {
+            /*if (pieces[row-1][col+1].isThreatened(toSingleArray(pieces), opposingColor).size() == 0)//no one threaten this tile
+            {*/
+                if (pieces[row-1][col+1].isEmpty())//piece is empty
+                {
+                    result.add(pieces[row-1][col+1]);
+                }
+                else//piece is not empty
+                {
+                    if (pieces[row-1][col+1].getIntColor() != getIntColor())//piece is in different color
+                    {
+                        result.add(pieces[row-1][col+1]);
+                    }
+                }
+//            }
+        }
+        return result;
+    }
+
+    /*@Override
+    protected ArrayList<Piece> obligativeTiles(Piece[] pieces)
+    {
+         return new ArrayList<>();
     }*/
-
 
 }
 

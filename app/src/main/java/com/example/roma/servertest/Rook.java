@@ -41,9 +41,9 @@ public class Rook extends Piece {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
-        _checksKing = piece.checks();
+        //_checksKing = piece.checks();
         _isFlipped = piece._isFlipped;
-        name = piece.getName();
+        name = "rook";
         color = piece.getColor();
         image = piece.getImg();
         position = piece.getPosition();
@@ -52,32 +52,40 @@ public class Rook extends Piece {
 
     //done by Jony
     @Override
-    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
+    public ArrayList<Integer> getLegalMoves(Piece[] pieces){
+
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> pieceArr = possibleMoves(toDoubleArray(pieces));
-        for (Piece p : pieceArr)
+        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        for (Piece p : possibleMoves)
         {
             legalMoves.add(p.getPosition());
         }
         return legalMoves;
     }
 
-    @Override
+    /*@Override
     protected boolean canMove(Piece[] pieces) {
         return false;
-    }
+    }*/
 
-    private ArrayList<Piece> possibleMoves(Piece[][] pieces) {
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces) {
         ArrayList<Piece> result = new ArrayList<Piece>();
+        if (!getActive())
+        {
+            return result;
+        }
         int row = _pointPosition.x;
         int col = _pointPosition.y;
 
-        //moving downward
+        //moving up
         for (int r = row+1; r < TILES_NUMBER_IN_A_ROW; r++)
         {
             if (!(pieces[r][col].getName().equals("empty")))//piece is not empty
             {
-                if (pieces[r][col].getColor().equals(color))//piece is the same color as the queen
+                if (!pieces[r][col].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][col]);
+                else
+                if (pieces[r][col].getColor().equals(color))//piece is the same color as the rook
                 {
                     break;
                 }
@@ -101,12 +109,15 @@ public class Rook extends Piece {
                 result.add(pieces[r][col]);
             }
         }
-        //moving upward
+        //moving down
         for (int r = row-1; r >= 0; r--)
         {
             if (!(pieces[r][col].getName().equals("empty")))//piece is not empty
             {
-                if (pieces[r][col].getColor().equals(color))//piece is the same color as the queen
+                if (!pieces[r][col].getActive())//add to possibleMoves if not active
+                    result.add(pieces[r][col]);
+                else
+                if (pieces[r][col].getColor().equals(color))//piece is the same color as the rook
                 {
                     break;
                 }
@@ -135,7 +146,10 @@ public class Rook extends Piece {
         {
             if (!(pieces[row][c].getName().equals("empty")))//piece is not empty
             {
-                if (pieces[row][c].getColor().equals(color))//piece is the same color as the queen
+                if (!pieces[row][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[row][c]);
+                else
+                if (pieces[row][c].getColor().equals(color))//piece is the same color as the rook
                 {
                     break;
                 }
@@ -164,7 +178,10 @@ public class Rook extends Piece {
         {
             if (!(pieces[row][c].getName().equals("empty")))//piece is not empty
             {
-                if (pieces[row][c].getColor().equals(color))//piece is the same color as the queen
+                if (!pieces[row][c].getActive())//add to possibleMoves if not active
+                    result.add(pieces[row][c]);
+                else
+                if (pieces[row][c].getColor().equals(color))//piece is the same color as the rook
                 {
                     break;
                 }
@@ -188,6 +205,7 @@ public class Rook extends Piece {
                 result.add(pieces[row][c]);
             }
         }
+
         return result;
     }
 

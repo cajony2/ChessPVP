@@ -9,6 +9,7 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,9 +95,15 @@ public abstract class Piece{
         _isActive = bool;
     }
 
-    public boolean checks()
+    public boolean checks(Piece[] pieces)
     {
-        return _checksKing;
+        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        for (Piece p : possibleMoves)
+        {
+            if (p instanceof King && p.getIntColor() != getIntColor())
+                return true;
+        }
+        return false;
     }
 
     public void setCheck(boolean bool)
@@ -173,49 +180,108 @@ public abstract class Piece{
     }
 
     // each peace should override this method and return  the legal moves from the piece location according to the games piece layout
-    public abstract  ArrayList<Integer> getLegalMoves(Piece[] pieces);
+    public abstract ArrayList<Integer> getLegalMoves(Piece[] pieces);
 
-    protected boolean canMove(Piece[] pieces)
+    public abstract ArrayList<Piece> possibleMoves(Piece[][] pieces);
+
+    //returns the pieces on board with the same color
+    protected ArrayList<Piece> getPiecesByColor(Piece[] pieces, int color)
     {
-        /*Piece theKing = null;
+        ArrayList<Piece> resultPieces = new ArrayList<Piece>();
         for (Piece p : pieces)
         {
-            if (p.getIntColor() == getIntColor() && p instanceof King)
-            {
-                theKing = p;
-            }
-        }*/
-
-        //extracting only opponent pieces
-        ArrayList<Piece> opponentPieces = new ArrayList<Piece>();
-        for (Piece p : pieces)
-        {
-            if (p.getIntColor() != _color && !(p instanceof Empty))// add piece if not empty and with opponent color
-                opponentPieces.add(p);
+            if (p.getIntColor() == color && !(p instanceof Empty))// add piece if not empty and with specific color
+                resultPieces.add(p);
         }
+        return resultPieces;
+    }
 
-        setActive(false);//set this piece as inactive (hollow) to see if opponent pieces check the king if it moves
+    //returns all of the opponent pieces
+    protected ArrayList<Piece> opponentPieces(Piece[] pieces)
+    {
+        //getting the opposed color of this piece
+        int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
+        //returns all the pieces on board that belongs to the opponent
+        return getPiecesByColor(pieces, opposingColor);
+    }
+
+    /*this method returns a list of Pieces that has to be occupied in order to block a check, even tiles that this piece can not reach
+    * if it returns null, it means it can`t block the check = this piece can not move
+    * if it returns an empty list, it means there are no obligations, there is no check
+    * the king himself overrides this method*/
+    /*protected ArrayList<Piece> obligativeTiles(Piece[] pieces)
+    {
+        ArrayList<Piece> result = new ArrayList<>();
+        //if this piece is empty it can`t move!
+        if (this instanceof Empty)
+            return null;
+
+        //getting the opposed color of this piece
+        int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
+
+        //returns all the pieces on board that belongs to the opponent
+        ArrayList<Piece> opponentPieces = getPiecesByColor(pieces, opposingColor);
+
+        Piece threatenigPiece = null;
+        for (Piece p : opponentPieces)//looping through opponent pieces, see if there`s a check by opponent
+        {
+            ArrayList<Piece> threatenedTiles = p.possibleMoves(toDoubleArray(pieces));
+            if (p.checks())
+            {
+                threatenigPiece = p;
+                if (p instanceof Knight)
+                    return null;
+                result = threatenedTiles;
+                result.add(p);//this piece can eat the piece that checks the king
+            }
+        }
+        setActive(false);//set this piece as inactive (hollow) to see if other opponent pieces check the king if it moves
         for (Piece p : opponentPieces)//looping through opponent pieces
         {
-            p.getLegalMoves(pieces);
+            if (p == threatenigPiece)
+                continue;
+            ArrayList<Piece> threatenedTiles = p.possibleMoves(toDoubleArray(pieces));
             if (p.checks())
             {
                 setActive(true);
-                return false;
+                return null;
+                //result = threatenedTiles;
             }
-            /*ArrayList<Integer> legalMoves = p.getLegalMoves(game);
-            for (Integer i : legalMoves)//looping through the pieces legalMoves to see if they check the king
-            {
-                if (i == theKing.getPosition())//if check then this piece can`t move
-                {
-                    setActive(true);
-                    return false;
-                }
-            }*/
         }
         setActive(true);
-        return true;
+        return result;
+    }*/
+
+    //returns list of pieces that threaten this piece. returns empty list if no one threaten this piece
+    protected ArrayList<Piece> isThreatened(Piece[] pieces, int threateningColor)
+    {
+        ArrayList<Piece> result = new ArrayList<>();
+        ArrayList<Piece> opponentPieces = getPiecesByColor(pieces, threateningColor);
+
+        /*//remove the king
+        int counter = 0;
+        for (int i = 0; i < opponentPieces.size(); i++)
+        {
+            if (opponentPieces.get(i) instanceof King)
+                counter = i;
+        }
+        opponentPieces.remove(counter);*/
+
+        setActive(false);
+        for (Piece opponentPiece : opponentPieces)//looping through opponent pieces
+        {
+            ArrayList<Piece> tileArray = opponentPiece.possibleMoves(toDoubleArray(pieces));
+            for (Piece threatenedTile : tileArray)
+            {
+                if (threatenedTile.equals(this))
+                {
+                     result.add(opponentPiece);
+                }
+            }
+        }
+        setActive(true);
+        return result;
     }
 
     public JSONObject toJson() throws JSONException {
@@ -241,5 +307,20 @@ public abstract class Piece{
             }
         }
         return doublePieces;
+    }
+
+    protected static Piece[] toSingleArray(Piece[][] pieces)
+    {
+        Piece[] singleArray = new Piece[64];
+        int counter = 0;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                singleArray[counter] = pieces[row][col];
+                counter++;
+            }
+        }
+        return singleArray;
     }
 }
