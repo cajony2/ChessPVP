@@ -31,6 +31,7 @@ public class GameBoard extends Activity implements Communicator {
     String userName;
     private Game game;
     int myColor;
+    private boolean firstTime;
 
 
 
@@ -50,19 +51,34 @@ public class GameBoard extends Activity implements Communicator {
         String action = intent.getStringExtra("ACTION");
 
         Log.i("chess", "gameBoard created , action: " + action);
-
-        if (action.equals("fullGame")) {
-
-            try {
-                game = new Game(new JSONObject(gameJson));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (game != null) {
-                myColor = (userName.equals(game.getPlayer1())) ? Color.WHITE : Color.BLACK;
-                addEatenPieces(game.getEatenPieces());
-            }
+        firstTime=true;
+        // create the game from string extra "game"
+        try {
+            game = new Game(new JSONObject(gameJson));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        //set players color
+        myColor = (userName.equals(game.getPlayer1())) ? Color.WHITE : Color.BLACK;
+        addEatenPieces(game.getEatenPieces());
+
+
+        // if player is white then he starts the game
+        if (action.equals("fullGame")) {
+        }
+        else if(action.equals("joinedGame")){
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i("chess","in on start");
+        if(firstTime  && !this.canClick()){
+            new ReadFromDB(this, GAME_READY, userName, game).execute();
+        }
+        firstTime=false;
     }
 
     /*private void flipBoard(Game game)
@@ -250,6 +266,11 @@ public class GameBoard extends Activity implements Communicator {
     @Override
     public void timerFinished() {
         Log.i("chess","Times up!");
+    }
+
+    @Override
+    public boolean canClick() {
+        return userName.equals(game.getTurn());
     }
 }
 

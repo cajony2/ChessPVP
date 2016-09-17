@@ -20,4 +20,6 @@ public interface Communicator {
     void setGame(String gameJson);
     void moveMade(String answerType , String message);
     void timerFinished();
+
+    boolean canClick();
 }

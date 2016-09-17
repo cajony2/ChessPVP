@@ -43,7 +43,6 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        canClick=true;
         isSelected=false;
         moveMade=false;
         possibleMove = new boolean[64];
@@ -62,6 +61,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         comm = (Communicator) getActivity();
+        canClick= comm.canClick();
         piecesOld= comm.getPiecesOld();
         pieces = comm.getPieces();
         myColor = comm.getColor();

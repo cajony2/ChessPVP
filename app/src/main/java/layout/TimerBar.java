@@ -4,6 +4,7 @@ package layout;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class TimerBar extends Fragment {
     TextView progressBarText;
     private Handler handler;
     Communicator comm;
+    private String progressBarMessage;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,8 +33,7 @@ public class TimerBar extends Fragment {
         simpleProgressBar = (ProgressBar) view.findViewById(R.id.timerBar);
         progressBarText = (TextView) view.findViewById(R.id.timerText);
         progress=0;
-        handler  = new Handler();
-        setProgressValue();
+
 
 
     }
@@ -41,15 +42,23 @@ public class TimerBar extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         comm = (Communicator) getActivity();
+        if(comm.canClick())
+            progressBarMessage="Make a Move: ";
+        else
+            progressBarMessage="Waiting for Opponent: ";
+        handler  = new Handler();
+        setProgressValue();
+
     }
 
     private void setProgressValue() {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                Log.i("chess","in timer somthing");
                 simpleProgressBar.setProgress(progress);
                 if(progress%10==0)
-                    progressBarText.setText("Time Left: "+timeLeft());
+                    progressBarText.setText(progressBarMessage+timeLeft());
                 progress++;
                 if(progress<simpleProgressBar.getMax())
                     handler.postDelayed(this, 100);

@@ -35,6 +35,12 @@ public class InitGame extends Activity{
     private String userName;
     private Game game;
 
+
+    public static final String CREATE_GAME = "createNewGame";
+    public static final String JOIN_GAME = "joinGame";
+    public static final String JOIN_READY ="JoinedGame";
+    public static final String JOIN_FAILED = "ERROR";
+
     @Override
     /*
         on create init UI  and send the first request to the server depending on the action specified
@@ -51,13 +57,21 @@ public class InitGame extends Activity{
         Intent intent = getIntent();
         userName = intent.getStringExtra("userName");
         String action = intent.getStringExtra("ACTION");
+        switch (action){
+            case CREATE_GAME:
+                status.setText("Creating Game...");
+                game = null;
+                ReadFromDB createGame = new ReadFromDB(this,CREATE_GAME );
+                createGame.execute();
+                break;
+            case JOIN_GAME:
+                status.setText("Searching Game");
+                ReadFromDB joinGame = new ReadFromDB(this,JOIN_GAME );
+                joinGame.execute();
 
-        if(action.equals("createNewGame")) {
-            status.setText("Creating Game...");
-            game = null;
-            ReadFromDB createGame = new ReadFromDB(this, "createNewGame");
-            createGame.execute();
+                break;
         }
+
 
         spinner.setVisibility(View.VISIBLE);
 
@@ -67,12 +81,12 @@ public class InitGame extends Activity{
      join game
      create new game
      gameReady
-     getEmptyGame
-
      */
     class ReadFromDB extends AsyncTask< Void, Void, String> {
         Activity activity;
         String action;
+        String response;
+
 
         //constructor
         public ReadFromDB(Activity _e, String _action){
@@ -116,6 +130,9 @@ public class InitGame extends Activity{
                     message += nextLine;
                 }
 
+                if(action.equals(JOIN_GAME))
+                    response = connection.getHeaderField("Response");
+
                 //Log.d("chess","the return message "+message);
                 in.close();
             }
@@ -131,7 +148,7 @@ public class InitGame extends Activity{
         public void onPostExecute(String message){
             Log.d("chess","on post execute return msg: "+message);
 
-            if(action.equals("createNewGame")){      // if game created
+            if(action.equals(CREATE_GAME)){      // if game created get game json from response
                 try {
                     game = new Game(new JSONObject(message));
                 } catch (JSONException e) {
@@ -140,13 +157,12 @@ public class InitGame extends Activity{
                 status.setText("Searching for player");
                 new ReadFromDB(activity,"gameReady").execute();                       // chech to see if player 2 is ready
             }
-            else {                                                 //action is "gameready
+            else if (action.equals("gameReady")){                                                 //action is "gameready
                 Log.d("chess","mesg: "+message);
                 if (message.equals("null")){
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     new ReadFromDB(activity,"gameReady").execute();
@@ -154,12 +170,25 @@ public class InitGame extends Activity{
                 else{
                     status.setText("game Ready");
                     Intent intent = new Intent(activity, GameBoard.class);
-
                     intent.putExtra("game",message );
                     intent.putExtra("ACTION","fullGame" );
                     intent.putExtra("userName", userName);
                     startActivity(intent);
                 }
+            }
+            else if (action.equals(JOIN_GAME)){
+                if(response.equals(JOIN_FAILED)){
+                    new ReadFromDB(activity,JOIN_GAME).execute();
+                }
+                else if (response.equals(JOIN_READY)){
+                    Log.i("chess","joined game successfully");
+                    Intent intent = new Intent(activity, GameBoard.class);
+                    intent.putExtra("game",message );
+                    intent.putExtra("ACTION","joinedGame" );
+                    intent.putExtra("userName", userName);
+                    startActivity(intent);
+                }
+
             }
         }
 
