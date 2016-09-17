@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -74,6 +75,31 @@ public abstract class Piece{
         isEmpty = piece.isEmpty();
     }*/
 
+    public boolean canMove(Piece[] pieces)
+    {
+        ArrayList<Piece> opponentPieces = opponentPieces(pieces);
+        ArrayList<Piece> opponentPiecesThatDontCheckTheKing = new ArrayList<>();
+        for (Piece p : opponentPieces)
+        {
+            if (!p.checks(pieces))
+            {
+                opponentPiecesThatDontCheckTheKing.add(p);
+            }
+        }
+        //setting this piece as inactive so we could see if any of the opponent pieces check the king
+        //when this piece leaves its position
+        setActive(false);
+        for (Piece p : opponentPiecesThatDontCheckTheKing)
+        {
+            if (p.checks(pieces))
+            {
+                setActive(true);
+                return false;
+            }
+        }
+        setActive(true);
+        return true;
+    }
 
     public boolean getIsFliped()
     {
@@ -95,8 +121,8 @@ public abstract class Piece{
         _isActive = bool;
     }
 
-    public boolean checks(Piece[] pieces)
-    {
+    //true if this piece checks the king
+    public boolean checks(Piece[] pieces) {
         ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
         for (Piece p : possibleMoves)
         {
@@ -169,8 +195,7 @@ public abstract class Piece{
         _pointPosition.set(x, y);
     }
 
-    public void setPointPosition(Point point)
-    {
+    public void setPointPosition(Point point) {
         _pointPosition.x = point.x;
         _pointPosition.y = point.y;
     }
@@ -185,8 +210,7 @@ public abstract class Piece{
     public abstract ArrayList<Piece> possibleMoves(Piece[][] pieces);
 
     //returns the pieces on board with the same color
-    protected ArrayList<Piece> getPiecesByColor(Piece[] pieces, int color)
-    {
+    protected ArrayList<Piece> getPiecesByColor(Piece[] pieces, int color) {
         ArrayList<Piece> resultPieces = new ArrayList<Piece>();
         for (Piece p : pieces)
         {
@@ -197,8 +221,7 @@ public abstract class Piece{
     }
 
     //returns all of the opponent pieces
-    protected ArrayList<Piece> opponentPieces(Piece[] pieces)
-    {
+    protected ArrayList<Piece> opponentPieces(Piece[] pieces) {
         //getting the opposed color of this piece
         int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
@@ -206,56 +229,25 @@ public abstract class Piece{
         return getPiecesByColor(pieces, opposingColor);
     }
 
-    /*this method returns a list of Pieces that has to be occupied in order to block a check, even tiles that this piece can not reach
-    * if it returns null, it means it can`t block the check = this piece can not move
-    * if it returns an empty list, it means there are no obligations, there is no check
-    * the king himself overrides this method*/
-    /*protected ArrayList<Piece> obligativeTiles(Piece[] pieces)
-    {
-        ArrayList<Piece> result = new ArrayList<>();
-        //if this piece is empty it can`t move!
-        if (this instanceof Empty)
-            return null;
-
+    protected Piece getOpponentKing(Piece[] pieces) {
+        ArrayList<Piece> opponentPieces = new ArrayList<>();
         //getting the opposed color of this piece
         int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
         //returns all the pieces on board that belongs to the opponent
-        ArrayList<Piece> opponentPieces = getPiecesByColor(pieces, opposingColor);
-
-        Piece threatenigPiece = null;
-        for (Piece p : opponentPieces)//looping through opponent pieces, see if there`s a check by opponent
+        opponentPieces =  getPiecesByColor(pieces, opposingColor);
+        for (Piece p : opponentPieces)
         {
-            ArrayList<Piece> threatenedTiles = p.possibleMoves(toDoubleArray(pieces));
-            if (p.checks())
+            if (p instanceof King)
             {
-                threatenigPiece = p;
-                if (p instanceof Knight)
-                    return null;
-                result = threatenedTiles;
-                result.add(p);//this piece can eat the piece that checks the king
+                return p;
             }
         }
-        setActive(false);//set this piece as inactive (hollow) to see if other opponent pieces check the king if it moves
-        for (Piece p : opponentPieces)//looping through opponent pieces
-        {
-            if (p == threatenigPiece)
-                continue;
-            ArrayList<Piece> threatenedTiles = p.possibleMoves(toDoubleArray(pieces));
-            if (p.checks())
-            {
-                setActive(true);
-                return null;
-                //result = threatenedTiles;
-            }
-        }
-        setActive(true);
-        return result;
-    }*/
+        return null;
+    }
 
     //returns list of pieces that threaten this piece. returns empty list if no one threaten this piece
-    protected ArrayList<Piece> isThreatened(Piece[] pieces, int threateningColor)
-    {
+    public ArrayList<Piece> isThreatened(Piece[] pieces, int threateningColor) {
         ArrayList<Piece> result = new ArrayList<>();
         ArrayList<Piece> opponentPieces = getPiecesByColor(pieces, threateningColor);
 
@@ -268,19 +260,20 @@ public abstract class Piece{
         }
         opponentPieces.remove(counter);*/
 
-        setActive(false);
         for (Piece opponentPiece : opponentPieces)//looping through opponent pieces
         {
             ArrayList<Piece> tileArray = opponentPiece.possibleMoves(toDoubleArray(pieces));
             for (Piece threatenedTile : tileArray)
             {
+                //if a pawn is moving forward it`s not really threatening the tile
+                if (opponentPiece instanceof Pawn && opponentPiece.getPointPosition().y == threatenedTile.getPointPosition().y)
+                    continue;
                 if (threatenedTile.equals(this))
                 {
                      result.add(opponentPiece);
                 }
             }
         }
-        setActive(true);
         return result;
     }
 
@@ -309,8 +302,7 @@ public abstract class Piece{
         return doublePieces;
     }
 
-    protected static Piece[] toSingleArray(Piece[][] pieces)
-    {
+    protected static Piece[] toSingleArray(Piece[][] pieces) {
         Piece[] singleArray = new Piece[64];
         int counter = 0;
         for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
@@ -322,5 +314,160 @@ public abstract class Piece{
             }
         }
         return singleArray;
+    }
+
+    //when a piece checks the king, this method returns the tiles on the way to the king
+    protected ArrayList<Piece> wayToTheKing(Piece[] pieces) {
+        Piece[][] doublePieceArray = toDoubleArray(pieces);
+        ArrayList<Piece> result = new ArrayList<>();
+        if (this.checks(pieces))
+        {
+            result.add(this);
+            if (this instanceof Knight || this instanceof Pawn)
+            {
+                return result;
+            }
+            else
+            {
+                Point kingPointPosition = getOpponentKing(pieces).getPointPosition();
+                Point currentPiecePosition = getPointPosition();
+                ArrayList<Point> wayToTheKingAsPoints = pointsBetween(kingPointPosition, currentPiecePosition);
+                for (Point p : wayToTheKingAsPoints)
+                {
+                    result.add(doublePieceArray[p.x][p.y]);
+                }
+                return result;
+            }
+        }
+        else
+        {
+            return result;
+        }
+    }
+
+    /*in a grid of points, this method returns an array of points that go from point1
+    to point2, we assume that the way between the points is a straight line.
+    for example if point1=(3,1) and point2=(7,5) the result is {(4,2),(5,3),(6,4)}*/
+    protected ArrayList<Point> pointsBetween(Point point1, Point point2)
+    {
+        ArrayList<Point> result = new ArrayList<Point>();
+        if (point1.x == point2.x && point1.y != point2.y)//horizontal
+        {
+            int origin = Math.min(point1.y, point2.y);
+            int end = Math.max(point1.y, point2.y);
+            for (int i = origin+1; i < end; i++)
+            {
+                result.add(new Point(point1.x, i));
+            }
+        }
+        else if (point1.y == point2.y && point1.x != point2.x)//vertical
+        {
+            int origin = Math.min(point1.x, point2.x);
+            int end = Math.max(point1.x, point2.x);
+            for (int i = origin+1; i < end; i++)
+            {
+                result.add(new Point(i, point1.y));
+            }
+        }
+        else if (point1.x != point2.x && point1.y != point2.y)//diagonal
+        {
+            int counter = 1;
+            if (point1.x < point2.x && point1.y < point2.y)
+            {
+                for (int x = point1.x+1; x < point2.x; x++)
+                {
+                    result.add(new Point(x, point1.y+counter));
+                    counter++;
+                }
+            }
+            else if (point1.x < point2.x && point1.y > point2.y)
+            {
+                for (int x = point1.x+1; x < point2.x; x++)
+                {
+                    result.add(new Point(x, point1.y-counter));
+                    counter++;
+                }
+            }
+            else if (point1.x > point2.x && point1.y < point2.y)
+            {
+                for (int x = point1.x-1; x > point2.x; x--)
+                {
+                    result.add(new Point(x, point1.y+counter));
+                    counter++;
+                }
+            }
+            else//point1.x > point2.x && point1.y > point2.y
+            {
+                for (int x = point1.x-1; x > point2.x; x--)
+                {
+                    result.add(new Point(x, point1.y-counter));
+                    counter++;
+                }
+            }
+        }//end of diagonal
+        return result;
+    }
+
+    protected void swapPieces(Piece[] pieces, Piece piece1, Piece piece2) {
+        Point tempPoint = new Point(piece1.getPointPosition().x, piece1.getPointPosition().y);
+        int tempPosition = piece1.getPosition();
+
+        String piece1Name = piece1.getName();
+
+        switch (piece2.getName()){
+            case "rook":
+                piece1 = new Rook(piece2);
+                break;
+            case "queen":
+                piece1 = new Queen(piece2);
+                break;
+            case "pawn":
+                piece1 = new Pawn(piece2);
+                break;
+            case "Knight":
+                piece1 = new Knight(piece2);
+                break;
+            case "king":
+                piece1 = new King(piece2);
+                break;
+            case "empty":
+                piece1 = new Empty(piece2);
+                break;
+            case "Bishop":
+                piece1 = new Bishop(piece2);
+                break;
+        }
+        piece1.setPointPosition(tempPoint);
+        piece1.setPosition(tempPosition);
+
+        int x = piece2.getPointPosition().x;
+        int y = piece2.getPointPosition().y;
+        switch (piece1Name){
+            case "rook":
+                piece2 = new Rook(piece2);
+                break;
+            case "queen":
+                piece2 = new Queen(piece2);
+                break;
+            case "pawn":
+                piece2 = new Pawn(piece2);
+                break;
+            case "Knight":
+                piece2 = new Knight(piece2);
+                break;
+            case "king":
+                piece2 = new King(piece2);
+                break;
+            case "empty":
+                piece2 = new Empty(piece2);
+                break;
+            case "Bishop":
+                piece2 = new Bishop(piece2);
+                break;
+        }
+
+        piece2 = new Empty("empty", "white", piece2.getPosition());
+        piece2.setPointPosition(x, y);
+        piece2.setEmpty(true);
     }
 }

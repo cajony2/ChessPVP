@@ -48,6 +48,37 @@ public class Knight extends Piece {
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
         ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        ArrayList<Piece> opponentPieces = opponentPieces(pieces);
+        for (Piece p : opponentPieces)
+        {
+            if (p.checks(pieces))
+            {
+                ArrayList<Piece> theWayToTheKing = p.wayToTheKing(pieces);
+                if (canMove(pieces))//queen can move
+                {
+                    ArrayList<Piece> mergedList = new ArrayList<>();
+                    for (Piece piece : possibleMoves)
+                    {
+                        for (Piece tile : theWayToTheKing)
+                        {
+                            if (piece.equals(tile))
+                            {
+                                mergedList.add(piece);
+                            }
+                        }
+                    }
+                    for (Piece ml : mergedList)
+                    {
+                        legalMoves.add(ml.getPosition());
+                    }
+                    return legalMoves;
+                }
+                else//queen can not move
+                {
+                    return legalMoves;
+                }
+            }
+        }
         for (Piece p : possibleMoves)
         {
             legalMoves.add(p.getPosition());

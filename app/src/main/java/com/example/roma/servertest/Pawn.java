@@ -51,44 +51,42 @@ public class Pawn extends Piece {
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
         ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        ArrayList<Piece> opponentPieces = opponentPieces(pieces);
+        for (Piece p : opponentPieces)
+        {
+            if (p.checks(pieces))
+            {
+                ArrayList<Piece> theWayToTheKing = p.wayToTheKing(pieces);
+                if (canMove(pieces))//queen can move
+                {
+                    ArrayList<Piece> mergedList = new ArrayList<>();
+                    for (Piece piece : possibleMoves)
+                    {
+                        for (Piece tile : theWayToTheKing)
+                        {
+                            if (piece.equals(tile))
+                            {
+                                mergedList.add(piece);
+                            }
+                        }
+                    }
+                    for (Piece ml : mergedList)
+                    {
+                        legalMoves.add(ml.getPosition());
+                    }
+                    return legalMoves;
+                }
+                else//queen can not move
+                {
+                    return legalMoves;
+                }
+            }
+        }
         for (Piece p : possibleMoves)
         {
             legalMoves.add(p.getPosition());
         }
         return legalMoves;
-        /*ArrayList<Piece> obligatedTiles = obligativeTiles(pieces);//the tiles this piece have to go to in order to block check
-        if (obligativeTiles(pieces) == null)//if it moves the king is exposed, so can`t move
-        {
-            return legalMoves;
-        }
-        if (obligatedTiles.size() == 0)//no restrictions on the moves
-        {
-            for (Piece p : possibleMoves)
-            {
-                legalMoves.add(p.getPosition());
-            }
-            return legalMoves;
-        }
-        else//merge between obligatedTiles and possibleMoves to see where this piece can move
-        {
-            ArrayList<Piece> mergedList = new ArrayList<>();
-            for (Piece pm : possibleMoves)
-            {
-                for (Piece ot : obligatedTiles)
-                {
-                    if (pm.equals(ot))
-                    {
-                        mergedList.add(pm);
-                    }
-                }
-                //legalMoves.add(pm.getPosition());
-            }
-            for (Piece p : mergedList)
-            {
-                legalMoves.add(p.getPosition());
-            }
-            return legalMoves;
-        }*/
     }
 
     public ArrayList<Piece> possibleMoves(Piece[][] pieces)
@@ -135,21 +133,21 @@ public class Pawn extends Piece {
             {
                 result.add(pieces[row-1][col]);
             }
-            if (row == 7)//pawn hasn`t moved yet, can move 2 tiles
+            if (row == 6)//pawn hasn`t moved yet, can move 2 tiles
             {
                 if (pieces[row-2][col].getName().equals("empty"))
                 {
                     result.add(pieces[row-2][col]);
                 }
             }
-            if (col+1 < TILES_NUMBER_IN_A_ROW)
+            if (row-1 > 0 && col+1 < TILES_NUMBER_IN_A_ROW)
             {
                 if ((!pieces[row-1][col+1].getName().equals("empty") && pieces[row-1][col+1].getIntColor() != getIntColor()) || (pieces[row-1][col+1].getActive()))
                 {
                     result.add(pieces[row-1][col+1]);
                 }
             }
-            if (col-1 >= 0)
+            if (row-1 > 0 && col-1 >= 0)
             {
                 if ((!pieces[row-1][col-1].getName().equals("empty") && pieces[row-1][col-1].getIntColor() != getIntColor()) || (pieces[row-1][col-1].getActive()))
                 {

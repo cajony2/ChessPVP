@@ -71,16 +71,23 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         adapter.notifyDataSetChanged();              //
         if (myColor == Color.WHITE )//getTurn should return int
              flipBoard();
-
-
+        else
+            resetIsFlipped();
     }
-    private void flipBoard()
-    {
+
+    private void resetIsFlipped(){
+        for (Piece p : piecesOld)
+        {
+            p.setIsFlipped(false);
+        }
+    }
+
+    private void flipBoard(){
         chessBoardView.setRotationX(180);
-        //chessBoardView.setRotationY(180);
         rotatePieces();
     }
-    private void rotatePieces() {
+
+    private void rotatePieces(){
 
         for (Piece p : piecesOld)
         {
@@ -93,6 +100,10 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         piecesOld=_pieces;
         adapter.setPieces(_pieces);
         adapter.notifyDataSetChanged();
+        if (myColor == Color.WHITE )//getTurn should return int
+            flipBoard();
+        else
+            resetIsFlipped();
         Log.i("chess","after refresh");
     }
 
@@ -110,6 +121,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
 
         ArrayList<Integer> moves ;
         // do only if the square clicked is the users color
+        canClick = comm.canClick();
         if(canClick) {
             if (!isSelected) {
                 Log.i("chess", "tile "+position+" Selected");
@@ -171,6 +183,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                         piecesOld[selectedTile].setPointPosition(x, y);
                         piecesOld[selectedTile].setEmpty(true);
 
+
                         fillDoubleArrayFromSingle(piecesOld, pieces);
                         /*piecesOld[position] = piecesOld[selectedTile];
                         piecesOld[position].setPosition(position);
@@ -196,6 +209,25 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    //not tested yet
+    public boolean isChess(int color)
+    {
+        Piece myKing = null;
+        for (Piece p : piecesOld)
+        {
+             if (p.getIntColor() == color && p instanceof King)
+             {
+                 myKing = p;
+                 break;
+             }
+        }
+        int opponentColor = (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+        if (myKing.isThreatened(piecesOld, opponentColor).size() != 0)
+            return true;
+        else
+            return false;
     }
 
     //filling the double array of Pieces from a single array

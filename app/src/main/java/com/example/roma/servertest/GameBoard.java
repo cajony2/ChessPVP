@@ -242,7 +242,7 @@ public class GameBoard extends Activity implements Communicator {
             case MOVE_MADE:                                         //servlet received players move
                 Log.i("chess", "move make was successful");
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -250,7 +250,7 @@ public class GameBoard extends Activity implements Communicator {
                 break;
             case ReadFromDB.GAME_NOT_READY:                                                                        //check if opponent made his move
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
