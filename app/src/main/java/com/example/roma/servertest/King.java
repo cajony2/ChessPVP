@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class King extends Piece {
 
-    boolean hasNotMovedYet;
+    public boolean hasNotMovedYet;
 
     /*//constructor - added by jony
     public  King(int color, Tile tile){

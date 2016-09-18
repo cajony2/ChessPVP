@@ -148,55 +148,8 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                         if(!piecesOld[position].getName().equals("empty"))      //if player eats opponent piece
                                 comm.setEatenPiece(piecesOld[position]);
 
-                        Point tempPoint = new Point(piecesOld[position].getPointPosition().x, piecesOld[position].getPointPosition().y);
-                        int tempPosition = piecesOld[position].getPosition();
+                        swapPieces(piecesOld, selectedTile, position);
 
-                        switch (piecesOld[selectedTile].getName()){
-                            case "rook":
-                                piecesOld[position] = new Rook(piecesOld[selectedTile]);
-                                break;
-                            case "queen":
-                                piecesOld[position] = new Queen(piecesOld[selectedTile]);
-                                break;
-                            case "pawn":
-                                piecesOld[position] = new Pawn(piecesOld[selectedTile]);
-                                break;
-                            case "knight":
-                                piecesOld[position] = new Knight(piecesOld[selectedTile]);
-                                break;
-                            case "king":
-                                piecesOld[position] = new King(piecesOld[selectedTile]);
-                                break;
-                            case "empty":
-                                piecesOld[position] = new Empty(piecesOld[selectedTile]);
-                                break;
-                            case "bishop":
-                                piecesOld[position] = new Bishop(piecesOld[selectedTile]);
-                                break;
-                        }
-                        piecesOld[position].setPointPosition(tempPoint);
-                        piecesOld[position].setPosition(tempPosition);
-
-                        int x = piecesOld[selectedTile].getPointPosition().x;
-                        int y = piecesOld[selectedTile].getPointPosition().y;
-                        piecesOld[selectedTile] = new Empty("empty", "white", selectedTile);
-                        piecesOld[selectedTile].setPointPosition(x, y);
-                        piecesOld[selectedTile].setEmpty(true);
-
-
-                        fillDoubleArrayFromSingle(piecesOld, pieces);
-                        /*piecesOld[position] = piecesOld[selectedTile];
-                        piecesOld[position].setPosition(position);
-                        Point p = piecesOld[selectedTile].getPointPosition();
-                        piecesOld[position].setPointPosition(p);
-
-                        piecesOld[selectedTile] = new Empty("empty", "white", selectedTile);
-                        piecesOld[selectedTile].setEmpty(true);
-                        piecesOld[selectedTile].setPosition(position);*/
-                        /*
-                        pieces[selectedTile].setPointPosition(tempPointPosition);
-                        pieces[selectedTile].setPosition(tempPosition);
-                            */
                         moveMade = true;
 
                         Log.i("chess", "move made");
@@ -209,6 +162,45 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private void swapPieces(Piece[] piecesOld, int selectedTile, int position) {
+        Point tempPoint = new Point(piecesOld[position].getPointPosition().x, piecesOld[position].getPointPosition().y);
+
+        switch (piecesOld[selectedTile].getName()){
+            case "rook":
+                piecesOld[position] = new Rook(piecesOld[selectedTile]);
+                break;
+            case "queen":
+                piecesOld[position] = new Queen(piecesOld[selectedTile]);
+                break;
+            case "pawn":
+                piecesOld[position] = new Pawn(piecesOld[selectedTile]);
+                break;
+            case "knight":
+                piecesOld[position] = new Knight(piecesOld[selectedTile]);
+                break;
+            case "king":
+                piecesOld[position] = new King(piecesOld[selectedTile]);
+                break;
+            case "empty":
+                piecesOld[position] = new Empty(piecesOld[selectedTile]);
+                break;
+            case "bishop":
+                piecesOld[position] = new Bishop(piecesOld[selectedTile]);
+                break;
+        }
+        piecesOld[position].setPointPosition(tempPoint);
+        piecesOld[position].setPosition(position);
+
+        int x = piecesOld[selectedTile].getPointPosition().x;
+        int y = piecesOld[selectedTile].getPointPosition().y;
+        piecesOld[selectedTile] = new Empty("empty", "white", selectedTile);
+        piecesOld[selectedTile].setPointPosition(x, y);
+        piecesOld[selectedTile].setEmpty(true);
+
+
+        fillDoubleArrayFromSingle(piecesOld, pieces);
     }
 
     //not tested yet
