@@ -21,6 +21,8 @@ public class TimerBar extends Fragment {
     private Handler handler;
     Communicator comm;
     private String progressBarMessage;
+    boolean stopTimer;
+
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,7 +34,8 @@ public class TimerBar extends Fragment {
 
         simpleProgressBar = (ProgressBar) view.findViewById(R.id.timerBar);
         progressBarText = (TextView) view.findViewById(R.id.timerText);
-        progress=0;
+
+        stopTimer =false;
 
 
 
@@ -42,20 +45,30 @@ public class TimerBar extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         comm = (Communicator) getActivity();
+        startTimer();
+
+    }
+
+    private void startTimer() {
+        //set text
         if(comm.canClick())
             progressBarMessage="Make a Move: ";
         else
             progressBarMessage="Waiting for Opponent: ";
+        //reset progress
+        progress=0;
+        //start timer thread
         handler  = new Handler();
-        setProgressValue();
-
-    }
-
-    private void setProgressValue() {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                // if no interrupt
+                if(stopTimer){
+                    stopTimer=false;
+                    return;
+                }
                 Log.i("chess","in timer somthing");
+
                 simpleProgressBar.setProgress(progress);
                 if(progress%10==0)
                     progressBarText.setText(progressBarMessage+timeLeft());
@@ -77,10 +90,10 @@ public class TimerBar extends Fragment {
         int timeleft =60-progress/10;
 
             if(timeleft>=60) {
-                minutes=""+ timeleft /60;
+                minutes="0"+ timeleft /60;
             }
             else {
-                minutes="0";
+                minutes="00";
             }
             if(timeleft<10)
                 seconds="0";
@@ -90,4 +103,8 @@ public class TimerBar extends Fragment {
     }
 
 
+    public void reset() {
+        stopTimer=true;
+        startTimer();
+    }
 }

@@ -2,7 +2,9 @@ package com.example.roma.servertest;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -23,12 +21,14 @@ import java.net.URLConnection;
 
 public class Login extends Activity implements View.OnClickListener {
 
-    public final static String USERNAME = "com.example.roma.servletTest.USERNAME";
-    public final static String ACTION = "com.example.roma.servletTest.FIRST";
+    public final static String USERNAME = "userName";
+    public final static String PSW = "password";
+    public static final String MyPREFERENCES = "MyPrefs" ;
 
     EditText userName = null;
     EditText pswField = null;
     TextView createAccount;
+    SharedPreferences sharedpreferences;
 
     Button logIn;
 
@@ -46,8 +46,18 @@ public class Login extends Activity implements View.OnClickListener {
         logIn = (Button) findViewById(R.id.logIn);
         logIn.setOnClickListener(this);
         createAccount.setOnClickListener(this);
-    }
+        loadSharedPreferences();
 
+    }
+    private void loadSharedPreferences(){
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String userNameSaved = sharedpreferences.getString(USERNAME,null);
+        String passwordSaved = sharedpreferences.getString(PSW, null);
+        if(userNameSaved != null)
+            userName.setText(userNameSaved);
+        if(passwordSaved!=null)
+            pswField.setText(passwordSaved);
+    }
     public void onClick(View v){
         switch (v.getId()){
             case R.id.logIn:
@@ -65,11 +75,19 @@ public class Login extends Activity implements View.OnClickListener {
         String name = userName.getText().toString();
         String psw = pswField.getText().toString();
 
+        setSharedpreferences();
+
         ReadFromDB readFromDB = new ReadFromDB(this,name,psw);
 
         readFromDB.execute();
     }
 
+    private void setSharedpreferences(){
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(USERNAME, userName.getText().toString());
+        editor.putString(PSW, pswField.getText().toString());
+        editor.apply();
+    }
 
 
     class ReadFromDB extends AsyncTask< Void, Void, String> {

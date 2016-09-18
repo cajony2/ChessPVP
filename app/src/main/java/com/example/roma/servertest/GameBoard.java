@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import layout.Board;
 import layout.BottomInfo;
+import layout.TimerBar;
 import layout.TopInfo;
 
 
@@ -37,8 +38,11 @@ public class GameBoard extends Activity implements Communicator {
 
 
 
+
     public static final String GAME_READY = "isGameReady";
     public static final String MOVE_MADE = "moveMade";
+    public static final String USER_NAME  = "userName";
+    public static final String PSW = "password";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -147,14 +151,15 @@ public class GameBoard extends Activity implements Communicator {
     private void updateUI( ) {
         Log.i("chess","in updateUI");
         FragmentManager fManager = getFragmentManager();
+
+        //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
         boardFragment.refresh(game.getBoard2());
 
+        //update eaten pieces
         addEatenPieces(game.getEatenPieces());
-
         TopInfo topFragment = (TopInfo) fManager.findFragmentById(R.id.topFragment);
         BottomInfo bottomFragment = ( BottomInfo) fManager.findFragmentById(R.id.bottomFragment);
-
         if(myColor==Color.BLACK) {
             topFragment.refresh(blackEaten);
             bottomFragment.refresh(whiteEaten);
@@ -163,7 +168,13 @@ public class GameBoard extends Activity implements Communicator {
             bottomFragment.refresh(blackEaten);
         }
 
+        //reset timer
+        TimerBar timerBarFragment = (TimerBar) fManager.findFragmentById(R.id.timerBarFragment);
+        if(timerBarFragment==null)
+            Log.i("chess","timer is null");
 
+        if(game.getTurn().equals(userName))
+            timerBarFragment.reset();
 
     }
 
