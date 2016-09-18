@@ -35,4 +35,9 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="myCoolDialog" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:colorForeground">#000000</item>
+    </style>
+
 </resources>

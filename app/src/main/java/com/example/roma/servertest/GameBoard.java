@@ -1,14 +1,17 @@
 package com.example.roma.servertest;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import layout.Board;
 import layout.BottomInfo;
@@ -24,7 +27,10 @@ import layout.TopInfo;
  */
 public class GameBoard extends Activity implements Communicator {
 
-    private final int TILES_NUMBER_IN_A_ROW = 8;
+    private final int YOU_LOOSE =1;
+    private final int OPPONENT_LOOSE=2;
+    private final int CHCKMATE =3;
+    private final int TIMEROVER=4;
 
     ArrayList<Piece> whiteEaten;            // need to move this to game object
     ArrayList<Piece> blackEaten;            // need to move this to game object
@@ -41,8 +47,7 @@ public class GameBoard extends Activity implements Communicator {
 
     public static final String GAME_READY = "isGameReady";
     public static final String MOVE_MADE = "moveMade";
-    public static final String USER_NAME  = "userName";
-    public static final String PSW = "password";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -66,13 +71,6 @@ public class GameBoard extends Activity implements Communicator {
         //set players color
         myColor = (userName.equals(game.getPlayer1())) ? Color.WHITE : Color.BLACK;
         addEatenPieces(game.getEatenPieces());
-
-
-        // if player is white then he starts the game
-        if (action.equals("fullGame")) {
-        }
-        else if(action.equals("joinedGame")){
-        }
     }
 
     @Override
@@ -274,9 +272,45 @@ public class GameBoard extends Activity implements Communicator {
         }
     }
 
+    /*
+    by Roma
+        if timer is done , show the propper message and end game
+     */
     @Override
     public void timerFinished() {
         Log.i("chess","Times up!");
+
+        if(game.getTurn().equals(userName))
+            showDialog(YOU_LOOSE,TIMEROVER);
+        else
+            showDialog(OPPONENT_LOOSE,TIMEROVER);
+
+    }
+    /*
+    by Roma
+    show end Game Dialog
+     */
+    private void showDialog(int looser , int looseType){
+        Dialog dialog = new Dialog(this ,R.style.myCoolDialog);
+        dialog.setTitle("Game Over");
+        dialog.setContentView(R.layout.end_game_dialog);
+
+        dialog.show();
+        TextView messageTextView  = (TextView) dialog.findViewById(R.id.endGameTextView);
+
+        String message="";
+
+        switch (looseType){
+            case CHCKMATE: message+="CheckMate! - "; break;
+            case TIMEROVER: message+="Time Over! - "; break;
+        }
+        switch (looser){
+            case YOU_LOOSE: message+="You Loose!";break;
+            case OPPONENT_LOOSE: message+="You Win!";break;
+        }
+
+        messageTextView.setText(message);
+
     }
 
     @Override

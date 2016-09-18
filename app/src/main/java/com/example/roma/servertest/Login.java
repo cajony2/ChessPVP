@@ -49,6 +49,8 @@ public class Login extends Activity implements View.OnClickListener {
         loadSharedPreferences();
 
     }
+
+
     private void loadSharedPreferences(){
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String userNameSaved = sharedpreferences.getString(USERNAME,null);
@@ -58,6 +60,8 @@ public class Login extends Activity implements View.OnClickListener {
         if(passwordSaved!=null)
             pswField.setText(passwordSaved);
     }
+
+
     public void onClick(View v){
         switch (v.getId()){
             case R.id.logIn:
@@ -78,7 +82,6 @@ public class Login extends Activity implements View.OnClickListener {
         setSharedpreferences();
 
         ReadFromDB readFromDB = new ReadFromDB(this,name,psw);
-
         readFromDB.execute();
     }
 
