@@ -1,39 +1,28 @@
 package com.example.roma.servertest;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.util.Log;
-import android.view.View;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-/**
- * Created by Roma on 8/2/2016.
- */
 
 public abstract class Piece{
 
-        protected final static int TILES_NUMBER_IN_A_ROW = 8;
+    //variables
+    protected final static int TILES_NUMBER_IN_A_ROW = 8;
+    protected int _color;
+    protected Point _pointPosition;
+    protected boolean _isActive;
+    protected boolean _checksKing;
+    protected boolean _isFlipped;
+    protected String name;
+    protected String color;
+    protected int image;
+    protected int position;
+    protected boolean isEmpty;
+    protected boolean _hasNotMovedYet = true;
 
-        protected int _color;//added by jony
-        protected Point _pointPosition;//added by jony
-        protected boolean _isActive;//added by jony
-        protected boolean _checksKing;
-        protected boolean _isFlipped;
-        protected String name;
-        protected String color;
-        protected int image;
-        protected int position;
-        protected boolean isEmpty;
-
-
+    //Constructor
     public Piece (String name, String color, int pos){
 
         this.name = name;
@@ -48,35 +37,15 @@ public abstract class Piece{
             _color = Color.BLACK;
     }
 
-    //empty Ctor
-    public Piece()
-    {
-
-    }
-
     //default constructor
     public Piece(int color)
     {
         _color = color;
     }
-    
-    /*//constructor that copies the piece`s contents
-    public Piece (Piece piece)
-    {
-         _color = piece.getIntColor();
-        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
-        _isActive = piece.getActive();
-        _checksKing = piece.checks();
-        _isFlipped = piece._isFlipped;
-        name = piece.getName();
-        color = piece.getColor();
-        image = piece.getImg();
-        position = piece.getPosition();
-        isEmpty = piece.isEmpty();
-    }*/
 
-    public boolean canMove(Piece[] pieces)
-    {
+    public boolean hasNotMovedYet(){return _hasNotMovedYet;}
+    
+    public boolean canMove(Piece[] pieces) {
         ArrayList<Piece> opponentPieces = opponentPieces(pieces);
         ArrayList<Piece> opponentPiecesThatDontCheckTheKing = new ArrayList<>();
         for (Piece p : opponentPieces)
@@ -204,7 +173,7 @@ public abstract class Piece{
         position=pos;
     }
 
-    // each peace should override this method and return  the legal moves from the piece location according to the games piece layout
+    //each peace should override this method and return the legal moves from the piece location according to the games piece layout
     public abstract ArrayList<Integer> getLegalMoves(Piece[] pieces);
 
     public abstract ArrayList<Piece> possibleMoves(Piece[][] pieces);
@@ -220,7 +189,7 @@ public abstract class Piece{
         return resultPieces;
     }
 
-    //returns all of the opponent pieces
+    //returns all of the opponent pieces of this current piece
     protected ArrayList<Piece> opponentPieces(Piece[] pieces) {
         //getting the opposed color of this piece
         int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -270,7 +239,8 @@ public abstract class Piece{
                     continue;
                 if (threatenedTile.equals(this))
                 {
-                     result.add(opponentPiece);
+                    result.add(opponentPiece);
+                    break;
                 }
             }
         }

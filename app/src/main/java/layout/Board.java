@@ -151,6 +151,10 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                         swapPieces(piecesOld, selectedTile, position);
 
                         moveMade = true;
+                        //TODO
+                        //if (moveMade)
+                            //if it`s a pawn then it turns into a queen when reaches the last row
+                            //set king/rook hasNotMovedYet to false
 
                         Log.i("chess", "move made");
                         adapter.setSelectedTile(-1);
@@ -165,8 +169,38 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     }
 
     private void swapPieces(Piece[] piecesOld, int selectedTile, int position) {
-        Point tempPoint = new Point(piecesOld[position].getPointPosition().x, piecesOld[position].getPointPosition().y);
 
+        //castling
+        if (piecesOld[selectedTile].getName().equals("king"))
+        {
+            if (selectedTile == 4 && position == 6)
+            {
+                swapPieces(piecesOld, 7, 5);
+            }
+            else if (selectedTile == 4 && position == 2)
+            {
+                swapPieces(piecesOld, 0, 3);
+            }
+            else if (selectedTile == 60 && position == 62)
+            {
+                swapPieces(piecesOld, 63, 61);
+            }
+            else if (selectedTile == 60 && position == 58)
+            {
+                swapPieces(piecesOld, 56, 59);
+            }
+        }
+
+        //pawn turns into a queen when reaches the end
+        if (piecesOld[selectedTile].getName().equals("pawn"))
+        {
+            if (position >= 56 || position <= 7)//pawn reached last row
+            {
+                piecesOld[selectedTile] = new Queen("queen", piecesOld[selectedTile].getColor(), piecesOld[selectedTile].getPosition());
+            }
+        }
+
+        Point tempPoint = new Point(piecesOld[position].getPointPosition().x, piecesOld[position].getPointPosition().y);
         switch (piecesOld[selectedTile].getName()){
             case "rook":
                 piecesOld[position] = new Rook(piecesOld[selectedTile]);
@@ -192,13 +226,11 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         }
         piecesOld[position].setPointPosition(tempPoint);
         piecesOld[position].setPosition(position);
-
         int x = piecesOld[selectedTile].getPointPosition().x;
         int y = piecesOld[selectedTile].getPointPosition().y;
         piecesOld[selectedTile] = new Empty("empty", "white", selectedTile);
         piecesOld[selectedTile].setPointPosition(x, y);
         piecesOld[selectedTile].setEmpty(true);
-
 
         fillDoubleArrayFromSingle(piecesOld, pieces);
     }

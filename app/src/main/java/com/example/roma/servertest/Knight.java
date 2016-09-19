@@ -1,22 +1,11 @@
 package com.example.roma.servertest;
 
-import android.content.Context;
 import android.graphics.Point;
-
 import java.util.ArrayList;
-
-/**
- * Created by Roma on 8/2/2016.
- */
-
 
 public class Knight extends Piece {
 
-    /*//constructor - added by jony
-    public  Knight(int color, Tile tile){
-        super(color, tile);
-    }*/
-
+    //Constructor
     public Knight(String name, String color, int pos) {
         super(name, color, pos);
         // TODO Auto-generated constructor stub
@@ -27,10 +16,8 @@ public class Knight extends Piece {
             image=R.drawable.ndt60;
     }
 
-    public Knight(){}
-
-    public Knight (Piece piece)
-    {
+    //Constructor
+    public Knight (Piece piece) {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
@@ -43,7 +30,6 @@ public class Knight extends Piece {
         isEmpty = piece.isEmpty();
     }
 
-    //done by Jony
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
@@ -54,7 +40,7 @@ public class Knight extends Piece {
             if (p.checks(pieces))
             {
                 ArrayList<Piece> theWayToTheKing = p.wayToTheKing(pieces);
-                if (canMove(pieces))//queen can move
+                if (canMove(pieces))//knight can move
                 {
                     ArrayList<Piece> mergedList = new ArrayList<>();
                     for (Piece piece : possibleMoves)
@@ -73,7 +59,7 @@ public class Knight extends Piece {
                     }
                     return legalMoves;
                 }
-                else//queen can not move
+                else//knight can not move
                 {
                     return legalMoves;
                 }
@@ -86,8 +72,7 @@ public class Knight extends Piece {
         return legalMoves;
     }
 
-    public ArrayList<Piece> possibleMoves(Piece[][] pieces)
-    {
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces) {
         ArrayList<Piece> result = new ArrayList<Piece>();
         if (!getActive())
         {

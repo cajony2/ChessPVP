@@ -1,24 +1,12 @@
 package com.example.roma.servertest;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-
 import java.util.ArrayList;
-
-/**
- * Created by Roma on 8/2/2016.
- */
 
 public class Pawn extends Piece {
 
-    //boolean hasNotMovedYet;
-
-    /*//constructor - added by jony
-    public  Pawn(int color, Tile tile){
-        super(color, tile);
-    }*/
-
+    //Constructor
     public Pawn(String name, String color, int pos) {
         super(name, color, pos);
         //hasNotMovedYet = true;
@@ -30,14 +18,11 @@ public class Pawn extends Piece {
             image=R.drawable.pdt60;
     }
 
-    public Pawn(){}
-
-    public Pawn (Piece piece)
-    {
+    //Constructor
+    public Pawn (Piece piece) {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
-        //_checksKing = piece.checks();
         _isFlipped = piece._isFlipped;
         name = "pawn";
         color = piece.getColor();
@@ -46,7 +31,6 @@ public class Pawn extends Piece {
         isEmpty = piece.isEmpty();
     }
 
-    //Jony added: pawn can move 2 squares at the beginning and setCheck if can eat the king(not tested yet)
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
@@ -57,7 +41,7 @@ public class Pawn extends Piece {
             if (p.checks(pieces))
             {
                 ArrayList<Piece> theWayToTheKing = p.wayToTheKing(pieces);
-                if (canMove(pieces))//queen can move
+                if (canMove(pieces))//pawn can move
                 {
                     ArrayList<Piece> mergedList = new ArrayList<>();
                     for (Piece piece : possibleMoves)
@@ -76,7 +60,7 @@ public class Pawn extends Piece {
                     }
                     return legalMoves;
                 }
-                else//queen can not move
+                else//pawn can not move
                 {
                     return legalMoves;
                 }
@@ -89,8 +73,7 @@ public class Pawn extends Piece {
         return legalMoves;
     }
 
-    public ArrayList<Piece> possibleMoves(Piece[][] pieces)
-    {
+    public ArrayList<Piece> possibleMoves(Piece[][] pieces) {
         ArrayList<Piece> result = new ArrayList<Piece>();
         if (!getActive())
         {
