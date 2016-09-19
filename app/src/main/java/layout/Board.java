@@ -96,7 +96,8 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     }
 
     public void refresh(Piece[] _pieces){
-        Log.i("chess","in refresh");
+        updateStatus();
+
         piecesOld=_pieces;
         adapter.setPieces(_pieces);
         adapter.notifyDataSetChanged();
@@ -105,6 +106,9 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         else
             resetIsFlipped();
         Log.i("chess","after refresh");
+    }
+
+    private void updateStatus() {
     }
 
     //@Override
@@ -236,18 +240,18 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     }
 
     //not tested yet
-    public boolean isChess(int color)
+    public boolean isChess()
     {
         Piece myKing = null;
         for (Piece p : piecesOld)
         {
-             if (p.getIntColor() == color && p instanceof King)
+             if (p.getIntColor() == myColor && p instanceof King)
              {
                  myKing = p;
                  break;
              }
         }
-        int opponentColor = (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+        int opponentColor = (myColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
         if (myKing.isThreatened(piecesOld, opponentColor).size() != 0)
             return true;
         else

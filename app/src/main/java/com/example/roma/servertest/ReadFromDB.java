@@ -28,6 +28,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     public static final String GAME_READY = "isGameReady";
     public static final String GAME_NOT_READY = "gameNotReady";
     public static final String GAME_IS_READY = "gameIsReady";
+    public static final String ENDGAME = "endGame";
 
 
 
@@ -65,7 +66,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
             connection.setDoOutput(true);
 
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-            if(action.equals(MAKE_MOVE)) {
+            if(action.equals(MAKE_MOVE) || action.equals(ENDGAME)) {
                 if (game != null) {
                     JSONObject json = game.toJson();
                     Log.i("chess", "json:" + json.toString());
@@ -102,7 +103,11 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
 
     public void onPostExecute(String message){
         // after move was sent to database check if opponent made his move
-        comm.moveMade(message , returnMessage);
+        if(action.equals(ENDGAME)){
+            comm.endGame(message);
+        }
+        else
+            comm.moveMade(message , returnMessage);
 
     }
 

@@ -67,7 +67,6 @@ public class TimerBar extends Fragment {
                     stopTimer=false;
                     return;
                 }
-                Log.i("chess","in timer somthing");
 
                 simpleProgressBar.setProgress(progress);
                 if(progress%10==0)

@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
@@ -27,10 +30,13 @@ import layout.TopInfo;
  */
 public class GameBoard extends Activity implements Communicator {
 
+    private static final int OK_GAME = 1;
+
     private final int YOU_LOOSE =1;
     private final int OPPONENT_LOOSE=2;
     private final int CHCKMATE =3;
     private final int TIMEROVER=4;
+    private final int CHECK = 2;
 
     ArrayList<Piece> whiteEaten;            // need to move this to game object
     ArrayList<Piece> blackEaten;            // need to move this to game object
@@ -39,6 +45,9 @@ public class GameBoard extends Activity implements Communicator {
     private Game game;
     int myColor;
     private boolean firstTime;
+    Dialog dialog;
+    Button okButton;
+    ProgressBar spinner;
 
 
 
@@ -125,14 +134,14 @@ public class GameBoard extends Activity implements Communicator {
    public void refreshGame(String str)  {
        try {
            game = new Game(new JSONObject(str));
-
+           updateStatus();
            int status=game.getStatus();
            switch (status){
-               case 1:                      // opponent made a move, just update UI, enable back the adapter and reset timer
+               case OK_GAME:                      // opponent made a move, just update UI, enable back the adapter and reset timer
                     updateUI();
                    break;
-               case 2:                      //check , player must get out of check , update UI enable back the adapter resert timer SET POSSIBLE MOVES!!!!!
-
+               case CHECK:                      //check , player must get out of check , update UI enable back the adapter resert timer SET POSSIBLE MOVES!!!!!
+                    showCheckToast();
                    break;
                case 3:                      // checkMate , finish game
 
@@ -145,6 +154,11 @@ public class GameBoard extends Activity implements Communicator {
            e.printStackTrace();
        }
    }
+
+    private void showCheckToast() {
+        Toast toast = Toast.makeText(this, "Get out of Check", Toast.LENGTH_LONG);
+        toast.show();
+    }
 
     private void updateUI( ) {
         Log.i("chess","in updateUI");
@@ -213,11 +227,25 @@ public class GameBoard extends Activity implements Communicator {
             Toast toast = Toast.makeText(this, "game is null", Toast.LENGTH_LONG);
             toast.show();
         }else {
+
             ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game);
             read.execute();
         }
     }
+    private void updateStatus(){
+        FragmentManager fManager = getFragmentManager();
 
+        //update pieces
+        Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
+        if(boardFragment.isChess()) {
+            Log.i("chess","check!!!");
+            game.setStatus(CHECK);
+        }
+        else {
+            Log.i("chess","No check :) !!!");
+            game.setStatus(OK_GAME);
+        }
+    }
     @Override
     public Piece[][] getPieces() {
         return  game.getGridPieces();
@@ -291,13 +319,16 @@ public class GameBoard extends Activity implements Communicator {
     show end Game Dialog
      */
     private void showDialog(int looser , int looseType){
-        Dialog dialog = new Dialog(this ,R.style.myCoolDialog);
+        dialog = new Dialog(this ,R.style.myCoolDialog);
         dialog.setTitle("Game Over");
         dialog.setContentView(R.layout.end_game_dialog);
 
         dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
         TextView messageTextView  = (TextView) dialog.findViewById(R.id.endGameTextView);
-
+        okButton = (Button) dialog.findViewById(R.id.endGameOkButton);
+        spinner = (ProgressBar) dialog.findViewById(R.id.EndGameProgressBar);
+        okButton.setVisibility(View.GONE);
         String message="";
 
         switch (looseType){
@@ -311,11 +342,31 @@ public class GameBoard extends Activity implements Communicator {
 
         messageTextView.setText(message);
 
+        ReadFromDB read = new ReadFromDB(this,ReadFromDB.ENDGAME,userName,game);
+        read.execute();
+
+
     }
 
     @Override
     public boolean canClick() {
         return userName.equals(game.getTurn());
+    }
+
+    @Override
+    public void endGame(String message) {
+        okButton.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.GONE);
+        if(message.equals("gameEnded")){
+            okButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getParent(), EndGame.class);
+                    intent.putExtra("userName", userName);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 }
 

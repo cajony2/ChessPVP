@@ -22,4 +22,6 @@ public interface Communicator {
     void timerFinished();
 
     boolean canClick();
+
+    void endGame(String message);
 }

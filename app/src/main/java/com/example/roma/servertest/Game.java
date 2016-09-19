@@ -294,4 +294,8 @@ public class Game {
         eatenPiecesSize++;
         Log.i("chess","eaten piece added");
     }
+
+    public void setStatus(int check) {
+        status = check;
+    }
 }
