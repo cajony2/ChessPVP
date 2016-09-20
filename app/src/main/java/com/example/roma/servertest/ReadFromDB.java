@@ -22,6 +22,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     int attempts;
     Communicator comm;
     String returnMessage;
+    boolean win;
 
     public static final String MAKE_MOVE = "makeMove";
     public static final String MOVE_MADE = "moveMade";
@@ -29,6 +30,8 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     public static final String GAME_NOT_READY = "gameNotReady";
     public static final String GAME_IS_READY = "gameIsReady";
     public static final String ENDGAME = "endGame";
+    public static final String GETINFO = "getInfo";
+
 
 
 
@@ -38,17 +41,17 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
         game=_game;
         attempts=0;
         comm = _comm;
-
     }
-    public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game, int _attempts){
-
+    public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game, boolean _win){
         action = _action;
         userName=_userName;
         game=_game;
-        attempts=_attempts;
+        attempts=0;
         comm = _comm;
-
+        win= _win;
     }
+
+
 
     protected String doInBackground(Void... params) {
         String message="";
@@ -73,6 +76,11 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
                     out.write(json.toString());
                 } else
                     Log.i("chess", "game is null");
+                if(action.equals(ENDGAME))
+                    if(win)
+                        connection.setRequestProperty("winner","me");
+                    else
+                        connection.setRequestProperty("winner","opponent");
             }
             out.close();
 
@@ -106,8 +114,13 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
         if(action.equals(ENDGAME)){
             comm.endGame(message);
         }
+        else if(action.equals(GETINFO)){
+           comm.setInfo(message);
+        }
         else
             comm.moveMade(message , returnMessage);
+
+
 
     }
 

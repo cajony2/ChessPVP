@@ -24,4 +24,6 @@ public interface Communicator {
     boolean canClick();
 
     void endGame(String message);
+
+    void setInfo(String message);
 }

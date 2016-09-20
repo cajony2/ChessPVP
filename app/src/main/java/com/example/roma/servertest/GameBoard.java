@@ -48,6 +48,7 @@ public class GameBoard extends Activity implements Communicator {
     Dialog dialog;
     Button okButton;
     ProgressBar spinner;
+    boolean win;
 
 
 
@@ -308,8 +309,10 @@ public class GameBoard extends Activity implements Communicator {
     public void timerFinished() {
         Log.i("chess","Times up!");
 
-        if(game.getTurn().equals(userName))
-            showDialog(YOU_LOOSE,TIMEROVER);
+        if(game.getTurn().equals(userName)) {
+            win = false;
+            showDialog(YOU_LOOSE, TIMEROVER);
+        }
         else
             showDialog(OPPONENT_LOOSE,TIMEROVER);
 
@@ -355,14 +358,20 @@ public class GameBoard extends Activity implements Communicator {
 
     @Override
     public void endGame(String message) {
+        ReadFromDB read = new ReadFromDB(this,ReadFromDB.GETINFO,userName,game, win);
+        read.execute();
+    }
+
+    @Override
+    public void setInfo(final String message) {
         okButton.setVisibility(View.VISIBLE);
         spinner.setVisibility(View.GONE);
         if(message.equals("gameEnded")){
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getParent(), EndGame.class);
-                    intent.putExtra("userName", userName);
+                    Intent intent = new Intent(getParent(), PersonalInfo.class);
+                    intent.putExtra("JSON", message);
                     startActivity(intent);
                 }
             });

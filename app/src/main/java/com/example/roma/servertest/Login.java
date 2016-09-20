@@ -123,8 +123,8 @@ public class Login extends Activity implements View.OnClickListener {
                 // URL url = new URL("http://10.0.2.2:8080/Chess/ChessServlet");
 
                 URLConnection connection = url.openConnection();
-                connection.setRequestProperty("Action","logIn");
-                Log.d("chess", "connecting to db: LogIn");
+                connection.setRequestProperty("Action","getInfo");
+                Log.d("chess", "connecting to db: getInfo");
 
                 connection.setRequestProperty("UserName", name);
                 connection.setRequestProperty("Password", psw);
