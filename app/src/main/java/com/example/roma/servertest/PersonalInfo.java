@@ -32,6 +32,7 @@ public class PersonalInfo extends Activity implements View.OnClickListener {
     Button joinGameBtn;
 
     String userName ;
+    String psw;
 
 
 
@@ -50,7 +51,7 @@ public class PersonalInfo extends Activity implements View.OnClickListener {
         joinGameBtn.setOnClickListener(this);
 
         Intent intent = getIntent();
-
+        psw = intent.getStringExtra("password");
         try {
             JSONObject json = new JSONObject(intent.getStringExtra("JSON"));            // get info from login activity and create a json
             userName =json.getString("playerName");
@@ -76,6 +77,7 @@ public class PersonalInfo extends Activity implements View.OnClickListener {
                 Log.i("chess","button clicked, create new Game");
                 intent.putExtra("ACTION","createNewGame");
                 intent.putExtra("userName",userName);
+                intent.putExtra("password",psw);
                 break;
             case R.id.joinGameBtn:
                 Log.i("chess","button clicked, create new Game");

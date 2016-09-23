@@ -21,49 +21,64 @@
             <TextView
                 style="@style/blackBold"
                 android:id="@+id/player1"
-                android:paddingLeft="20dp"
+                android:paddingLeft="2dp"
+                android:lines="1"
                 android:minWidth="70dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/blackBold"
-                android:id="@+id/timer"
-                android:gravity="center"/>
 
         </LinearLayout>
 
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/linearLayout3"
+    android:paddingLeft="20dp"
+    android:gravity="center">
+    <GridView
+        android:id="@+id/eatenPiecesBottom"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_horizontal"
+        android:numColumns="8"
+        android:background="@drawable/bottom2"
+        >
+    </GridView>
 
-        <GridView
-            android:id="@+id/eatenPiecesBottom"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:gravity="center_horizontal"
-            android:numColumns="8"
-            android:background="@drawable/bottom2"
-            >
-        </GridView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingRight="15dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Make Move"
+            android:id="@+id/submit"
+            android:background="@drawable/red_button"
+            style="@style/button_text_small"
+            android:textAllCaps="false"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Cancel"
+            android:id="@+id/Cancel"
+            android:background="@drawable/red_button"
+            style="@style/button_text_small"
+            android:textAllCaps="false"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Make Move"
-                android:id="@+id/submit"
-                android:background="@drawable/red_button"
-                style="@style/button_text_small"
-                android:textAllCaps="false"
-                android:layout_gravity="center_vertical|center_horizontal" />
+    </LinearLayout>
 
-        </FrameLayout>
+</LinearLayout>
 
 
 

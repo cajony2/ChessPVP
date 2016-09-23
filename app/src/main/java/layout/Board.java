@@ -126,7 +126,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         ArrayList<Integer> moves ;
         // do only if the square clicked is the users color
         canClick = comm.canClick();
-        if(canClick) {
+        if(canClick && !moveMade) {
             if (!isSelected) {
                 Log.i("chess", "tile "+position+" Selected");
 
@@ -273,4 +273,11 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         }
     }
 
+    public boolean getMoveMade() {
+        return moveMade;
+    }
+
+    public void setMoveMade(boolean moveMade) {
+        this.moveMade = moveMade;
+    }
 }

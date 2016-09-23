@@ -26,10 +26,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".GameBoard"></activity>
-        <activity android:name=".InitGame"></activity>
+        <activity android:name=".InitGame"
+                  android:noHistory="true"></activity>
         <activity android:name=".PersonalInfo"></activity>
         <activity android:name=".CreateAccount"></activity>
-        <activity android:name=".EndGamePopup"></activity>
     </application>
 
 </manifest>

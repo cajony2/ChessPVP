@@ -166,6 +166,7 @@ public class Login extends Activity implements View.OnClickListener {
 
                 intent.putExtra("JSON",message);
                 intent.putExtra("userName",name);
+                intent.putExtra("password",psw);
                 startActivity(intent);
             }
 

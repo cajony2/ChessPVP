@@ -33,6 +33,7 @@ public class InitGame extends Activity{
     private ProgressBar spinner;
     private TextView status;
     private String userName;
+    private String psw;
     private Game game;
 
 
@@ -56,6 +57,7 @@ public class InitGame extends Activity{
 
         Intent intent = getIntent();
         userName = intent.getStringExtra("userName");
+        psw= intent.getStringExtra("password");
         String action = intent.getStringExtra("ACTION");
         switch (action){
             case CREATE_GAME:
@@ -173,6 +175,7 @@ public class InitGame extends Activity{
                     intent.putExtra("game",message );
                     intent.putExtra("ACTION","fullGame" );
                     intent.putExtra("userName", userName);
+                    intent.putExtra("password",psw);
                     startActivity(intent);
                 }
             }

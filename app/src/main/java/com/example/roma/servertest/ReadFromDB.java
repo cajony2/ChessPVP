@@ -1,6 +1,8 @@
 package com.example.roma.servertest;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -23,6 +25,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     Communicator comm;
     String returnMessage;
     boolean win;
+    private String psw;
 
     public static final String MAKE_MOVE = "makeMove";
     public static final String MOVE_MADE = "moveMade";
@@ -31,6 +34,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     public static final String GAME_IS_READY = "gameIsReady";
     public static final String ENDGAME = "endGame";
     public static final String GETINFO = "getInfo";
+    public static final String MyPREFERENCES = "MyPrefs" ;
 
 
 
@@ -42,13 +46,14 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
         attempts=0;
         comm = _comm;
     }
-    public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game, boolean _win){
+    public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game, boolean _win,String _psw){
         action = _action;
         userName=_userName;
         game=_game;
         attempts=0;
         comm = _comm;
         win= _win;
+        psw=_psw;
     }
 
 
@@ -57,12 +62,21 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
         String message="";
         String response="";
         try{
+
             URL url = new URL("http://5.29.207.103:8080/Chess/ChessServlet");
 
             URLConnection connection = url.openConnection();
+
             connection.setRequestProperty("Action",action);
             connection.setRequestProperty("UserName", userName);
             connection.setRequestProperty("gameId",game.getGameId()+"");
+            if(action.equals(ENDGAME))
+                if(win)
+                    connection.setRequestProperty("winner",userName);
+                else
+                    connection.setRequestProperty("winner",game.getPlayer2());
+            if(action.equals(GETINFO))
+                connection.setRequestProperty("Password",psw);
             Log.i("chess", "connecting to db:"+action);
 
 
@@ -76,11 +90,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
                     out.write(json.toString());
                 } else
                     Log.i("chess", "game is null");
-                if(action.equals(ENDGAME))
-                    if(win)
-                        connection.setRequestProperty("winner","me");
-                    else
-                        connection.setRequestProperty("winner","opponent");
+
             }
             out.close();
 
@@ -115,7 +125,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
             comm.endGame(message);
         }
         else if(action.equals(GETINFO)){
-           comm.setInfo(message);
+           comm.setInfo(returnMessage);
         }
         else
             comm.moveMade(message , returnMessage);

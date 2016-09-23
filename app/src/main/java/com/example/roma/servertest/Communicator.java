@@ -26,4 +26,5 @@ public interface Communicator {
     void endGame(String message);
 
     void setInfo(String message);
+
 }

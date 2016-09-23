@@ -49,7 +49,8 @@ public class GameBoard extends Activity implements Communicator {
     Button okButton;
     ProgressBar spinner;
     boolean win;
-
+    private String psw;
+    boolean moveMade;
 
 
 
@@ -66,11 +67,13 @@ public class GameBoard extends Activity implements Communicator {
         Intent intent = getIntent();
         //this is the name of the player that playes this game
         userName = intent.getStringExtra("userName");           // username ==player1 - this player is playing the white pieces
+        psw =intent.getStringExtra("password");
         String gameJson = intent.getStringExtra("game");
         String action = intent.getStringExtra("ACTION");
 
         Log.i("chess", "gameBoard created , action: " + action);
         firstTime=true;
+        moveMade=false;
         // create the game from string extra "game"
         try {
             game = new Game(new JSONObject(gameJson));
@@ -143,6 +146,7 @@ public class GameBoard extends Activity implements Communicator {
                    break;
                case CHECK:                      //check , player must get out of check , update UI enable back the adapter resert timer SET POSSIBLE MOVES!!!!!
                     showCheckToast();
+                    updateUI();
                    break;
                case 3:                      // checkMate , finish game
 
@@ -168,6 +172,7 @@ public class GameBoard extends Activity implements Communicator {
         //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
         boardFragment.refresh(game.getBoard2());
+        boardFragment.setMoveMade(false);
 
         //update eaten pieces
         addEatenPieces(game.getEatenPieces());
@@ -224,13 +229,21 @@ public class GameBoard extends Activity implements Communicator {
 
     @Override
     public void makeMove() {
-        if(game==null) {
-            Toast toast = Toast.makeText(this, "game is null", Toast.LENGTH_LONG);
-            toast.show();
-        }else {
+        FragmentManager fManager = getFragmentManager();
 
+        //update pieces
+        Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
+
+        moveMade =  boardFragment.getMoveMade();
+
+        if(moveMade) {
             ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game);
             read.execute();
+
+        }else {
+            Toast toast = Toast.makeText(this, "game is null", Toast.LENGTH_LONG);
+            toast.show();
+
         }
     }
     private void updateStatus(){
@@ -307,14 +320,19 @@ public class GameBoard extends Activity implements Communicator {
      */
     @Override
     public void timerFinished() {
-        Log.i("chess","Times up!");
 
         if(game.getTurn().equals(userName)) {
             win = false;
             showDialog(YOU_LOOSE, TIMEROVER);
+                    ReadFromDB read = new ReadFromDB(this,ReadFromDB.ENDGAME,userName,game);
+            read.execute();
         }
-        else
-            showDialog(OPPONENT_LOOSE,TIMEROVER);
+        else {
+            win = true;
+            showDialog(OPPONENT_LOOSE, TIMEROVER);
+        }
+
+
 
     }
     /*
@@ -345,8 +363,7 @@ public class GameBoard extends Activity implements Communicator {
 
         messageTextView.setText(message);
 
-        ReadFromDB read = new ReadFromDB(this,ReadFromDB.ENDGAME,userName,game);
-        read.execute();
+
 
 
     }
@@ -358,24 +375,26 @@ public class GameBoard extends Activity implements Communicator {
 
     @Override
     public void endGame(String message) {
-        ReadFromDB read = new ReadFromDB(this,ReadFromDB.GETINFO,userName,game, win);
+        ReadFromDB read = new ReadFromDB(this,ReadFromDB.GETINFO,userName,game, win,psw);
         read.execute();
     }
 
     @Override
-    public void setInfo(final String message) {
-        okButton.setVisibility(View.VISIBLE);
-        spinner.setVisibility(View.GONE);
-        if(message.equals("gameEnded")){
+        public void setInfo(final String message) {
+            okButton.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.GONE);
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getParent(), PersonalInfo.class);
-                    intent.putExtra("JSON", message);
-                    startActivity(intent);
+                    startPersonalActivity(message);
                 }
             });
+
         }
+    private void startPersonalActivity(String infoJson){
+        Intent intent = new Intent(this, PersonalInfo.class);
+        intent.putExtra("JSON", infoJson);
+        startActivity(intent);
     }
 }
 
