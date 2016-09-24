@@ -51,7 +51,7 @@
     <Button
         android:text="Create Account"
         android:id="@+id/create_account"
-        android:background="@drawable/red_button"
+        android:background="@drawable/green_button"
         style="@style/button_text"
         android:textAllCaps="false"
         android:minWidth="300dp"

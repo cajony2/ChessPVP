@@ -28,6 +28,7 @@ public class BottomInfo extends Fragment implements View.OnClickListener {
     EatenAdapter eatenAdapter;
     GridView eatenGridView;
     Button makeMove;
+    Button undoMove;
 
 
 
@@ -41,8 +42,13 @@ public class BottomInfo extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         userNameTV = (TextView) view.findViewById(R.id.player1);
+        timerTV =(TextView) view.findViewById(R.id.timer);
         eatenGridView = (GridView) view.findViewById(R.id.eatenPiecesBottom);
         makeMove = (Button) view.findViewById(R.id.submit);
+        undoMove = (Button) view.findViewById(R.id.undo);
+
+
+
     }
 
     @Override
@@ -57,6 +63,7 @@ public class BottomInfo extends Fragment implements View.OnClickListener {
         eatenGridView.setAdapter(eatenAdapter);
 
         makeMove.setOnClickListener(this);
+        undoMove.setOnClickListener(this);
 
     }
 
@@ -64,7 +71,18 @@ public class BottomInfo extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(comm!=null)
-            comm.makeMove();
+        {
+            if (v.equals(makeMove))
+            {
+                comm.makeMove();
+            }
+            else//user pushed undo
+            {
+
+            }
+
+
+        }
 
     }
 

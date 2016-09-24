@@ -39,6 +39,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     boolean[] possibleMove;
     boolean moveMade;
     View chessBoardView;
+    Piece eatenPiece = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,47 +127,58 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         ArrayList<Integer> moves ;
         // do only if the square clicked is the users color
         canClick = comm.canClick();
-        if(canClick && !moveMade) {
-            if (!isSelected) {
-                Log.i("chess", "tile "+position+" Selected");
+        //if (view == )//user hit submit button
+        if(canClick)
+        {
+            if (!moveMade)
+            {
+                if (!isSelected)
+                {
+                    Log.i("chess", "tile " + position + " Selected");
 
-                //if (!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white")))
-                if (piecesOld[position].getIntColor() == myColor)      // selected his own color
-                {//then this user is white. needs to be changed to pieces[position].getColor == Player.getColor
-                    isSelected = true;
-                    moves = piecesOld[position].getLegalMoves(piecesOld);
-                    if (moves != null && moves.size() != 0)//jony added moves.size() != 0
-                    {
-                        for (int pos : moves) {
-                            possibleMove[pos] = true;
+                    //if (!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white")))
+                    if (piecesOld[position].getIntColor() == myColor)      // selected his own color
+                    {//then this user is white. needs to be changed to pieces[position].getColor == Player.getColor
+                        isSelected = true;
+                        moves = piecesOld[position].getLegalMoves(piecesOld);
+                        if (moves != null && moves.size() != 0)//jony added moves.size() != 0
+                        {
+                            for (int pos : moves) {
+                                possibleMove[pos] = true;
+                            }
+                            adapter.setSelectedTile(position);
+                            adapter.setPossibleMoves(possibleMove);
                         }
-                        adapter.setSelectedTile(position);
-                        adapter.setPossibleMoves(possibleMove);
                     }
                 }
-            } else {                        //selected maybe a move
-                if (selectedTile >= 0) {   //making a move
-                    if (possibleMove[position]) {    // this move is legal
-                        //should add if piece canMove (so he would not expose the king)
+                else
+                {
+                    if (selectedTile >= 0)
+                    {   //making a move
+                        if (possibleMove[position])// this move is legal
+                        {
+                            if (!piecesOld[position].getName().equals("empty"))//if player eats opponent piece
+                            {
+                                eatenPiece = piecesOld[position];
+                                comm.setEatenPiece(eatenPiece);
+                            }
 
-                        if(!piecesOld[position].getName().equals("empty"))      //if player eats opponent piece
-                                comm.setEatenPiece(piecesOld[position]);
+                            swapPieces(piecesOld, selectedTile, position);
 
-                        swapPieces(piecesOld, selectedTile, position);
-
-                        moveMade = true;
-                        //TODO
-                        //if (moveMade)
+                            moveMade = true;
+                            //TODO
+                            //if (moveMade)
                             //if it`s a pawn then it turns into a queen when reaches the last row
                             //set king/rook hasNotMovedYet to false
 
-                        Log.i("chess", "move made");
-                        adapter.setSelectedTile(-1);
+                            Log.i("chess", "move made");
+                            adapter.setSelectedTile(-1);
+                        }
                     }
+                    isSelected = false;
+                    for (int i = 0; i < possibleMove.length; i++)
+                        possibleMove[i] = false;
                 }
-                isSelected = false;
-                for (int i = 0; i < possibleMove.length; i++)
-                    possibleMove[i] = false;
             }
         }
         adapter.notifyDataSetChanged();

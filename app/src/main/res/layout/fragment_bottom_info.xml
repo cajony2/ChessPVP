@@ -24,7 +24,22 @@
                 android:paddingLeft="2dp"
                 android:lines="1"
                 android:minWidth="70dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Undo"
+                android:id="@+id/undo"
+                android:background="@drawable/red_button"
+                style="@style/button_text_small"
+                android:textAllCaps="false"
+                android:layout_gravity="center_vertical|left" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/blackBold"
+                android:id="@+id/timer"
+                android:gravity="center"/>
 
         </LinearLayout>
 
@@ -55,26 +70,15 @@
         android:gravity="center"
 >
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Make Move"
-            android:id="@+id/submit"
-            android:background="@drawable/red_button"
-            style="@style/button_text_small"
-            android:textAllCaps="false"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Cancel"
-            android:id="@+id/Cancel"
-            android:background="@drawable/red_button"
-            style="@style/button_text_small"
-            android:textAllCaps="false"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:id="@+id/submit"
+                android:background="@drawable/green_button"
+                style="@style/button_text_small"
+                android:textAllCaps="false"
+                android:layout_gravity="center_vertical|center_horizontal" />
 
     </LinearLayout>
 
