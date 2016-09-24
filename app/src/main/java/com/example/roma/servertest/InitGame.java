@@ -41,6 +41,7 @@ public class InitGame extends Activity{
     public static final String JOIN_GAME = "joinGame";
     public static final String JOIN_READY ="JoinedGame";
     public static final String JOIN_FAILED = "ERROR";
+    public static final String GAME_READY = "gameReady";
 
     @Override
     /*
@@ -88,12 +89,20 @@ public class InitGame extends Activity{
         Activity activity;
         String action;
         String response;
+        int attemps;
 
 
         //constructor
         public ReadFromDB(Activity _e, String _action){
             activity=_e;
             action = _action;
+            attemps=0;
+            Log.d("chess","new read from db created action: "+action);
+        }
+        public ReadFromDB(Activity _e, String _action, int _attemps){
+            activity=_e;
+            action = _action;
+            attemps = _attemps;
             Log.d("chess","new read from db created action: "+action);
         }
 
@@ -114,7 +123,6 @@ public class InitGame extends Activity{
                 Log.d("chess", "connecting to db:"+action);
 
                 connection.setRequestProperty("UserName", userName);
-                //connection.setRequestProperty("Password", psw);
                 connection.setDoOutput(true);
 
                 OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
@@ -156,10 +164,10 @@ public class InitGame extends Activity{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                status.setText("Searching for player");
-                new ReadFromDB(activity,"gameReady").execute();                       // chech to see if player 2 is ready
+                status.setText("Searching for player attemps: "+attemps);
+                new ReadFromDB(activity,GAME_READY).execute();                       // chech to see if player 2 is ready
             }
-            else if (action.equals("gameReady")){                                                 //action is "gameready
+            else if (action.equals(GAME_READY)){                                                 //action is "gameready
                 Log.d("chess","mesg: "+message);
                 if (message.equals("null")){
                     try {
@@ -167,7 +175,8 @@ public class InitGame extends Activity{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    new ReadFromDB(activity,"gameReady").execute();
+                    new ReadFromDB(activity,GAME_READY,attemps++).execute();
+                    status.setText("Searching for player attemps: "+attemps);
                 }
                 else{
                     status.setText("game Ready");
