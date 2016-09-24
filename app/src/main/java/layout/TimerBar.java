@@ -63,17 +63,19 @@ public class TimerBar extends Fragment {
             @Override
             public void run() {
                 // if no interrupt
+                Log.i("chess","progress:"+progress);
                 if(stopTimer){
                     stopTimer=false;
+                    Log.i("chess","timer restarted");
                     return;
                 }
 
                 simpleProgressBar.setProgress(progress);
-                if(progress%10==0)
-                    progressBarText.setText(progressBarMessage+timeLeft());
+
+                progressBarText.setText(progressBarMessage+timeLeft());
                 progress++;
                 if(progress<simpleProgressBar.getMax())
-                    handler.postDelayed(this, 100);
+                    handler.postDelayed(this, 1000);
                 else {
                     progressBarText.setText("Time's Up");
                     comm.timerFinished();
@@ -86,7 +88,7 @@ public class TimerBar extends Fragment {
 
     private String timeLeft(){
         String minutes ="",seconds="";
-        int timeleft =60-progress/10;
+        int timeleft =60-progress;
 
             if(timeleft>=60) {
                 minutes="0"+ timeleft /60;
@@ -104,6 +106,7 @@ public class TimerBar extends Fragment {
 
     public void reset() {
         stopTimer=true;
+        Log.i("chess","reseting timer");
         startTimer();
     }
 }

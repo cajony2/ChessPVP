@@ -26,6 +26,7 @@ public class Game {
     private Player _whitePlayer;
     private Player _blackPlayer;
 
+
     //constructor NOT IN USE!!!
     public Game (String player1){
 		_whitePlayer = new Player.WhitePlayer(player1);
@@ -209,7 +210,7 @@ public class Game {
             json.put("eatenpieces",getEatenPiecesJson());
             json.put("eatenpiecessize",eatenPieces.size());
         } catch (JSONException e) {
-            Log.d("chess","fucking error creatinf json player name=" + _whitePlayer.getName());
+            Log.d("chess","fucking error creatinf json player name=" + _whitePlayer.getName()+" turn:"+turn);
             e.printStackTrace();
         }
         return json;
@@ -298,4 +299,5 @@ public class Game {
     public void setStatus(int check) {
         status = check;
     }
+
 }
