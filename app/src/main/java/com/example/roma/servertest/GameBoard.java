@@ -227,6 +227,15 @@ public class GameBoard extends Activity implements Communicator {
             return whiteEaten;
     }
 
+    public void undo() {
+        FragmentManager fManager = getFragmentManager();
+
+        //update pieces
+        Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
+
+        boardFragment.undoClicked();
+    }
+
     @Override
     public void makeMove() {
         FragmentManager fManager = getFragmentManager();

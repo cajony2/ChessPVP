@@ -9,7 +9,7 @@
        android:layout_height="30dp"
        android:id="@+id/timerBar"
        style="?android:attr/progressBarStyleHorizontal"
-       android:max="60"
+       android:max="600"
        android:progress="0"
        android:progressDrawable="@drawable/custom_progress"/>
 

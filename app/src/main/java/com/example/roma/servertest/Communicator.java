@@ -27,4 +27,5 @@ public interface Communicator {
 
     void setInfo(String message);
 
+    public void undo();
 }

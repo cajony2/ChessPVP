@@ -76,9 +76,9 @@ public class BottomInfo extends Fragment implements View.OnClickListener {
             {
                 comm.makeMove();
             }
-            else//user pushed undo
+            else if (v.equals(undoMove))     //undo clicked
             {
-
+                comm.undo();
             }
 
 

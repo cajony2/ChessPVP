@@ -112,6 +112,8 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     private void updateStatus() {
     }
 
+
+
     //@Override
     // listener  for the gridview when the user clicks a tile check if the tile contains a piece and
     // the piece is of the legal color and create a legalmoves array and update adapter and UI
@@ -291,5 +293,11 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
 
     public void setMoveMade(boolean moveMade) {
         this.moveMade = moveMade;
+    }
+
+    public void undoClicked() {
+        //undo button is clicked
+
+
     }
 }
