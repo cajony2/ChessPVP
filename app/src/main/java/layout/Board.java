@@ -39,6 +39,8 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     boolean[] possibleMove;
     boolean moveMade;
     View chessBoardView;
+    Piece[] piecesOldCopy = null;
+    Piece[][] piecesCopy = null;
     Piece eatenPiece = null;
 
     @Override
@@ -74,6 +76,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
              flipBoard();
         else
             resetIsFlipped();
+
     }
 
     private void resetIsFlipped(){
@@ -159,10 +162,42 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                     {   //making a move
                         if (possibleMove[position])// this move is legal
                         {
+                            //copy of the board in case the player hits undo the whole pieces will get the copy value
+                            piecesOldCopy = new Piece[64];
+                            piecesCopy = new Piece[8][8];
+                            for (int i = 0; i < 64; i++)
+                            {
+                                switch (piecesOld[i].getName()){
+                                    case "rook":
+                                        piecesOldCopy[i] = new Rook(piecesOld[i]);
+                                        break;
+                                    case "queen":
+                                        piecesOldCopy[i] = new Queen(piecesOld[i]);
+                                        break;
+                                    case "pawn":
+                                        piecesOldCopy[i] = new Pawn(piecesOld[i]);
+                                        break;
+                                    case "knight":
+                                        piecesOldCopy[i] = new Knight(piecesOld[i]);
+                                        break;
+                                    case "king":
+                                        piecesOldCopy[i] = new King(piecesOld[i]);
+                                        break;
+                                    case "empty":
+                                        piecesOldCopy[i] = new Empty(piecesOld[i]);
+                                        break;
+                                    case "bishop":
+                                        piecesOldCopy[i] = new Bishop(piecesOld[i]);
+                                        break;
+                                }
+                            }
+                            fillDoubleArrayFromSingle(piecesOldCopy, piecesCopy);
+
                             if (!piecesOld[position].getName().equals("empty"))//if player eats opponent piece
                             {
                                 eatenPiece = piecesOld[position];
                                 comm.setEatenPiece(eatenPiece);
+                                //whatWasEaten += piecesOld[position].getName();
                             }
 
                             swapPieces(piecesOld, selectedTile, position);
@@ -253,6 +288,73 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         fillDoubleArrayFromSingle(piecesOld, pieces);
     }
 
+    private void swapPieces(Piece[] piecesOld, Piece selectedTile, Piece position) {
+
+        //castling
+        if (selectedTile.getName().equals("king"))
+        {
+            if (selectedTile.getPosition() == 4 && position.getPosition() == 6)
+            {
+                swapPieces(piecesOld, 7, 5);
+            }
+            else if (selectedTile.getPosition() == 4 && position.getPosition() == 2)
+            {
+                swapPieces(piecesOld, 0, 3);
+            }
+            else if (selectedTile.getPosition() == 60 && position.getPosition() == 62)
+            {
+                swapPieces(piecesOld, 63, 61);
+            }
+            else if (selectedTile.getPosition() == 60 && position.getPosition() == 58)
+            {
+                swapPieces(piecesOld, 56, 59);
+            }
+        }
+
+        //pawn turns into a queen when reaches the end
+        if (selectedTile.getName().equals("pawn"))
+        {
+            if (position.getPosition() >= 56 || position.getPosition() <= 7)//pawn reached last row
+            {
+                selectedTile = new Queen("queen", selectedTile.getColor(), selectedTile.getPosition());
+            }
+        }
+
+        Point tempPoint = new Point(position.getPointPosition().x, position.getPointPosition().y);
+        switch (selectedTile.getName()){
+            case "rook":
+                position = new Rook(selectedTile);
+                break;
+            case "queen":
+                position = new Queen(selectedTile);
+                break;
+            case "pawn":
+                position = new Pawn(selectedTile);
+                break;
+            case "knight":
+                position = new Knight(selectedTile);
+                break;
+            case "king":
+                position = new King(selectedTile);
+                break;
+            case "empty":
+                position = new Empty(selectedTile);
+                break;
+            case "bishop":
+                position = new Bishop(selectedTile);
+                break;
+        }
+        position.setPointPosition(tempPoint);
+        position.setPosition(position.getPosition());
+        int x = selectedTile.getPointPosition().x;
+        int y = selectedTile.getPointPosition().y;
+        selectedTile = new Empty("empty", "white", selectedTile.getPosition());
+        selectedTile.setPointPosition(x, y);
+        selectedTile.setEmpty(true);
+
+        fillDoubleArrayFromSingle(piecesOld, pieces);
+    }
+
     //not tested yet
     public boolean isChess()
     {
@@ -296,8 +398,24 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     }
 
     public void undoClicked() {
-        //undo button is clicked
 
-
+        if (moveMade)
+        {
+            //swapPieces(piecesOld, movingPiece, eatenPiece);
+            //revertSwap();
+            adapter.setSelectedTile(-1);
+            moveMade = false;
+            isSelected = false;
+            for (int i = 0; i < possibleMove.length; i++)
+                possibleMove[i] = false;
+            piecesOld = piecesOldCopy;
+            pieces = piecesCopy;
+            if (eatenPiece != null)
+            {
+                comm.erasePieceFromEatenPieces(eatenPiece);
+            }
+            adapter.setPieces(piecesOld);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

@@ -43,6 +43,22 @@ public abstract class Piece{
         _color = color;
     }
 
+    //copy constructor
+    public Piece (Piece piece)
+    {
+        _color = piece.getIntColor();
+        _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
+        _isActive = piece.getActive();
+        _checksKing = piece._checksKing;
+        _isFlipped = piece.getIsFliped();
+        name = piece.getName();
+        color = piece.getColor();
+        image = piece.getImg();
+        position = piece.getPosition();
+        isEmpty = piece.isEmpty();
+        _hasNotMovedYet = piece.hasNotMovedYet();
+    }
+
     public boolean hasNotMovedYet(){return _hasNotMovedYet;}
     
     public boolean canMove(Piece[] pieces) {

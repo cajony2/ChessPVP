@@ -19,13 +19,16 @@ public class Queen extends Piece {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
+        _checksKing = piece._checksKing;
         _isFlipped = piece._isFlipped;
         name = "queen";
         color = piece.getColor();
         image = piece.getImg();
         position = piece.getPosition();
         isEmpty = piece.isEmpty();
+        _hasNotMovedYet = piece.hasNotMovedYet();
     }
+
 
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {

@@ -25,6 +25,7 @@ public class King extends Piece {
         super(piece.getIntColor());
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
+		_checksKing = piece._checksKing;
         _isFlipped = piece._isFlipped;
         name = "king";
         color = piece.getColor();
@@ -33,6 +34,7 @@ public class King extends Piece {
         isEmpty = piece.isEmpty();
 		_hasNotMovedYet = false;
     }
+
 
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {

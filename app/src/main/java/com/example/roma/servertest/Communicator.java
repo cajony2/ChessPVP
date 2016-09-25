@@ -16,6 +16,7 @@ public interface Communicator {
     Piece[][] getPieces();
     Piece[] getPiecesOld();
     void setEatenPiece(Piece p );
+    void erasePieceFromEatenPieces(Piece p);
     int getColor();
     void setGame(String gameJson);
     void moveMade(String answerType , String message);

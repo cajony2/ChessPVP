@@ -96,22 +96,6 @@ public class GameBoard extends Activity implements Communicator {
         firstTime=false;
     }
 
-    /*private void flipBoard(Game game)
-    {
-        View v = findViewById(R.id.linearlayountchessboard);//the view in which the board is in
-        v.setRotationX(180);
-        rotatePieces(game);
-    }
-
-    private void rotatePieces(Game game) {
-        Piece[] pieces = game.getBoard2();
-        for (Piece p : pieces)
-        {
-            p._isFlipped = true;
-        }
-    }*/
-
-
     private void addEatenPieces(ArrayList<Piece> eatenPieces) {
         // set eaten pieces
         whiteEaten = new ArrayList<>();
@@ -193,7 +177,6 @@ public class GameBoard extends Activity implements Communicator {
 
         if(game.getTurn().equals(userName))
             timerBarFragment.reset();
-
     }
 
     @Override
@@ -207,6 +190,7 @@ public class GameBoard extends Activity implements Communicator {
         else
             return "OpponentName";
     }
+
     public String getUserName(){
         if (game!=null) {
             if (myColor == Color.BLACK)
@@ -218,7 +202,6 @@ public class GameBoard extends Activity implements Communicator {
             return "UserName";
     }
 
-
     @Override
     public ArrayList<Piece> getEatenPieces(int color) {
         if(color==Color.BLACK)
@@ -229,10 +212,7 @@ public class GameBoard extends Activity implements Communicator {
 
     public void undo() {
         FragmentManager fManager = getFragmentManager();
-
-        //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
-
         boardFragment.undoClicked();
     }
 
@@ -252,9 +232,9 @@ public class GameBoard extends Activity implements Communicator {
         }else {
             Toast toast = Toast.makeText(this, "game is null", Toast.LENGTH_LONG);
             toast.show();
-
         }
     }
+
     private void updateStatus(){
         FragmentManager fManager = getFragmentManager();
 
@@ -269,6 +249,7 @@ public class GameBoard extends Activity implements Communicator {
             game.setStatus(OK_GAME);
         }
     }
+
     @Override
     public Piece[][] getPieces() {
         return  game.getGridPieces();
@@ -284,6 +265,10 @@ public class GameBoard extends Activity implements Communicator {
        game.addEatenPiece(p);
     }
 
+    @Override
+    public void erasePieceFromEatenPieces(Piece p) {
+        game.erasePieceFromEatenPieces(p);
+    }
 
     @Override
     public int getColor() {
@@ -293,7 +278,6 @@ public class GameBoard extends Activity implements Communicator {
     @Override
     public void setGame(String gameJson) {
         refreshGame(gameJson);
-
     }
 
     @Override
@@ -340,9 +324,6 @@ public class GameBoard extends Activity implements Communicator {
             win = true;
             showDialog(OPPONENT_LOOSE, TIMEROVER);
         }
-
-
-
     }
     /*
     by Roma
@@ -371,10 +352,6 @@ public class GameBoard extends Activity implements Communicator {
         }
 
         messageTextView.setText(message);
-
-
-
-
     }
 
     @Override

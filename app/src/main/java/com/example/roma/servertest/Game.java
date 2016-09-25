@@ -295,6 +295,13 @@ public class Game {
         Log.i("chess","eaten piece added");
     }
 
+    public void erasePieceFromEatenPieces(Piece p)
+    {
+        //Piece lastAdded = eatenPieces.get(eatenPiecesSize);
+        eatenPieces.remove(p);
+        //return lastAdded;
+    }
+
     public void setStatus(int check) {
         status = check;
     }

@@ -26,6 +26,7 @@ public class Empty extends Piece {
         image = piece.getImg();
         position = piece.getPosition();
         isEmpty = true;
+        _hasNotMovedYet = true;
     }
 
     @Override
