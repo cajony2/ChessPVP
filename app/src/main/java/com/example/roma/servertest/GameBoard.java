@@ -175,7 +175,7 @@ public class GameBoard extends Activity implements Communicator {
         if(timerBarFragment==null)
             Log.i("chess","timer is null");
 
-        if(game.getTurn().equals(userName))
+
             timerBarFragment.reset();
     }
 
@@ -222,12 +222,14 @@ public class GameBoard extends Activity implements Communicator {
 
         //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
+        TimerBar timer   = (TimerBar) fManager.findFragmentById(R.id.timerBarFragment);
 
         moveMade =  boardFragment.getMoveMade();
 
         if(moveMade) {
             ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game);
             read.execute();
+
 
         }else {
             Toast toast = Toast.makeText(this, "game is null", Toast.LENGTH_LONG);
@@ -285,16 +287,22 @@ public class GameBoard extends Activity implements Communicator {
         switch (answerType) {
             case MOVE_MADE:                                         //servlet received players move
                 Log.i("chess", "move make was successful");
+                FragmentManager fManager = getFragmentManager();
+                TimerBar timer   = (TimerBar) fManager.findFragmentById(R.id.timerBarFragment);
                 try {
+                    game = new Game(new JSONObject(message));
+                    timer.reset();
                     Thread.sleep(1500);
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 new ReadFromDB(this, GAME_READY, userName, game).execute();             // check if opponent made his move
+
                 break;
             case ReadFromDB.GAME_NOT_READY:                                                                        //check if opponent made his move
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -356,6 +364,7 @@ public class GameBoard extends Activity implements Communicator {
 
     @Override
     public boolean canClick() {
+        Log.i("chess","turn:"+game.getTurn());
         return userName.equals(game.getTurn());
     }
 
