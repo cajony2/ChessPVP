@@ -87,6 +87,7 @@ public class Pawn extends Piece {
 
         if (getIntColor() == Color.WHITE)
         {
+            //might need to check if row+1 < TILES_NUMBER_IN_A_ROW
             if (pieces[row+1][col].getName().equals("empty"))
             {
                 result.add(pieces[row+1][col]);
@@ -128,14 +129,14 @@ public class Pawn extends Piece {
             }
             if (row-1 > 0 && col+1 < TILES_NUMBER_IN_A_ROW)
             {
-                if ((!pieces[row-1][col+1].getName().equals("empty") && pieces[row-1][col+1].getIntColor() != getIntColor()) || (pieces[row-1][col+1].getActive()))
+                if ((!pieces[row-1][col+1].getName().equals("empty") && pieces[row-1][col+1].getIntColor() != getIntColor()))// || (pieces[row-1][col+1].getActive())
                 {
                     result.add(pieces[row-1][col+1]);
                 }
             }
             if (row-1 > 0 && col-1 >= 0)
             {
-                if ((!pieces[row-1][col-1].getName().equals("empty") && pieces[row-1][col-1].getIntColor() != getIntColor()) || (pieces[row-1][col-1].getActive()))
+                if ((!pieces[row-1][col-1].getName().equals("empty") && pieces[row-1][col-1].getIntColor() != getIntColor()))// || (pieces[row-1][col-1].getActive())
                 {
                     result.add(pieces[row-1][col-1]);
                 }
