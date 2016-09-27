@@ -24,7 +24,6 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     int attempts;
     Communicator comm;
     String returnMessage;
-    boolean win;
     private String psw;
 
     public static final String MAKE_MOVE = "makeMove";
@@ -34,31 +33,25 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     public static final String GAME_IS_READY = "gameIsReady";
     public static final String ENDGAME = "endGame";
     public static final String GETINFO = "getInfo";
-    public static final String MyPREFERENCES = "MyPrefs" ;
 
 
 
 
-    public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game){
+
+
+    public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game,String _psw){
         action = _action;
         userName=_userName;
         game=_game;
         attempts=0;
         comm = _comm;
-    }
-    public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game, boolean _win,String _psw){
-        action = _action;
-        userName=_userName;
-        game=_game;
-        attempts=0;
-        comm = _comm;
-        win= _win;
         psw=_psw;
     }
 
 
 
     protected String doInBackground(Void... params) {
+        Log.i("chess","HTTP:action"+action);
         String message="";
         String response="";
         try{
@@ -71,13 +64,14 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
             connection.setRequestProperty("Action",action);
             connection.setRequestProperty("UserName", userName);
             connection.setRequestProperty("gameId",game.getGameId()+"");
-            if(action.equals(ENDGAME))
-                if(win)
+            connection.setRequestProperty("Password",psw);
+            if(action.equals(ENDGAME)){
+                if(comm.getWin())
                     connection.setRequestProperty("winner",userName);
                 else
                     connection.setRequestProperty("winner",game.getPlayer2());
-            if(action.equals(GETINFO))
-                connection.setRequestProperty("Password",psw);
+            }
+
             Log.i("chess", "connecting to db:"+action);
 
 
@@ -123,7 +117,7 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     public void onPostExecute(String message){
         // after move was sent to database check if opponent made his move
         if(action.equals(ENDGAME)){
-            comm.endGame(message);
+            comm.gameEnded();
         }
         else if(action.equals(GETINFO)){
            comm.setInfo(returnMessage);

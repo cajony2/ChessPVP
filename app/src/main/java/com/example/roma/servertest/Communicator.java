@@ -24,9 +24,11 @@ public interface Communicator {
 
     boolean canClick();
 
-    void endGame(String message);
+    void gameEnded();
 
     void setInfo(String message);
 
-    public void undo();
+    void undo();
+
+    boolean getWin();
 }

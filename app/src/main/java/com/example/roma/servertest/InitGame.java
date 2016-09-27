@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class InitGame extends Activity{
     public static final String JOIN_READY ="JoinedGame";
     public static final String JOIN_FAILED = "ERROR";
     public static final String GAME_READY = "gameReady";
+    public static final String KILL_GAME ="killGame";
 
     @Override
     /*
@@ -79,32 +81,45 @@ public class InitGame extends Activity{
         spinner.setVisibility(View.VISIBLE);
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(game!=null) {
+            ReadFromDB read = new ReadFromDB(this, KILL_GAME);
+            read.execute();
+        }
+    }
+
+
     /*
-    async task readfromDB send a request in a separate thread depending on the action
-     join game
-     create new game
-     gameReady
-     */
+        async task readfromDB send a request in a separate thread depending on the action
+         join game
+         create new game
+         gameReady
+         */
     class ReadFromDB extends AsyncTask< Void, Void, String> {
+        private static final int MAX_ATTEMPTS = 60;
         Activity activity;
         String action;
         String response;
-        int attemps;
+        int attempts;
 
 
         //constructor
         public ReadFromDB(Activity _e, String _action){
             activity=_e;
             action = _action;
-            attemps=0;
+            attempts =0;
             Log.d("chess","new read from db created action: "+action);
         }
-        public ReadFromDB(Activity _e, String _action, int _attemps){
+        public ReadFromDB(Activity _e, String _action, int _attempts){
             activity=_e;
             action = _action;
-            attemps = _attemps;
+            attempts = _attempts;
             Log.d("chess","new read from db created action: "+action);
         }
+
 
         @Override
         // send  request to server
@@ -118,7 +133,7 @@ public class InitGame extends Activity{
 
                 URLConnection connection = url.openConnection();
                 connection.setRequestProperty("Action",action);
-                if(action.equals("gameReady"))
+                if(action.equals("gameReady") || (game!=null && action.equals(KILL_GAME)))
                     connection.setRequestProperty("gameId",game.getGameId()+"");
                 Log.d("chess", "connecting to db:"+action);
 
@@ -156,52 +171,48 @@ public class InitGame extends Activity{
         @Override
         // Update UI and  continue according to the response
         public void onPostExecute(String message){
-            Log.d("chess","on post execute return msg: "+message);
-
-            if(action.equals(CREATE_GAME)){      // if game created get game json from response
+            if(attempts >MAX_ATTEMPTS) {
+                Toast toast = Toast.makeText(activity, "No players", Toast.LENGTH_LONG);
+                toast.show();
+                activity.finish();
+            }else if(action.equals(CREATE_GAME)){      // if game created get game json from response
                 try {
                     game = new Game(new JSONObject(message));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                status.setText("Searching for player attemps: "+attemps);
+                status.setText("Searching for player attempts: "+ attempts);
                 new ReadFromDB(activity,GAME_READY).execute();                       // chech to see if player 2 is ready
             }
             else if (action.equals(GAME_READY)){                                                 //action is "gameready
-                Log.d("chess","mesg: "+message);
                 if (message.equals("null")){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    new ReadFromDB(activity,GAME_READY,attemps++).execute();
-                    status.setText("Searching for player attemps: "+attemps);
+                        new ReadFromDB(activity, GAME_READY, ++attempts).execute();
+                        status.setText("Searching for players attempts: " + attempts);
                 }
                 else{
                     status.setText("game Ready");
-                    Intent intent = new Intent(activity, GameBoard.class);
-                    intent.putExtra("game",message );
-                    intent.putExtra("ACTION","fullGame" );
-                    intent.putExtra("userName", userName);
-                    intent.putExtra("password",psw);
-                    startActivity(intent);
+                    startGame(message);
                 }
             }
             else if (action.equals(JOIN_GAME)){
                 if(response.equals(JOIN_FAILED)){
                     new ReadFromDB(activity,JOIN_GAME).execute();
+                    status.setText("Searching for players attempts: " + attempts);
                 }
                 else if (response.equals(JOIN_READY)){
                     Log.i("chess","joined game successfully");
-                    Intent intent = new Intent(activity, GameBoard.class);
-                    intent.putExtra("game",message );
-                    intent.putExtra("ACTION","joinedGame" );
-                    intent.putExtra("userName", userName);
-                    startActivity(intent);
+                    startGame(message);
                 }
 
             }
+        }
+
+        private void startGame(String gameJson ){
+            Intent intent = new Intent(activity, GameBoard.class);
+            intent.putExtra("game",gameJson );
+            intent.putExtra("userName", userName);
+            intent.putExtra("password",psw);
+            startActivity(intent);
         }
 
     }

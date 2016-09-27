@@ -59,6 +59,7 @@ public class GameBoard extends Activity implements Communicator {
 
     public static final String GAME_READY = "isGameReady";
     public static final String MOVE_MADE = "moveMade";
+    public static final String YOU_WON = "youWon";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +71,7 @@ public class GameBoard extends Activity implements Communicator {
         userName = intent.getStringExtra("userName");           // username ==player1 - this player is playing the white pieces
         psw =intent.getStringExtra("password");
         String gameJson = intent.getStringExtra("game");
-        String action = intent.getStringExtra("ACTION");
 
-        Log.i("chess", "gameBoard created , action: " + action);
         firstTime=true;
         moveMade=false;
         endGame = false;
@@ -93,9 +92,15 @@ public class GameBoard extends Activity implements Communicator {
         super.onStart();
         Log.i("chess","in on start");
         if(firstTime  && !this.canClick()){
-            new ReadFromDB(this, GAME_READY, userName, game).execute();
+            new ReadFromDB(this, GAME_READY, userName, game,psw).execute();
         }
         firstTime=false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        endGame();
     }
 
     private void addEatenPieces(ArrayList<Piece> eatenPieces) {
@@ -219,6 +224,11 @@ public class GameBoard extends Activity implements Communicator {
     }
 
     @Override
+    public boolean getWin() {
+        return win;
+    }
+
+    @Override
     public void makeMove() {
         FragmentManager fManager = getFragmentManager();
 
@@ -228,10 +238,8 @@ public class GameBoard extends Activity implements Communicator {
         moveMade =  boardFragment.getMoveMade();
 
         if(moveMade) {
-            ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game);
+            ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game,psw);
             read.execute();
-
-
         }else {
             Toast toast = Toast.makeText(this, "game is null", Toast.LENGTH_LONG);
             toast.show();
@@ -289,6 +297,7 @@ public class GameBoard extends Activity implements Communicator {
         refreshGame(gameJson);
     }
 
+
     @Override
     public void moveMade(String answerType, String message) {
         switch (answerType) {
@@ -304,16 +313,20 @@ public class GameBoard extends Activity implements Communicator {
                     e.printStackTrace();
                 }
 
-                new ReadFromDB(this, GAME_READY, userName, game).execute();             // check if opponent made his move
+                new ReadFromDB(this, GAME_READY, userName, game,psw).execute();             // check if opponent made his move
 
                 break;
             case ReadFromDB.GAME_NOT_READY:                                                                        //check if opponent made his move
                 if(!endGame)
-                    new ReadFromDB(this, GAME_READY, userName, game).execute();
+                    new ReadFromDB(this, GAME_READY, userName, game,psw).execute();
                 break;
             case ReadFromDB.GAME_IS_READY:
                 Log.i("chess", "game is ready and gameJson is:" + game.toJson());
                 setGame(message);
+                break;
+            case YOU_WON:
+                showDialog(OPPONENT_LOOSE, TIMEROVER);
+                endGame();
                 break;
         }
     }
@@ -327,18 +340,16 @@ public class GameBoard extends Activity implements Communicator {
         if(game.getTurn().equals(userName)) {
             win = false;
             showDialog(YOU_LOOSE, TIMEROVER);
-                    ReadFromDB read = new ReadFromDB(this,ReadFromDB.ENDGAME,userName,game);
-            read.execute();
+            endGame();
         }
         else {
             win = true;
-            showDialog(OPPONENT_LOOSE, TIMEROVER);
         }
         endGame=true;
     }
     /*
-    by Roma
-    show end Game Dialog
+        by Roma
+        show end Game Dialog
      */
     private void showDialog(int looser , int looseType){
         dialog = new Dialog(this ,R.style.myCoolDialog);
@@ -371,10 +382,19 @@ public class GameBoard extends Activity implements Communicator {
         return userName.equals(game.getTurn());
     }
 
+
+    public void endGame() {
+        if(game!=null) {
+            ReadFromDB read = new ReadFromDB(this, ReadFromDB.ENDGAME, userName, game, psw);
+            read.execute();
+        }
+    }
     @Override
-    public void endGame(String message) {
-        ReadFromDB read = new ReadFromDB(this,ReadFromDB.GETINFO,userName,game, win,psw);
-        read.execute();
+    public void gameEnded() {
+        if(game!=null) {
+            ReadFromDB read = new ReadFromDB(this, ReadFromDB.GETINFO, userName, game, psw);
+            read.execute();
+        }
     }
 
     @Override
@@ -392,6 +412,7 @@ public class GameBoard extends Activity implements Communicator {
     private void startPersonalActivity(String infoJson){
         Intent intent = new Intent(this, PersonalInfo.class);
         intent.putExtra("JSON", infoJson);
+        intent.putExtra("password",psw);
         startActivity(intent);
     }
 }
