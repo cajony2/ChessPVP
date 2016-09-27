@@ -243,11 +243,17 @@ public class GameBoard extends Activity implements Communicator {
 
         //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
-        if(boardFragment.isChess()) {
+        if(boardFragment.isChess() == CHECK) {
             Log.i("chess","check!!!");
             game.setStatus(CHECK);
         }
-        else {
+        else if (boardFragment.isChess() == CHCKMATE)//check mate
+        {
+            Log.i("chess","check mate!!!");
+            game.setStatus(CHCKMATE);
+        }
+        else
+        {
             Log.i("chess","No check :) !!!");
             game.setStatus(OK_GAME);
         }

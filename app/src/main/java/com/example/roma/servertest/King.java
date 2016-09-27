@@ -35,7 +35,6 @@ public class King extends Piece {
 		_hasNotMovedYet = false;
     }
 
-
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
 		int opponentColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -45,8 +44,14 @@ public class King extends Piece {
 		possibleMoves.addAll(castlingMoves);
 		for (Piece p : possibleMoves)//allow the king to move only where it`s safe
 		{
+			if (!(p instanceof Empty) && p.getIntColor() == opponentColor)
+			{
+				p.setActive(false);
+			}
+
 			if (p.isThreatened(pieces, opponentColor).size() == 0)
 				legalMoves.add(p.getPosition());
+			p.setActive(true);
 		}
 		return legalMoves;
     }

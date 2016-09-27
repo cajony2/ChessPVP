@@ -27,6 +27,9 @@ import java.util.ArrayList;
 public class Board extends Fragment implements AdapterView.OnItemClickListener {
 
     private final int TILES_NUMBER_IN_A_ROW = 8;
+    private final int OK = 1;
+    private final int CHECK = 2;
+    private final int CHECK_MATE = 3;
 
     GridView gridView;
     Communicator comm;
@@ -356,7 +359,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     }
 
     //not tested yet
-    public boolean isChess()
+    public int isChess()
     {
         Piece myKing = null;
         for (Piece p : piecesOld)
@@ -368,10 +371,15 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
              }
         }
         int opponentColor = (myColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
-        if (myKing.isThreatened(piecesOld, opponentColor).size() != 0)
-            return true;
-        else
-            return false;
+
+        if (myKing.isThreatened(piecesOld, opponentColor).size() != 0)//the king is threatened
+        {
+            if (!myKing.canMove(piecesOld))//king can not move
+                return CHECK_MATE;
+            else
+                return CHECK;
+        }
+        return OK;
     }
 
     //filling the double array of Pieces from a single array
@@ -401,8 +409,6 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
 
         if (moveMade)
         {
-            //swapPieces(piecesOld, movingPiece, eatenPiece);
-            //revertSwap();
             adapter.setSelectedTile(-1);
             moveMade = false;
             isSelected = false;
