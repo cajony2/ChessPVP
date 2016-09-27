@@ -51,6 +51,7 @@ public class GameBoard extends Activity implements Communicator {
     boolean win;
     private String psw;
     boolean moveMade;
+    boolean endGame;
 
 
 
@@ -74,6 +75,7 @@ public class GameBoard extends Activity implements Communicator {
         Log.i("chess", "gameBoard created , action: " + action);
         firstTime=true;
         moveMade=false;
+        endGame = false;
         // create the game from string extra "game"
         try {
             game = new Game(new JSONObject(gameJson));
@@ -222,7 +224,6 @@ public class GameBoard extends Activity implements Communicator {
 
         //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
-        TimerBar timer   = (TimerBar) fManager.findFragmentById(R.id.timerBarFragment);
 
         moveMade =  boardFragment.getMoveMade();
 
@@ -292,7 +293,7 @@ public class GameBoard extends Activity implements Communicator {
                 try {
                     game = new Game(new JSONObject(message));
                     timer.reset();
-                    Thread.sleep(1500);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -301,12 +302,8 @@ public class GameBoard extends Activity implements Communicator {
 
                 break;
             case ReadFromDB.GAME_NOT_READY:                                                                        //check if opponent made his move
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                new ReadFromDB(this, GAME_READY, userName, game).execute();
+                if(!endGame)
+                    new ReadFromDB(this, GAME_READY, userName, game).execute();
                 break;
             case ReadFromDB.GAME_IS_READY:
                 Log.i("chess", "game is ready and gameJson is:" + game.toJson());
@@ -316,7 +313,6 @@ public class GameBoard extends Activity implements Communicator {
     }
 
     /*
-    by Roma
         if timer is done , show the propper message and end game
      */
     @Override
@@ -332,6 +328,7 @@ public class GameBoard extends Activity implements Communicator {
             win = true;
             showDialog(OPPONENT_LOOSE, TIMEROVER);
         }
+        endGame=true;
     }
     /*
     by Roma

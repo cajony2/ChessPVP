@@ -62,7 +62,8 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
         String message="";
         String response="";
         try{
-
+            if(action.equals(GAME_READY))
+                Thread.sleep(1500);
             URL url = new URL("http://5.29.207.103:8080/Chess/ChessServlet");
 
             URLConnection connection = url.openConnection();
