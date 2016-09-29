@@ -231,6 +231,12 @@ public abstract class Piece{
         return null;
     }
 
+    public boolean isGuarded(Piece[] pieces)
+    {
+        ArrayList<Piece> alliedPieces = getPiecesByColor(pieces, getIntColor());
+        return true;
+    }
+
     //returns list of pieces that threaten this piece. returns empty list if no one threaten this piece
     public ArrayList<Piece> isThreatened(Piece[] pieces, int threateningColor) {
         ArrayList<Piece> result = new ArrayList<>();
@@ -247,7 +253,16 @@ public abstract class Piece{
 
         for (Piece opponentPiece : opponentPieces)//looping through opponent pieces
         {
-            ArrayList<Piece> tileArray = opponentPiece.possibleMoves(toDoubleArray(pieces));
+            ArrayList<Piece> tileArray;
+            if (opponentPiece instanceof Pawn)
+            {
+                Pawn pawnPiece = (Pawn)opponentPiece;
+                tileArray = pawnPiece.possibleEatingMoves(toDoubleArray(pieces));
+            }
+            else
+            {
+                tileArray = opponentPiece.possibleMoves(toDoubleArray(pieces));
+            }
             for (Piece threatenedTile : tileArray)
             {
                 //if a pawn is moving forward it`s not really threatening the tile

@@ -90,14 +90,14 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row-2][col-1].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row-2][col-1].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row-2][col-1].getColor().equals(color)) || !pieces[row-2][col-1].getActive())//piece is different color or inactive
                     {
                         if (pieces[row-2][col-1].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[row-2][col-1]);
                     }
                 }
-                else
+                else//piece is empty
                 {
                     result.add(pieces[row-2][col-1]);
                 }
@@ -106,7 +106,7 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row-2][col+1].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row-2][col+1].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row-2][col+1].getColor().equals(color)) || !pieces[row-2][col+1].getActive())//piece is different color or inactive
                     {
                         if (pieces[row-2][col+1].getName().equals("king"))
                             setCheck(true);
@@ -126,7 +126,7 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row+2][col-1].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row+2][col-1].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row+2][col-1].getColor().equals(color)) || !pieces[row+2][col-1].getActive())//piece is different color or inactive
                     {
                         if (pieces[row+2][col-1].getName().equals("king"))
                             setCheck(true);
@@ -142,7 +142,7 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row+2][col+1].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row+2][col+1].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row+2][col+1].getColor().equals(color)) || !pieces[row+2][col+1].getActive())//piece is different color or inactive
                     {
                         if (pieces[row+2][col+1].getName().equals("king"))
                             setCheck(true);
@@ -162,7 +162,7 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row-1][col+2].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row-1][col+2].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row-1][col+2].getColor().equals(color)) || !pieces[row-1][col+2].getActive())//piece is different color or inactive
                     {
                         if (pieces[row-1][col+2].getName().equals("king"))
                             setCheck(true);
@@ -178,7 +178,7 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row+1][col+2].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row+1][col+2].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row+1][col+2].getColor().equals(color)) || !pieces[row+1][col+2].getActive())//piece is different color or inactive
                     {
                         if (pieces[row+1][col+2].getName().equals("king"))
                             setCheck(true);
@@ -198,7 +198,7 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row-1][col-2].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row-1][col-2].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row-1][col-2].getColor().equals(color)) || !pieces[row-1][col-2].getActive())//piece is different color or inactive
                     {
                         if (pieces[row-1][col-2].getName().equals("king"))
                             setCheck(true);
@@ -214,7 +214,7 @@ public class Knight extends Piece {
             {
                 if (!(pieces[row+1][col-2].getName().equals("empty")))//piece is not empty
                 {
-                    if (!(pieces[row+1][col-2].getColor().equals(color)))//piece is not the same color as the knight
+                    if (!(pieces[row+1][col-2].getColor().equals(color)) || !pieces[row+1][col-2].getActive())//piece is different color or inactive
                     {
                         if (pieces[row+1][col-2].getName().equals("king"))
                             setCheck(true);

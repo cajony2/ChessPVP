@@ -37,7 +37,9 @@ public class Pawn extends Piece {
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));//where the pawn can move
+        ArrayList<Piece> possibleEatingMoves = possibleEatingMoves(toDoubleArray(pieces));//where the pawn can eat
+        possibleMoves.addAll(possibleEatingMoves);
         ArrayList<Piece> opponentPieces = opponentPieces(pieces);
         for (Piece p : opponentPieces)
         {
@@ -87,28 +89,60 @@ public class Pawn extends Piece {
 
         if (getIntColor() == Color.WHITE)
         {
-            //might need to check if row+1 < TILES_NUMBER_IN_A_ROW
-            if (pieces[row+1][col].getName().equals("empty"))
+            if (row+1 < TILES_NUMBER_IN_A_ROW)
             {
-                result.add(pieces[row+1][col]);
-            }
-            if (row == 1)//pawn hasn`t moved yet, can move 2 tiles
-            {
-                if (pieces[row+2][col].getName().equals("empty"))
-                {
-                    result.add(pieces[row+2][col]);
+                if (pieces[row + 1][col].getName().equals("empty")) {
+                    result.add(pieces[row + 1][col]);
+                    if (row == 1)//pawn hasn`t moved yet, can move 2 tiles
+                    {
+                        if (pieces[row + 2][col].getName().equals("empty")) {
+                            result.add(pieces[row + 2][col]);
+                        }
+                    }
                 }
             }
+        }
+        else//pawn is black
+        {
+            if (row-1 > 0)
+            {
+                if (pieces[row - 1][col].getName().equals("empty")) {
+                    result.add(pieces[row - 1][col]);
+                    if (row == 6)//pawn hasn`t moved yet, can move 2 tiles
+                    {
+                        if (pieces[row - 2][col].getName().equals("empty")) {
+                            result.add(pieces[row - 2][col]);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Piece> possibleEatingMoves(Piece[][] pieces) {
+        ArrayList<Piece> result = new ArrayList<Piece>();
+        if (!getActive())
+        {
+            return result;
+        }
+        int row = _pointPosition.x;
+        int col = _pointPosition.y;
+
+        if (getIntColor() == Color.WHITE)
+        {
             if (row+1 < TILES_NUMBER_IN_A_ROW && col+1 < TILES_NUMBER_IN_A_ROW)
             {
-                if ((!pieces[row+1][col+1].getName().equals("empty") && pieces[row+1][col+1].getIntColor() != getIntColor()))
+                if ((!pieces[row+1][col+1].getName().equals("empty") && pieces[row+1][col+1].getIntColor() != getIntColor())
+                    || !pieces[row+1][col+1].getName().equals("empty") && pieces[row+1][col+1].getIntColor() == getIntColor() && !pieces[row+1][col+1].getActive())
                 {
                     result.add(pieces[row+1][col+1]);
                 }
             }
             if (row+1 < TILES_NUMBER_IN_A_ROW && col-1 >= 0)
             {
-                if ((!pieces[row+1][col-1].getName().equals("empty") && pieces[row+1][col-1].getIntColor() != getIntColor()))
+                if ((!pieces[row+1][col-1].getName().equals("empty") && pieces[row+1][col-1].getIntColor() != getIntColor())
+                    || !pieces[row+1][col-1].getName().equals("empty") && pieces[row+1][col-1].getIntColor() == getIntColor() && !pieces[row+1][col-1].getActive())
                 {
                     result.add(pieces[row+1][col-1]);
                 }
@@ -116,17 +150,6 @@ public class Pawn extends Piece {
         }
         else//pawn is black
         {
-            if (pieces[row-1][col].getName().equals("empty"))
-            {
-                result.add(pieces[row-1][col]);
-            }
-            if (row == 6)//pawn hasn`t moved yet, can move 2 tiles
-            {
-                if (pieces[row-2][col].getName().equals("empty"))
-                {
-                    result.add(pieces[row-2][col]);
-                }
-            }
             if (row-1 > 0 && col+1 < TILES_NUMBER_IN_A_ROW)
             {
                 if ((!pieces[row-1][col+1].getName().equals("empty") && pieces[row-1][col+1].getIntColor() != getIntColor()))// || (pieces[row-1][col+1].getActive())

@@ -91,28 +91,27 @@ public class Bishop extends Piece {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                {
                     result.add(pieces[r][c]);
-                else
-                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
-                {
-                    break;
+                    r--;
+                    c++;
                 }
-                else//piece is in different color
+                else//piece is active
                 {
-                    if (pieces[r][c].getActive())//piece is active
+                    if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                    {
+                        break;
+                    }
+                    else//piece is in different color
                     {
                         if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;
                     }
-                    else
-                    {
-                        result.add(pieces[r][c]);
-                    }
                 }
             }
-            else
+            else//piece is empty
             {
                 result.add(pieces[r][c]);
                 r--;
@@ -128,24 +127,23 @@ public class Bishop extends Piece {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                {
                     result.add(pieces[r][c]);
-                else
-                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
-                {
-                    break;
+                    r--;
+                    c--;
                 }
-                else//piece is in different color
+                else//piece is active
                 {
-                    if (pieces[r][c].getActive())//piece is active
+                    if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                    {
+                        break;
+                    }
+                    else//piece is in different color
                     {
                         if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;
-                    }
-                    else
-                    {
-                        result.add(pieces[r][c]);
                     }
                 }
             }
@@ -165,24 +163,23 @@ public class Bishop extends Piece {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                {
                     result.add(pieces[r][c]);
-                else
-                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
-                {
-                    break;
+                    r++;
+                    c--;
                 }
-                else//piece is in different color
+                else//piece is active
                 {
-                    if (pieces[r][c].getActive())//piece is active
+                    if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                    {
+                        break;
+                    }
+                    else//piece is in different color
                     {
                         if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;
-                    }
-                    else
-                    {
-                        result.add(pieces[r][c]);
                     }
                 }
             }
@@ -202,24 +199,23 @@ public class Bishop extends Piece {
             if (!(pieces[r][c].getName().equals("empty")))//piece is not empty
             {
                 if (!pieces[r][c].getActive())//add to possibleMoves if not active
+                {
                     result.add(pieces[r][c]);
-                else
-                if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
-                {
-                    break;
+                    r++;
+                    c++;
                 }
-                else//piece is in different color
+                else//piece is active
                 {
-                    if (pieces[r][c].getActive())//piece is active
+                    if (pieces[r][c].getColor().equals(color))//piece is the same color as the queen
+                    {
+                        break;
+                    }
+                    else//piece is in different color
                     {
                         if (pieces[r][c].getName().equals("king"))
                             setCheck(true);
                         result.add(pieces[r][c]);
                         break;
-                    }
-                    else
-                    {
-                        result.add(pieces[r][c]);
                     }
                 }
             }
