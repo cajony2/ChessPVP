@@ -39,7 +39,13 @@ public class Pawn extends Piece {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
         ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));//where the pawn can move
         ArrayList<Piece> possibleEatingMoves = possibleEatingMoves(toDoubleArray(pieces));//where the pawn can eat
-        possibleMoves.addAll(possibleEatingMoves);
+        for (Piece p : possibleEatingMoves)
+        {
+            if (!(p.getName().equals("empty")) && p.getIntColor() != getIntColor())
+            {
+                possibleMoves.add(p);
+            }
+        }
         ArrayList<Piece> opponentPieces = opponentPieces(pieces);
         for (Piece p : opponentPieces)
         {
@@ -133,36 +139,22 @@ public class Pawn extends Piece {
         {
             if (row+1 < TILES_NUMBER_IN_A_ROW && col+1 < TILES_NUMBER_IN_A_ROW)
             {
-                if ((!pieces[row+1][col+1].getName().equals("empty") && pieces[row+1][col+1].getIntColor() != getIntColor())
-                    || !pieces[row+1][col+1].getName().equals("empty") && pieces[row+1][col+1].getIntColor() == getIntColor() && !pieces[row+1][col+1].getActive())
-                {
-                    result.add(pieces[row+1][col+1]);
-                }
+                result.add(pieces[row+1][col+1]);
             }
             if (row+1 < TILES_NUMBER_IN_A_ROW && col-1 >= 0)
             {
-                if ((!pieces[row+1][col-1].getName().equals("empty") && pieces[row+1][col-1].getIntColor() != getIntColor())
-                    || !pieces[row+1][col-1].getName().equals("empty") && pieces[row+1][col-1].getIntColor() == getIntColor() && !pieces[row+1][col-1].getActive())
-                {
-                    result.add(pieces[row+1][col-1]);
-                }
+                result.add(pieces[row+1][col-1]);
             }
         }
         else//pawn is black
         {
             if (row-1 > 0 && col+1 < TILES_NUMBER_IN_A_ROW)
             {
-                if ((!pieces[row-1][col+1].getName().equals("empty") && pieces[row-1][col+1].getIntColor() != getIntColor()))// || (pieces[row-1][col+1].getActive())
-                {
-                    result.add(pieces[row-1][col+1]);
-                }
+                result.add(pieces[row-1][col+1]);
             }
             if (row-1 > 0 && col-1 >= 0)
             {
-                if ((!pieces[row-1][col-1].getName().equals("empty") && pieces[row-1][col-1].getIntColor() != getIntColor()))// || (pieces[row-1][col-1].getActive())
-                {
-                    result.add(pieces[row-1][col-1]);
-                }
+                result.add(pieces[row-1][col-1]);
             }
         }
         return result;

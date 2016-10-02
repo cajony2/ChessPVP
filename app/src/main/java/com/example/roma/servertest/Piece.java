@@ -266,8 +266,8 @@ public abstract class Piece{
             for (Piece threatenedTile : tileArray)
             {
                 //if a pawn is moving forward it`s not really threatening the tile
-                if (opponentPiece instanceof Pawn && opponentPiece.getPointPosition().y == threatenedTile.getPointPosition().y)
-                    continue;
+                /*if (opponentPiece instanceof Pawn && opponentPiece.getPointPosition().y == threatenedTile.getPointPosition().y)
+                    continue;*/
                 if (threatenedTile.equals(this))
                 {
                     result.add(opponentPiece);
