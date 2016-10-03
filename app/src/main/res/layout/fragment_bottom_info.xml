@@ -10,9 +10,9 @@
 
 
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="vertical"
-            android:layout_width="70dp"
+            android:layout_width="173dp"
             android:layout_height="match_parent"
             android:id="@+id/linearLayout2"
             android:paddingLeft="20dp"
@@ -23,33 +23,44 @@
                 android:id="@+id/player1"
                 android:paddingLeft="2dp"
                 android:lines="1"
-                android:minWidth="70dp" />
+                android:minWidth="70dp"
+                android:layout_marginBottom="18dp"
+                android:layout_above="@+id/undo"
+                android:layout_alignLeft="@+id/undo"
+                android:layout_alignStart="@+id/undo" />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Undo"
+                android:minHeight="0dp"
+                android:minWidth="60dp"
                 android:id="@+id/undo"
                 android:background="@drawable/red_button"
                 style="@style/button_text_small"
                 android:textAllCaps="false"
-                android:layout_gravity="center_vertical|left" />
-
-            <TextView
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/blackBold"
-                android:id="@+id/timer"
-                android:gravity="center"/>
+                android:text="Submit"
+                android:minHeight="0dp"
+                android:minWidth="60dp"
+                android:id="@+id/submit"
+                android:background="@drawable/green_button"
+                style="@style/button_text_small"
+                android:textAllCaps="false"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_alignTop="@+id/undo"
+                android:layout_toRightOf="@+id/undo"
+                android:layout_toEndOf="@+id/undo" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/linearLayout3"
-    android:paddingLeft="20dp"
-    android:gravity="center">
     <GridView
         android:id="@+id/eatenPiecesBottom"
         android:layout_width="150dp"
@@ -63,27 +74,6 @@
         android:background="@drawable/bottom2"
         >
     </GridView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
->
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Submit"
-                android:id="@+id/submit"
-                android:background="@drawable/green_button"
-                style="@style/button_text_small"
-                android:textAllCaps="false"
-                android:layout_gravity="center_vertical|center_horizontal" />
-
-    </LinearLayout>
-
-</LinearLayout>
-
 
 
 </LinearLayout>

@@ -42,7 +42,6 @@ public class BottomInfo extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         userNameTV = (TextView) view.findViewById(R.id.player1);
-        timerTV =(TextView) view.findViewById(R.id.timer);
         eatenGridView = (GridView) view.findViewById(R.id.eatenPiecesBottom);
         makeMove = (Button) view.findViewById(R.id.submit);
         undoMove = (Button) view.findViewById(R.id.undo);
