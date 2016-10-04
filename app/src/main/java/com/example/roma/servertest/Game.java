@@ -159,6 +159,37 @@ public class Game {
         return _pieces;
     }
 
+    public void setPieces (Piece[] pieces)
+    {
+        for (int i = 0; i < 64; i++)
+        {
+            switch (pieces[i].getName()){
+                case "rook":
+                    _pieces[i] = new Rook(pieces[i]);
+                    break;
+                case "queen":
+                    _pieces[i] = new Queen(pieces[i]);
+                    break;
+                case "pawn":
+                    _pieces[i] = new Pawn(pieces[i]);
+                    break;
+                case "knight":
+                    _pieces[i] = new Knight(pieces[i]);
+                    break;
+                case "king":
+                    _pieces[i] = new King(pieces[i]);
+                    break;
+                case "empty":
+                    _pieces[i] = new Empty(pieces[i]);
+                    break;
+                case "bishop":
+                    _pieces[i] = new Bishop(pieces[i]);
+                    break;
+            }
+        }
+        fillDoubleArrayFromSingle(_pieces, _gridPieces);
+    }
+
     public void getPiecesFromJson(JSONArray array) throws JSONException {
         int size = array.length();
         Log.d("numberOfPieces"," "+size);

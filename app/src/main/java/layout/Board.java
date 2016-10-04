@@ -149,7 +149,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                     {//then this user is white. needs to be changed to pieces[position].getColor == Player.getColor
                         isSelected = true;
                         moves = piecesOld[position].getLegalMoves(piecesOld);
-                        if (moves != null && moves.size() != 0)//jony added moves.size() != 0
+                        if (moves != null && moves.size() != 0)
                         {
                             for (int pos : moves) {
                                 possibleMove[pos] = true;
@@ -405,7 +405,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         this.moveMade = moveMade;
     }
 
-    public void undoClicked() {
+    public Piece[] undoClicked() {
 
         if (moveMade)
         {
@@ -423,5 +423,6 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             adapter.setPieces(piecesOld);
             adapter.notifyDataSetChanged();
         }
+        return piecesOld;
     }
 }

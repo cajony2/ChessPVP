@@ -52,6 +52,7 @@ public class GameBoard extends Activity implements Communicator {
     private String psw;
     boolean moveMade;
     boolean endGame;
+    Piece[] pieces;
 
 
 
@@ -220,7 +221,7 @@ public class GameBoard extends Activity implements Communicator {
     public void undo() {
         FragmentManager fManager = getFragmentManager();
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
-        boardFragment.undoClicked();
+        pieces = boardFragment.undoClicked();
     }
 
     @Override
@@ -238,6 +239,8 @@ public class GameBoard extends Activity implements Communicator {
         moveMade =  boardFragment.getMoveMade();
 
         if(moveMade) {
+            if (pieces != null)
+                game.setPieces(pieces);
             ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game,psw);
             read.execute();
         }else {
