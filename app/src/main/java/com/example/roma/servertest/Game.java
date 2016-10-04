@@ -272,6 +272,9 @@ public class Game {
     public ArrayList<Piece> getEatenPieces() {
         return eatenPieces;
     }
+    public void setEatenPieces(ArrayList<Piece> p){
+        eatenPieces=p;
+    }
     /*
     Added by Roma
     create the eaten pieces arraylist from a jason array
