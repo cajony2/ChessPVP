@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -24,6 +25,7 @@ public class Login extends Activity implements View.OnClickListener {
     public final static String USERNAME = "userName";
     public final static String PSW = "password";
     public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String TIME_OUT="timeOut";
 
     EditText userName = null;
     EditText pswField = null;
@@ -111,7 +113,7 @@ public class Login extends Activity implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(activity, "", "Loading...");
+            progressDialog = ProgressDialog.show(activity, "", "Connecting...");
         }
 
 
@@ -129,7 +131,7 @@ public class Login extends Activity implements View.OnClickListener {
                 connection.setRequestProperty("UserName", name);
                 connection.setRequestProperty("Password", psw);
                 connection.setDoOutput(true);
-
+                connection.setConnectTimeout(6000);
                 OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
 
                 out.write("");
@@ -145,9 +147,9 @@ public class Login extends Activity implements View.OnClickListener {
                 Log.d("chess","the return message "+message);
                 in.close();
             }
-            catch (Exception e1)
-            {
-                e1.printStackTrace();
+            catch (IOException e){
+                Log.i("chess","connection Error");
+                message=TIME_OUT;
             }
             return message;
         }
@@ -159,15 +161,21 @@ public class Login extends Activity implements View.OnClickListener {
             Log.i("chess",message);
             progressDialog.dismiss();
             //check returend msg from server
-            if(message.equals("error")){                // is message is error then account no such account
-                Toast.makeText(activity, "No such Account",Toast.LENGTH_LONG).show();
-            }else{                                      // else msg is json with use info show personal info activity
-                Intent intent = new Intent(activity, PersonalInfo.class);
+            switch (message) {
+                case "error":                 // is message is error then account no such account
+                    Toast.makeText(activity, "No such Account", Toast.LENGTH_LONG).show();
+                    break;
+                case TIME_OUT:
+                    Toast.makeText(activity, "Cant Connect to Server, Please try again later", Toast.LENGTH_LONG).show();
+                    break;
+                default:                                       // else msg is json with use info show personal info activity
+                    Intent intent = new Intent(activity, PersonalInfo.class);
 
-                intent.putExtra("JSON",message);
-                intent.putExtra("userName",name);
-                intent.putExtra("password",psw);
-                startActivity(intent);
+                    intent.putExtra("JSON", message);
+                    intent.putExtra("userName", name);
+                    intent.putExtra("password", psw);
+                    startActivity(intent);
+                    break;
             }
 
         }

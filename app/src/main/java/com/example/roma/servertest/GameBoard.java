@@ -137,11 +137,13 @@ public class GameBoard extends Activity implements Communicator {
                     updateUI();
                    break;
                case CHECK:                      //check , player must get out of check , update UI enable back the adapter resert timer SET POSSIBLE MOVES!!!!!
-                    showCheckToast();
+                    showToast("Check!");
                     updateUI();
                    break;
                case 3:                      // checkMate , finish game
-
+                   win = false;
+                   showDialog(YOU_LOOSE, CHCKMATE);
+                   endGame();
                    break;
                default:                      // error
                    break;
@@ -152,8 +154,8 @@ public class GameBoard extends Activity implements Communicator {
        }
    }
 
-    private void showCheckToast() {
-        Toast toast = Toast.makeText(this, "Get out of Check", Toast.LENGTH_LONG);
+    private void showToast(String msg) {
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
         toast.show();
     }
 

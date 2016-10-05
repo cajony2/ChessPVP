@@ -99,7 +99,7 @@ public class InitGame extends Activity{
          gameReady
          */
     class ReadFromDB extends AsyncTask< Void, Void, String> {
-        private static final int MAX_ATTEMPTS = 60;
+        private static final int MAX_ATTEMPTS = 30;
         Activity activity;
         String action;
         String response;
@@ -171,7 +171,7 @@ public class InitGame extends Activity{
         @Override
         // Update UI and  continue according to the response
         public void onPostExecute(String message){
-            if(attempts >MAX_ATTEMPTS) {
+            if(attempts >=MAX_ATTEMPTS) {
                 Toast toast = Toast.makeText(activity, "No players", Toast.LENGTH_LONG);
                 toast.show();
                 activity.finish();
