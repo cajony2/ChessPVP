@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/loginbackground">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server IP:"
+        android:id="@+id/createAccount"
+        android:textColor="#e40a32"
+        android:textSize="20sp"
+        android:paddingRight="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/PortText"
+        android:layout_alignEnd="@+id/PortText" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ServerIpTextView"
+        android:minWidth="200dp"
+        android:singleLine="true"
+        android:minHeight="25dp"
+
+        android:background="@drawable/edittext"
+        android:layout_alignBottom="@+id/createAccount"
+        android:layout_toRightOf="@+id/createAccount"
+        android:layout_toEndOf="@+id/createAccount" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Port:"
+        android:id="@+id/PortText"
+        android:textSize="20sp"
+        android:paddingRight="10dp"
+        android:textColor="#e40a32"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/createAccount"
+        android:layout_alignRight="@+id/ServletNameText"
+        android:layout_alignEnd="@+id/ServletNameText" />
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/PortTV"
+        android:minWidth="200dp"
+        android:singleLine="true"
+        android:minHeight="25dp"
+        android:background="@drawable/edittext"
+        android:layout_alignBottom="@+id/PortText"
+        android:layout_alignLeft="@+id/ServerIpTextView"
+        android:layout_alignStart="@+id/ServerIpTextView" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Servlet Name"
+        android:textSize="20sp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:id="@+id/ServletNameText"
+        android:textColor="#e40a32"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/PortTV"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ServletNameTV"
+        android:minWidth="200dp"
+        android:singleLine="true"
+        android:minHeight="25dp"
+        android:background="@drawable/edittext"
+        android:layout_alignBottom="@+id/ServletNameText"
+        android:layout_alignLeft="@+id/PortTV"
+        android:layout_alignStart="@+id/PortTV" />
+    <Button
+        android:text="Save"
+        android:id="@+id/SaveButton"
+        android:background="@drawable/red_button"
+        style="@style/button_text"
+        android:textAllCaps="false"
+        android:minWidth="300dp"
+        android:layout_below="@+id/ServletNameText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
+
+
+</RelativeLayout>

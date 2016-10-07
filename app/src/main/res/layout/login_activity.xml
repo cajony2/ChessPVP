@@ -42,7 +42,7 @@
     <Button
         android:text="Log In"
         android:id="@+id/logIn"
-        android:background="@drawable/green_button"
+        android:background="@drawable/red_button"
         style="@style/button_text"
         android:textAllCaps="false"
         android:minWidth="300dp"
@@ -60,6 +60,16 @@
         android:layout_centerHorizontal="true"
         android:textColor="#a4c639"
         android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:id="@+id/SettingText"
+        android:textColor="#a4c639"
+        android:layout_below="@+id/createAccount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
     />
 
 </RelativeLayout>

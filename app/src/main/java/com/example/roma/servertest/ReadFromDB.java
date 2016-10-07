@@ -1,8 +1,6 @@
 package com.example.roma.servertest;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -116,14 +114,17 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
 
     public void onPostExecute(String message){
         // after move was sent to database check if opponent made his move
-        if(action.equals(ENDGAME)){
-            comm.gameEnded();
+        switch (action) {
+            case ENDGAME:
+                comm.gameEnded();
+                break;
+            case GETINFO:
+                comm.setInfo(returnMessage);
+                break;
+            default:
+                comm.moveMade(message, returnMessage);
+                break;
         }
-        else if(action.equals(GETINFO)){
-           comm.setInfo(returnMessage);
-        }
-        else
-            comm.moveMade(message , returnMessage);
 
 
 

@@ -30,6 +30,7 @@ public class Login extends Activity implements View.OnClickListener {
     EditText userName = null;
     EditText pswField = null;
     TextView createAccount;
+    TextView settingText;
     SharedPreferences sharedpreferences;
 
     Button logIn;
@@ -44,10 +45,13 @@ public class Login extends Activity implements View.OnClickListener {
         userName = (EditText) findViewById(R.id.firstName);
         pswField = (EditText) findViewById(R.id.psw);
         createAccount = (TextView) findViewById(R.id.createAccount);
+        settingText = (TextView) findViewById(R.id.SettingText);
+
 
         logIn = (Button) findViewById(R.id.logIn);
         logIn.setOnClickListener(this);
         createAccount.setOnClickListener(this);
+        settingText.setOnClickListener(this);
         loadSharedPreferences();
 
     }
@@ -65,15 +69,21 @@ public class Login extends Activity implements View.OnClickListener {
 
 
     public void onClick(View v){
+        Intent intent;
         switch (v.getId()){
             case R.id.logIn:
                 Log.i("chess","button clicked, logIn");
                 logIn();
                 break;
             case R.id.createAccount:
-                Intent intent = new Intent(this, CreateAccount.class);
+                intent = new Intent(this, CreateAccount.class);
                 startActivity(intent);
                 break;
+            case R.id.SettingText:
+                intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
+                break;
+
 
         }
     }
