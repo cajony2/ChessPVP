@@ -14,15 +14,25 @@ import java.util.ArrayList;
  */
 public class Adapter extends BaseAdapter {
 
+    private final int TILES_NUMBER_IN_A_ROW = 8;
     Context c;
     ArrayList<Boolean> isSelected;
     boolean[] possibleMove;
     int selectedTile;
-    Piece[] pieces;
+    //Piece[] pieces;
+    Piece[][] _pieces;
 
-    public Adapter(Context c , Piece[] _pieces){
+    /*public Adapter(Context c , Piece[] pieces){
         this.c=c;
-        pieces=_pieces;
+        pieces=pieces;
+        isSelected = new ArrayList<>();
+        possibleMove = new boolean[64];
+        selectedTile=-1;
+    }*/
+
+    public Adapter(Context c , Piece[][] pieces){
+        this.c=c;
+        _pieces = pieces;
         isSelected = new ArrayList<>();
         possibleMove = new boolean[64];
         selectedTile=-1;
@@ -44,7 +54,24 @@ public class Adapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
 
-        return pieces[position];
+        if (position >= 0 && position < 64)
+        {
+            int counter = 0;
+            for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+            {
+                for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+                {
+                    if (position == counter)
+                    {
+                        return _pieces[row][col];
+                    }
+                    counter++;
+                }
+            }
+        }
+        return null;
+
+        //return pieces[position];
     }
 
     @Override
@@ -55,7 +82,22 @@ public class Adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Piece piece = pieces[position];
+        //Piece piece = pieces[position];
+        Piece piece = null;
+
+        int counter = 0;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                if (position == counter)
+                {
+                    piece = _pieces[row][col];
+                }
+                counter++;
+            }
+        }
+
         if(convertView == null){
             convertView=inflate.inflate(R.layout.singlesquare, parent, false);
         }
@@ -98,7 +140,6 @@ public class Adapter extends BaseAdapter {
             if (piece._isFlipped)
                 pieceImage.setRotationX(180);
         }
-
         return convertView;
     }
 
@@ -106,8 +147,12 @@ public class Adapter extends BaseAdapter {
         possibleMove=possibleMoves;
     }
 
-    public void setPieces(Piece[] _pieces){
-        pieces=_pieces;
+    public void setPieces(Piece[] pieces){
+        pieces=pieces;
+    }
+
+    public void setPieces(Piece[][] pieces){
+        _pieces = pieces;
     }
 
 }

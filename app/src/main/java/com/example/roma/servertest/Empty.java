@@ -30,7 +30,7 @@ public class Empty extends Piece {
     }
 
     @Override
-    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
+    public ArrayList<Integer> getLegalMoves(Piece[][] pieces) {
         return null;
     }
 

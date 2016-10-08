@@ -22,6 +22,11 @@ public abstract class Player {
 		return _name;
 	}
 
+	public int getColor()
+	{
+		return _color;
+	}
+
 	public static class WhitePlayer extends Player{
 
 		//Constructor

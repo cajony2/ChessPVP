@@ -52,11 +52,7 @@ public class GameBoard extends Activity implements Communicator {
     private String psw;
     boolean moveMade;
     boolean endGame;
-    Piece[] pieces;
-
-
-
-
+    //Piece[][] pieces;
 
     public static final String GAME_READY = "isGameReady";
     public static final String MOVE_MADE = "moveMade";
@@ -84,7 +80,7 @@ public class GameBoard extends Activity implements Communicator {
         }
 
         //set players color
-        myColor = (userName.equals(game.getPlayer1())) ? Color.WHITE : Color.BLACK;
+        myColor = (userName.equals(game.getWhitePlayerName())) ? Color.WHITE : Color.BLACK;
         addEatenPieces(game.getEatenPieces());
     }
 
@@ -147,7 +143,6 @@ public class GameBoard extends Activity implements Communicator {
                    break;
                default:                      // error
                    break;
-
            }
        } catch (JSONException e) {
            e.printStackTrace();
@@ -165,7 +160,7 @@ public class GameBoard extends Activity implements Communicator {
 
         //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
-        boardFragment.refresh(game.getBoard2());
+        boardFragment.refresh(game.getGridPieces());
         boardFragment.setMoveMade(false);
 
         //update eaten pieces
@@ -184,18 +179,16 @@ public class GameBoard extends Activity implements Communicator {
         TimerBar timerBarFragment = (TimerBar) fManager.findFragmentById(R.id.timerBarFragment);
         if(timerBarFragment==null)
             Log.i("chess","timer is null");
-
-
-            timerBarFragment.reset();
+        timerBarFragment.reset();
     }
 
     @Override
     public String getOpponentName() {
         if(game!=null) {
             if (myColor == Color.WHITE)
-                return game.getPlayer2();
+                return game.getBlackPlayerName();
             else
-                return game.getPlayer1();
+                return game.getWhitePlayerName();
         }
         else
             return "OpponentName";
@@ -204,9 +197,9 @@ public class GameBoard extends Activity implements Communicator {
     public String getUserName(){
         if (game!=null) {
             if (myColor == Color.BLACK)
-                return game.getPlayer2();
+                return game.getBlackPlayerName();
             else
-                return game.getPlayer1();
+                return game.getWhitePlayerName();
         }
         else
             return "UserName";
@@ -223,7 +216,7 @@ public class GameBoard extends Activity implements Communicator {
     public void undo() {
         FragmentManager fManager = getFragmentManager();
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
-        pieces = boardFragment.undoClicked();
+        game.setPieces(boardFragment.undoClicked());
     }
 
     @Override
@@ -238,11 +231,15 @@ public class GameBoard extends Activity implements Communicator {
         //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
 
+        int movingPiecePosition = boardFragment.getPositionOfLastMovingPiece();
+
+        game.setPieces(boardFragment.submitCliced());
+
         moveMade =  boardFragment.getMoveMade();
 
         if(moveMade) {
-            if (pieces != null)
-                game.setPieces(pieces);
+            game.getPiece(movingPiecePosition).setHasNotMovedYet(false);
+
             ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game,psw);
             read.execute();
         }else {
@@ -278,8 +275,8 @@ public class GameBoard extends Activity implements Communicator {
     }
 
     @Override
-    public Piece[] getPiecesOld() {
-        return game.getBoard2();
+    public void setPieces(Piece[][] pieces){
+        game.setPieces(pieces);
     }
 
     @Override
@@ -387,13 +384,13 @@ public class GameBoard extends Activity implements Communicator {
         return userName.equals(game.getTurn());
     }
 
-
     public void endGame() {
         if(game!=null) {
             ReadFromDB read = new ReadFromDB(this, ReadFromDB.ENDGAME, userName, game, psw);
             read.execute();
         }
     }
+
     @Override
     public void gameEnded() {
         if(game!=null) {
@@ -403,7 +400,7 @@ public class GameBoard extends Activity implements Communicator {
     }
 
     @Override
-        public void setInfo(final String message) {
+    public void setInfo(final String message) {
             okButton.setVisibility(View.VISIBLE);
             spinner.setVisibility(View.GONE);
             okButton.setOnClickListener(new View.OnClickListener() {
@@ -414,6 +411,7 @@ public class GameBoard extends Activity implements Communicator {
             });
 
         }
+
     private void startPersonalActivity(String infoJson){
         Intent intent = new Intent(this, PersonalInfo.class);
         intent.putExtra("JSON", infoJson);

@@ -29,7 +29,7 @@ public abstract class Piece{
         this.color = color;
         this.position = pos;
         isEmpty = name.equals("empty") ? true : false;
-        _pointPosition = new Point();
+        _pointPosition = positionToPoint(pos);
         _isActive = true;
         if (color.equals("white"))
             _color = Color.WHITE;
@@ -60,8 +60,13 @@ public abstract class Piece{
     }
 
     public boolean hasNotMovedYet(){return _hasNotMovedYet;}
-    
-    public boolean canMove(Piece[] pieces) {
+
+    public void setHasNotMovedYet(boolean bool)
+    {
+        _hasNotMovedYet = bool;
+    }
+
+    public boolean canMove(Piece[][] pieces) {
         ArrayList<Piece> opponentPieces = opponentPieces(pieces);
         ArrayList<Piece> opponentPiecesThatDontCheckTheKing = new ArrayList<>();
         for (Piece p : opponentPieces)
@@ -107,8 +112,8 @@ public abstract class Piece{
     }
 
     //true if this piece checks the king
-    public boolean checks(Piece[] pieces) {
-        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+    public boolean checks(Piece[][] pieces) {
+        ArrayList<Piece> possibleMoves = possibleMoves(pieces);
         for (Piece p : possibleMoves)
         {
             if (p instanceof King && p.getIntColor() != getIntColor())
@@ -190,23 +195,32 @@ public abstract class Piece{
     }
 
     //each peace should override this method and return the legal moves from the piece location according to the games piece layout
-    public abstract ArrayList<Integer> getLegalMoves(Piece[] pieces);
+    public abstract ArrayList<Integer> getLegalMoves(Piece[][] pieces);
 
     public abstract ArrayList<Piece> possibleMoves(Piece[][] pieces);
 
     //returns the pieces on board with the same color
-    protected ArrayList<Piece> getPiecesByColor(Piece[] pieces, int color) {
+    protected ArrayList<Piece> getPiecesByColor(Piece[][] pieces, int color) {
         ArrayList<Piece> resultPieces = new ArrayList<Piece>();
-        for (Piece p : pieces)
+
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                if (pieces[row][col].getIntColor() == color && !(pieces[row][col] instanceof Empty))// add piece if not empty and with specific color
+                    resultPieces.add(pieces[row][col]);
+            }
+        }
+        /*for (Piece p : pieces)
         {
             if (p.getIntColor() == color && !(p instanceof Empty))// add piece if not empty and with specific color
                 resultPieces.add(p);
-        }
+        }*/
         return resultPieces;
     }
 
     //returns all of the opponent pieces of this current piece
-    protected ArrayList<Piece> opponentPieces(Piece[] pieces) {
+    protected ArrayList<Piece> opponentPieces(Piece[][] pieces) {
         //getting the opposed color of this piece
         int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
@@ -214,7 +228,7 @@ public abstract class Piece{
         return getPiecesByColor(pieces, opposingColor);
     }
 
-    protected Piece getOpponentKing(Piece[] pieces) {
+    protected Piece getOpponentKing(Piece[][] pieces) {
         ArrayList<Piece> opponentPieces = new ArrayList<>();
         //getting the opposed color of this piece
         int opposingColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -231,14 +245,14 @@ public abstract class Piece{
         return null;
     }
 
-    public boolean isGuarded(Piece[] pieces)
+    public boolean isGuarded(Piece[][] pieces)
     {
         ArrayList<Piece> alliedPieces = getPiecesByColor(pieces, getIntColor());
         return true;
     }
 
     //returns list of pieces that threaten this piece. returns empty list if no one threaten this piece
-    public ArrayList<Piece> isThreatened(Piece[] pieces, int threateningColor) {
+    public ArrayList<Piece> isThreatened(Piece[][] pieces, int threateningColor) {
         ArrayList<Piece> result = new ArrayList<>();
         ArrayList<Piece> opponentPieces = getPiecesByColor(pieces, threateningColor);
 
@@ -257,11 +271,11 @@ public abstract class Piece{
             if (opponentPiece instanceof Pawn)
             {
                 Pawn pawnPiece = (Pawn)opponentPiece;
-                tileArray = pawnPiece.possibleEatingMoves(toDoubleArray(pieces));
+                tileArray = pawnPiece.possibleEatingMoves(pieces);
             }
             else
             {
-                tileArray = opponentPiece.possibleMoves(toDoubleArray(pieces));
+                tileArray = opponentPiece.possibleMoves(pieces);
             }
             for (Piece threatenedTile : tileArray)
             {
@@ -318,8 +332,8 @@ public abstract class Piece{
     }
 
     //when a piece checks the king, this method returns the tiles on the way to the king
-    protected ArrayList<Piece> wayToTheKing(Piece[] pieces) {
-        Piece[][] doublePieceArray = toDoubleArray(pieces);
+    protected ArrayList<Piece> wayToTheKing(Piece[][] pieces) {
+        //Piece[][] doublePieceArray = toDoubleArray(pieces);
         ArrayList<Piece> result = new ArrayList<>();
         if (this.checks(pieces))
         {
@@ -335,7 +349,7 @@ public abstract class Piece{
                 ArrayList<Point> wayToTheKingAsPoints = pointsBetween(kingPointPosition, currentPiecePosition);
                 for (Point p : wayToTheKingAsPoints)
                 {
-                    result.add(doublePieceArray[p.x][p.y]);
+                    result.add(pieces[p.x][p.y]);
                 }
                 return result;
             }
@@ -470,5 +484,23 @@ public abstract class Piece{
         piece2 = new Empty("empty", "white", piece2.getPosition());
         piece2.setPointPosition(x, y);
         piece2.setEmpty(true);
+    }
+
+    private Point positionToPoint(int pos)
+    {
+        Point resPoint = null;
+        int counter = 0;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                if (counter == pos)
+                {
+                    resPoint = new Point(row, col);
+                }
+                counter++;
+            }
+        }
+        return resPoint;
     }
 }

@@ -14,13 +14,14 @@ public interface Communicator {
     String getUserName();
     void makeMove();
     Piece[][] getPieces();
-    Piece[] getPiecesOld();
+    //Piece[] getPiecesOld();
     void setEatenPiece(Piece p );
     void erasePieceFromEatenPieces(Piece p);
     int getColor();
     void setGame(String gameJson);
     void moveMade(String answerType , String message);
     void timerFinished();
+    void setPieces(Piece[][] pieces);
 
     boolean canClick();
 

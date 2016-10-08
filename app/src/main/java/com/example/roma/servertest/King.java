@@ -36,11 +36,11 @@ public class King extends Piece {
     }
 
     @Override
-    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
+    public ArrayList<Integer> getLegalMoves(Piece[][] pieces) {
 		int opponentColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
 		ArrayList<Piece> castlingMoves = castlingMoves(pieces);
-        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        ArrayList<Piece> possibleMoves = possibleMoves(pieces);
 		possibleMoves.addAll(castlingMoves);
 		for (Piece p : possibleMoves)//allow the king to move only where it`s safe
 		{
@@ -57,9 +57,9 @@ public class King extends Piece {
     }
 
 	//overrides the Piece`s canMove method
-    public boolean canMove(Piece[] pieces) {
+    public boolean canMove(Piece[][] pieces) {
 		int opponentColor = (getIntColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
-		ArrayList<Piece> kingPossibleMoves = possibleMoves(toDoubleArray(pieces));
+		ArrayList<Piece> kingPossibleMoves = possibleMoves(pieces);
 		for (Piece p : kingPossibleMoves)
 		{
 			if (p.isThreatened(pieces, opponentColor).size() != 0)//someone threatens this tile
@@ -71,7 +71,7 @@ public class King extends Piece {
         return false;
     }
 
-    private boolean kingCanMoveThere(Piece[] pieces, ArrayList<Piece> opponentPieces, int tileLocation) {
+    private boolean kingCanMoveThere(Piece[][] pieces, ArrayList<Piece> opponentPieces, int tileLocation) {
 
 
         for (Piece p : opponentPieces)
@@ -84,12 +84,13 @@ public class King extends Piece {
         return true;
     }
 
+	//piece has the same method
 	public boolean hasNotMovedYet(){return _hasNotMovedYet;}
 
-	private ArrayList<Piece> castlingMoves(Piece[] pieces)
+	private ArrayList<Piece> castlingMoves(Piece[][] pieces)
 	{
 		ArrayList<Piece> result = new ArrayList<Piece>();
-		Piece[][] doubleArray = toDoubleArray(pieces);
+		//Piece[][] doubleArray = toDoubleArray(pieces);
 		if (hasNotMovedYet())
 		{
 			//the king is white
@@ -98,28 +99,28 @@ public class King extends Piece {
 				if (isThreatened(pieces, Color.BLACK).size() == 0)//if the king is not threatened
 				{
 					//castling right
-					if (doubleArray[0][7].hasNotMovedYet())//if rook has not moved yet
+					if (pieces[0][7].hasNotMovedYet())//if rook has not moved yet
 					{
 						//the tiles between the king and the rook are empty and not threatened
-						if (doubleArray[0][5] instanceof Empty && doubleArray[0][5].isThreatened(pieces, Color.BLACK).size() == 0)
+						if (pieces[0][5] instanceof Empty && pieces[0][5].isThreatened(pieces, Color.BLACK).size() == 0)
 						{
-							if (doubleArray[0][6] instanceof Empty && doubleArray[0][6].isThreatened(pieces, Color.BLACK).size() == 0)
+							if (pieces[0][6] instanceof Empty && pieces[0][6].isThreatened(pieces, Color.BLACK).size() == 0)
 							{
-								result.add(doubleArray[0][6]);
+								result.add(pieces[0][6]);
 							}
 						}
 					}
 					//castling left
-					if (doubleArray[0][0].hasNotMovedYet())
+					if (pieces[0][0].hasNotMovedYet())
 					{
 						//the tiles between the king and the rook are empty and not threatened
-						if (doubleArray[0][1] instanceof Empty && doubleArray[0][1].isThreatened(pieces, Color.BLACK).size() == 0)
+						if (pieces[0][1] instanceof Empty && pieces[0][1].isThreatened(pieces, Color.BLACK).size() == 0)
 						{
-							if (doubleArray[0][2] instanceof Empty && doubleArray[0][2].isThreatened(pieces, Color.BLACK).size() == 0)
+							if (pieces[0][2] instanceof Empty && pieces[0][2].isThreatened(pieces, Color.BLACK).size() == 0)
 							{
-								if (doubleArray[0][3] instanceof Empty && doubleArray[0][3].isThreatened(pieces, Color.BLACK).size() == 0)
+								if (pieces[0][3] instanceof Empty && pieces[0][3].isThreatened(pieces, Color.BLACK).size() == 0)
 								{
-									result.add(doubleArray[0][2]);
+									result.add(pieces[0][2]);
 								}
 							}
 						}
@@ -131,28 +132,28 @@ public class King extends Piece {
 				if (isThreatened(pieces, Color.WHITE).size() == 0)//if the king is not threatened
 				{
 					//castling right
-					if (doubleArray[7][7].hasNotMovedYet())//if rook has not moved yet
+					if (pieces[7][7].hasNotMovedYet())//if rook has not moved yet
 					{
 						//the tiles between the king and the rook are empty and not threatened
-						if (doubleArray[7][5] instanceof Empty && doubleArray[7][5].isThreatened(pieces, Color.WHITE).size() == 0)
+						if (pieces[7][5] instanceof Empty && pieces[7][5].isThreatened(pieces, Color.WHITE).size() == 0)
 						{
-							if (doubleArray[7][6] instanceof Empty && doubleArray[7][6].isThreatened(pieces, Color.WHITE).size() == 0)
+							if (pieces[7][6] instanceof Empty && pieces[7][6].isThreatened(pieces, Color.WHITE).size() == 0)
 							{
-								result.add(doubleArray[7][6]);
+								result.add(pieces[7][6]);
 							}
 						}
 					}
 					//castling left
-					if (doubleArray[7][0].hasNotMovedYet())
+					if (pieces[7][0].hasNotMovedYet())
 					{
 						//the tiles between the king and the rook are empty and not threatened
-						if (doubleArray[7][1] instanceof Empty && doubleArray[7][1].isThreatened(pieces, Color.WHITE).size() == 0)
+						if (pieces[7][1] instanceof Empty && pieces[7][1].isThreatened(pieces, Color.WHITE).size() == 0)
 						{
-							if (doubleArray[7][2] instanceof Empty && doubleArray[7][2].isThreatened(pieces, Color.WHITE).size() == 0)
+							if (pieces[7][2] instanceof Empty && pieces[7][2].isThreatened(pieces, Color.WHITE).size() == 0)
 							{
-								if (doubleArray[7][3] instanceof Empty && doubleArray[7][3].isThreatened(pieces, Color.WHITE).size() == 0)
+								if (pieces[7][3] instanceof Empty && pieces[7][3].isThreatened(pieces, Color.WHITE).size() == 0)
 								{
-									result.add(doubleArray[7][2]);
+									result.add(pieces[7][2]);
 								}
 							}
 						}

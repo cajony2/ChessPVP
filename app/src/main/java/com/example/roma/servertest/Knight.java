@@ -33,9 +33,9 @@ public class Knight extends Piece {
 
 
     @Override
-    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
+    public ArrayList<Integer> getLegalMoves(Piece[][] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));
+        ArrayList<Piece> possibleMoves = possibleMoves(pieces);
         ArrayList<Piece> opponentPieces = opponentPieces(pieces);
         for (Piece p : opponentPieces)
         {

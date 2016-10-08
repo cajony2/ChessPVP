@@ -35,10 +35,10 @@ public class Pawn extends Piece {
 
 
     @Override
-    public ArrayList<Integer> getLegalMoves(Piece[] pieces) {
+    public ArrayList<Integer> getLegalMoves(Piece[][] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
-        ArrayList<Piece> possibleMoves = possibleMoves(toDoubleArray(pieces));//where the pawn can move
-        ArrayList<Piece> possibleEatingMoves = possibleEatingMoves(toDoubleArray(pieces));//where the pawn can eat
+        ArrayList<Piece> possibleMoves = possibleMoves(pieces);//where the pawn can move
+        ArrayList<Piece> possibleEatingMoves = possibleEatingMoves(pieces);//where the pawn can eat
         for (Piece p : possibleEatingMoves)
         {
             if (!(p.getName().equals("empty")) && p.getIntColor() != getIntColor())

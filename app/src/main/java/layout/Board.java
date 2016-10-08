@@ -34,7 +34,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     GridView gridView;
     Communicator comm;
     Adapter adapter;
-    Piece[] piecesOld;         //old version   -->for testing for now
+    //Piece[] piecesOld;         //old version   -->for testing for now
     Piece[][] pieces;          //new version   --> jony's algorythm
     boolean canClick;
     boolean isSelected;
@@ -45,6 +45,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     Piece[] piecesOldCopy = null;
     Piece[][] piecesCopy = null;
     Piece eatenPiece = null;
+    int destinationPositionOfMovingPiece = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,14 +65,15 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         gridView = (GridView) view.findViewById(R.id.chessboard);
         chessBoardView = view.findViewById(R.id.linearlayountchessboard);
     }
+
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         comm = (Communicator) getActivity();
         canClick= comm.canClick();
-        piecesOld= comm.getPiecesOld();
+        //piecesOld= comm.getPiecesOld();
         pieces = comm.getPieces();
         myColor = comm.getColor();
-        adapter  = new Adapter(getActivity(),piecesOld);
+        adapter  = new Adapter(getActivity(),pieces);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
         adapter.notifyDataSetChanged();              //
@@ -83,10 +85,19 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     }
 
     private void resetIsFlipped(){
-        for (Piece p : piecesOld)
+
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                pieces[row][col].setIsFlipped(false);
+            }
+        }
+
+        /*for (Piece p : piecesOld)
         {
             p.setIsFlipped(false);
-        }
+        }*/
     }
 
     private void flipBoard(){
@@ -96,17 +107,25 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
 
     private void rotatePieces(){
 
-        for (Piece p : piecesOld)
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                pieces[row][col].setIsFlipped(true);
+            }
+        }
+
+        /*for (Piece p : piecesOld)
         {
             p.setIsFlipped(true);
-        }
+        }*/
     }
 
-    public void refresh(Piece[] _pieces){
+    public void refresh(Piece[][] pieces){
         updateStatus();
 
-        piecesOld=_pieces;
-        adapter.setPieces(_pieces);
+        this.pieces = pieces;
+        adapter.setPieces(pieces);
         adapter.notifyDataSetChanged();
         if (myColor == Color.WHITE )//getTurn should return int
             flipBoard();
@@ -117,8 +136,6 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
 
     private void updateStatus() {
     }
-
-
 
     //@Override
     // listener  for the gridview when the user clicks a tile check if the tile contains a piece and
@@ -132,7 +149,10 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
 
         int selectedTile=adapter.getSelectedTile();
 
+        Point tileCoordinate = positionToPoint(position);
+
         ArrayList<Integer> moves ;
+
         // do only if the square clicked is the users color
         canClick = comm.canClick();
         //if (view == )//user hit submit button
@@ -142,13 +162,13 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             {
                 if (!isSelected)
                 {
-                    Log.i("chess", "tile " + position + " Selected");
 
-                    //if (!(game.getPlayer1().equals(userName) == pieces[position].getColor().equals("white")))
-                    if (piecesOld[position].getIntColor() == myColor)      // selected his own color
+                    Log.i("chess", "tile " + position + " Selected");
+                    //if (piecesOld[position].getIntColor() == myColor)      // selected his own color
+                    if (pieces[tileCoordinate.x][tileCoordinate.y].getIntColor() == myColor)
                     {//then this user is white. needs to be changed to pieces[position].getColor == Player.getColor
                         isSelected = true;
-                        moves = piecesOld[position].getLegalMoves(piecesOld);
+                        moves = /*piecesOld[position]*/pieces[tileCoordinate.x][tileCoordinate.y].getLegalMoves(pieces);
                         if (moves != null && moves.size() != 0)
                         {
                             for (int pos : moves) {
@@ -165,45 +185,49 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                     {   //making a move
                         if (possibleMove[position])// this move is legal
                         {
+                            destinationPositionOfMovingPiece = position;
                             //copy of the board in case the player hits undo the whole pieces will get the copy value
-                            piecesOldCopy = new Piece[64];
+                            //piecesOldCopy = new Piece[64];
                             piecesCopy = new Piece[8][8];
-                            for (int i = 0; i < 64; i++)
+
+                            for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
                             {
-                                switch (piecesOld[i].getName()){
-                                    case "rook":
-                                        piecesOldCopy[i] = new Rook(piecesOld[i]);
-                                        break;
-                                    case "queen":
-                                        piecesOldCopy[i] = new Queen(piecesOld[i]);
-                                        break;
-                                    case "pawn":
-                                        piecesOldCopy[i] = new Pawn(piecesOld[i]);
-                                        break;
-                                    case "knight":
-                                        piecesOldCopy[i] = new Knight(piecesOld[i]);
-                                        break;
-                                    case "king":
-                                        piecesOldCopy[i] = new King(piecesOld[i]);
-                                        break;
-                                    case "empty":
-                                        piecesOldCopy[i] = new Empty(piecesOld[i]);
-                                        break;
-                                    case "bishop":
-                                        piecesOldCopy[i] = new Bishop(piecesOld[i]);
-                                        break;
+                                for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+                                {
+                                    switch (pieces[row][col].getName()){
+                                        case "rook":
+                                            piecesCopy[row][col] = new Rook(pieces[row][col]);
+                                            break;
+                                        case "queen":
+                                            piecesCopy[row][col] = new Queen(pieces[row][col]);
+                                            break;
+                                        case "pawn":
+                                            piecesCopy[row][col] = new Pawn(pieces[row][col]);
+                                            break;
+                                        case "knight":
+                                            piecesCopy[row][col] = new Knight(pieces[row][col]);
+                                            break;
+                                        case "king":
+                                            piecesCopy[row][col] = new King(pieces[row][col]);
+                                            break;
+                                        case "empty":
+                                            piecesCopy[row][col] = new Empty(pieces[row][col]);
+                                            break;
+                                        case "bishop":
+                                            piecesCopy[row][col] = new Bishop(pieces[row][col]);
+                                            break;
+                                    }
                                 }
                             }
-                            fillDoubleArrayFromSingle(piecesOldCopy, piecesCopy);
+                            Point pieceCoordinate =  positionToPoint(selectedTile);
 
-                            if (!piecesOld[position].getName().equals("empty"))//if player eats opponent piece
+                            if (!pieces[tileCoordinate.x][tileCoordinate.y].getName().equals("empty"))//if player eats opponent piece
                             {
-                                eatenPiece = piecesOld[position];
+                                eatenPiece = pieces[tileCoordinate.x][tileCoordinate.y];
                                 comm.setEatenPiece(eatenPiece);
-                                //whatWasEaten += piecesOld[position].getName();
                             }
 
-                            swapPieces(piecesOld, selectedTile, position);
+                            swapPieces(pieces, selectedTile, position);
 
                             moveMade = true;
                             //TODO
@@ -224,177 +248,114 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         adapter.notifyDataSetChanged();
     }
 
-    private void swapPieces(Piece[] piecesOld, int selectedTile, int position) {
+    private void swapPieces(Piece[][] pieces, int selectedTile, int position) {
+
+        Point selectedTileCoordinate = positionToPoint(selectedTile);
+        Point positionTileCoordinate = positionToPoint(position);
+
 
         //castling
-        if (piecesOld[selectedTile].getName().equals("king"))
+        if (pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getName().equals("king"))
         {
             if (selectedTile == 4 && position == 6)
             {
-                swapPieces(piecesOld, 7, 5);
+                swapPieces(pieces, 7, 5);
             }
             else if (selectedTile == 4 && position == 2)
             {
-                swapPieces(piecesOld, 0, 3);
+                swapPieces(pieces, 0, 3);
             }
             else if (selectedTile == 60 && position == 62)
             {
-                swapPieces(piecesOld, 63, 61);
+                swapPieces(pieces, 63, 61);
             }
             else if (selectedTile == 60 && position == 58)
             {
-                swapPieces(piecesOld, 56, 59);
+                swapPieces(pieces, 56, 59);
             }
         }
 
         //pawn turns into a queen when reaches the end
-        if (piecesOld[selectedTile].getName().equals("pawn"))
+        if (pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getName().equals("pawn"))
         {
             if (position >= 56 || position <= 7)//pawn reached last row
             {
-                piecesOld[selectedTile] = new Queen("queen", piecesOld[selectedTile].getColor(), piecesOld[selectedTile].getPosition());
+                pieces[selectedTileCoordinate.x][selectedTileCoordinate.y] = new Queen("queen", pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getColor(), pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getPosition());
             }
         }
 
-        Point tempPoint = new Point(piecesOld[position].getPointPosition().x, piecesOld[position].getPointPosition().y);
-        switch (piecesOld[selectedTile].getName()){
+        //Point tempPoint = new Point(pieces[positionTileCoordinate.x][positionTileCoordinate.y].getPointPosition().x, piecesOld[position].getPointPosition().y);
+        Point tempPoint = new Point(positionTileCoordinate.x, positionTileCoordinate.y);
+
+        switch (pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getName()){
             case "rook":
-                piecesOld[position] = new Rook(piecesOld[selectedTile]);
+                pieces[positionTileCoordinate.x][positionTileCoordinate.y] = new Rook(pieces[selectedTileCoordinate.x][selectedTileCoordinate.y]);
                 break;
             case "queen":
-                piecesOld[position] = new Queen(piecesOld[selectedTile]);
+                pieces[positionTileCoordinate.x][positionTileCoordinate.y] = new Queen(pieces[selectedTileCoordinate.x][selectedTileCoordinate.y]);
                 break;
             case "pawn":
-                piecesOld[position] = new Pawn(piecesOld[selectedTile]);
+                pieces[positionTileCoordinate.x][positionTileCoordinate.y] = new Pawn(pieces[selectedTileCoordinate.x][selectedTileCoordinate.y]);
                 break;
             case "knight":
-                piecesOld[position] = new Knight(piecesOld[selectedTile]);
+                pieces[positionTileCoordinate.x][positionTileCoordinate.y] = new Knight(pieces[selectedTileCoordinate.x][selectedTileCoordinate.y]);
                 break;
             case "king":
-                piecesOld[position] = new King(piecesOld[selectedTile]);
+                pieces[positionTileCoordinate.x][positionTileCoordinate.y] = new King(pieces[selectedTileCoordinate.x][selectedTileCoordinate.y]);
                 break;
             case "empty":
-                piecesOld[position] = new Empty(piecesOld[selectedTile]);
+                pieces[positionTileCoordinate.x][positionTileCoordinate.y] = new Empty(pieces[selectedTileCoordinate.x][selectedTileCoordinate.y]);
                 break;
             case "bishop":
-                piecesOld[position] = new Bishop(piecesOld[selectedTile]);
+                pieces[positionTileCoordinate.x][positionTileCoordinate.y] = new Bishop(pieces[selectedTileCoordinate.x][selectedTileCoordinate.y]);
                 break;
         }
-        piecesOld[position].setPointPosition(tempPoint);
-        piecesOld[position].setPosition(position);
-        int x = piecesOld[selectedTile].getPointPosition().x;
-        int y = piecesOld[selectedTile].getPointPosition().y;
-        piecesOld[selectedTile] = new Empty("empty", "white", selectedTile);
-        piecesOld[selectedTile].setPointPosition(x, y);
-        piecesOld[selectedTile].setEmpty(true);
+        pieces[positionTileCoordinate.x][positionTileCoordinate.y].setPointPosition(tempPoint);
+        pieces[positionTileCoordinate.x][positionTileCoordinate.y].setPosition(position);
+        int x = selectedTileCoordinate.x;
+        int y = selectedTileCoordinate.y;
+        pieces[selectedTileCoordinate.x][selectedTileCoordinate.y] = new Empty("empty", "white", selectedTile);
+        pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].setPointPosition(x, y);
+        pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].setEmpty(true);
 
-        fillDoubleArrayFromSingle(piecesOld, pieces);
+        //fillDoubleArrayFromSingle(piecesOld, pieces); //TODO erase this piece`o`shit!!!!
     }
 
-    private void swapPieces(Piece[] piecesOld, Piece selectedTile, Piece position) {
-
-        //castling
-        if (selectedTile.getName().equals("king"))
-        {
-            if (selectedTile.getPosition() == 4 && position.getPosition() == 6)
-            {
-                swapPieces(piecesOld, 7, 5);
-            }
-            else if (selectedTile.getPosition() == 4 && position.getPosition() == 2)
-            {
-                swapPieces(piecesOld, 0, 3);
-            }
-            else if (selectedTile.getPosition() == 60 && position.getPosition() == 62)
-            {
-                swapPieces(piecesOld, 63, 61);
-            }
-            else if (selectedTile.getPosition() == 60 && position.getPosition() == 58)
-            {
-                swapPieces(piecesOld, 56, 59);
-            }
-        }
-
-        //pawn turns into a queen when reaches the end
-        if (selectedTile.getName().equals("pawn"))
-        {
-            if (position.getPosition() >= 56 || position.getPosition() <= 7)//pawn reached last row
-            {
-                selectedTile = new Queen("queen", selectedTile.getColor(), selectedTile.getPosition());
-            }
-        }
-
-        Point tempPoint = new Point(position.getPointPosition().x, position.getPointPosition().y);
-        switch (selectedTile.getName()){
-            case "rook":
-                position = new Rook(selectedTile);
-                break;
-            case "queen":
-                position = new Queen(selectedTile);
-                break;
-            case "pawn":
-                position = new Pawn(selectedTile);
-                break;
-            case "knight":
-                position = new Knight(selectedTile);
-                break;
-            case "king":
-                position = new King(selectedTile);
-                break;
-            case "empty":
-                position = new Empty(selectedTile);
-                break;
-            case "bishop":
-                position = new Bishop(selectedTile);
-                break;
-        }
-        position.setPointPosition(tempPoint);
-        position.setPosition(position.getPosition());
-        int x = selectedTile.getPointPosition().x;
-        int y = selectedTile.getPointPosition().y;
-        selectedTile = new Empty("empty", "white", selectedTile.getPosition());
-        selectedTile.setPointPosition(x, y);
-        selectedTile.setEmpty(true);
-
-        fillDoubleArrayFromSingle(piecesOld, pieces);
-    }
-
-    //not tested yet
-    public int isChess()
-    {
+    public int isChess() {
         Piece myKing = null;
-        for (Piece p : piecesOld)
+        boolean toBreak = false;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            if (toBreak)
+                break;
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                if (pieces[row][col].getIntColor() == myColor && pieces[row][col] instanceof King)
+                {
+                    myKing = pieces[row][col];
+                    toBreak = true;
+                    break;
+                }
+            }
+        }
+        /*for (Piece p : piecesOld)
         {
              if (p.getIntColor() == myColor && p instanceof King)
              {
                  myKing = p;
                  break;
              }
-        }
+        }*/
         int opponentColor = (myColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
-        if (myKing.isThreatened(piecesOld, opponentColor).size() != 0)//the king is threatened
+        if (myKing.isThreatened(pieces, opponentColor).size() != 0)//the king is threatened
         {
-            if (!myKing.canMove(piecesOld))//king can not move
+            if (!myKing.canMove(pieces))//king can not move
                 return CHECK_MATE;
             else
                 return CHECK;
         }
         return OK;
-    }
-
-    //filling the double array of Pieces from a single array
-    private void fillDoubleArrayFromSingle(Piece[] singleArray, Piece[][] doubleArray)
-    {
-        int counter = 0;
-        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
-        {
-            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
-            {
-                doubleArray[row][col] = singleArray[counter];
-                doubleArray[row][col].setPointPosition(row, col);
-                counter++;
-            }
-        }
     }
 
     public boolean getMoveMade() {
@@ -405,7 +366,12 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         this.moveMade = moveMade;
     }
 
-    public Piece[] undoClicked() {
+    public int getPositionOfLastMovingPiece()
+    {
+        return destinationPositionOfMovingPiece;
+    }
+
+    public Piece[][] undoClicked() {
 
         if (moveMade)
         {
@@ -414,15 +380,39 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
             isSelected = false;
             for (int i = 0; i < possibleMove.length; i++)
                 possibleMove[i] = false;
-            piecesOld = piecesOldCopy;
-            pieces = piecesCopy;
+            //piecesOld = piecesOldCopy;// TODO erase!!!
+            if (piecesCopy != null)
+                pieces = piecesCopy;
             if (eatenPiece != null)
             {
                 comm.erasePieceFromEatenPieces(eatenPiece);
             }
-            adapter.setPieces(piecesOld);
+            comm.setPieces(pieces);
+            adapter.setPieces(pieces);
             adapter.notifyDataSetChanged();
         }
-        return piecesOld;
+        return pieces;
+    }
+
+    public Piece[][] submitCliced(){
+        return pieces;
+    }
+
+    private Point positionToPoint(int pos)
+    {
+        Point resPoint = null;
+        int counter = 0;
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                if (counter == pos)
+                {
+                    resPoint = new Point(row, col);
+                }
+                counter++;
+            }
+        }
+        return resPoint;
     }
 }

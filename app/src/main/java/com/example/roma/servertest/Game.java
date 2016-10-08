@@ -16,8 +16,8 @@ public class Game {
 
     //variables
     private final int TILES_NUMBER_IN_A_ROW = 8;
-    private Piece[][] _gridPieces;
-    private Piece[] _pieces;
+    private Piece[][] _pieces;
+    //private Piece[] pieces;
     private int status;
     private String turn;
     private int gameId;
@@ -28,13 +28,13 @@ public class Game {
 
 
     //constructor NOT IN USE!!!
-    public Game (String player1){
+    /*public Game (String player1){
 		_whitePlayer = new Player.WhitePlayer(player1);
 		_blackPlayer = new Player.BlackPlayer(player1);
         status = 0 ;      // 0=  create new game;
         turn = _whitePlayer.getName();
         createBoard();
-    }
+    }*/
 
     //Constructor receiving json from server and create new game object
     public Game (JSONObject gameJson){
@@ -45,8 +45,8 @@ public class Game {
 			_blackPlayer = new Player.BlackPlayer(gameJson.getString("player2"));
             status = gameJson.getInt("status");
             turn = gameJson.getString("turn");
-			_pieces = new Piece[64];
-            _gridPieces = new Piece[8][8];//jony added
+			//pieces = new Piece[64];
+            _pieces = new Piece[8][8];//jony added
             gameId = gameJson.getInt("gameid");
             eatenPiecesSize=gameJson.getInt("eatenpiecessize");
             setEatenPieces(gameJson.getJSONArray("eatenpieces"));       //create eatenpieces array list
@@ -55,7 +55,7 @@ public class Game {
             getPiecesFromJson(piecesJson);
 
             //jony added
-            fillDoubleArrayFromSingle(_pieces, _gridPieces);
+            //fillpiecesFromSingle(pieces, _pieces);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -77,59 +77,60 @@ public class Game {
         }
     }
 
-    private void createBoard(){
-		_pieces =  new Piece[64];
+    //NOT IN USE!!!
+    /*private void createBoard(){
+		pieces =  new Piece[64];
 
         //insert the starting pieces
         // init the one dim array  fill in the black and white tiles
-        for(int i=0 ; i<_pieces.length ; i++){
+        for(int i=0 ; i<pieces.length ; i++){
             if(i%16 < 8){
                 if(i%2 != 0)
-					_pieces[i]=new Empty("empty" ,"black",i);
+					pieces[i]=new Empty("empty" ,"black",i);
                 else
-					_pieces[i]=new Empty("empty" ,"white",i);
+					pieces[i]=new Empty("empty" ,"white",i);
             }else
             if(i%2 != 0)
-				_pieces[i]=new Empty("empty" ,"white",i);
+				pieces[i]=new Empty("empty" ,"white",i);
             else
-				_pieces[i]=new Empty("empty" ,"black",i);
+				pieces[i]=new Empty("empty" ,"black",i);
         }
 
         // add the pawns
         for(int i =8 ; i<16 ;i++){
-			_pieces[i] = new Pawn("pawn", "white", i);
-			_pieces[i+40]= new Pawn("pawn", "black", i+40);
+			pieces[i] = new Pawn("pawn", "white", i);
+			pieces[i+40]= new Pawn("pawn", "black", i+40);
         }
 
         // add white pieces
-		_pieces[56]=(new Rook("rook" , "white", 56));
-		_pieces[57]=(new Knight("Knight" , "white", 57));
-		_pieces[58]=(new Bishop("Bishop" , "white", 58));
-		_pieces[59]=(new Queen("queen" , "white", 59));
-		_pieces[60]=(new King("king" , "white", 60));
-		_pieces[61]=(new Bishop("Bishop" , "white", 61));
-		_pieces[62]=(new Knight("Knight" , "white", 62));
-		_pieces[63]=(new Rook("rook" , "white", 63));
+		pieces[56]=(new Rook("rook" , "white", 56));
+		pieces[57]=(new Knight("Knight" , "white", 57));
+		pieces[58]=(new Bishop("Bishop" , "white", 58));
+		pieces[59]=(new Queen("queen" , "white", 59));
+		pieces[60]=(new King("king" , "white", 60));
+		pieces[61]=(new Bishop("Bishop" , "white", 61));
+		pieces[62]=(new Knight("Knight" , "white", 62));
+		pieces[63]=(new Rook("rook" , "white", 63));
 
         // add black pieces
-		_pieces[0]=(new Rook("rook", "black", 0));
-		_pieces[1]=(new Knight("Knight", "black", 1));
-		_pieces[2]=(new Bishop("Bishop", "black", 2));
-		_pieces[3]=(new Queen("queen", "black", 3));
-		_pieces[4]=(new King("king", "black", 4));
-		_pieces[5]=(new Bishop("Bishop", "black", 5));
-		_pieces[6]=(new Knight("Knight", "black", 6));
-		_pieces[7]=(new Rook("rook", "black", 7));
+		pieces[0]=(new Rook("rook", "black", 0));
+		pieces[1]=(new Knight("Knight", "black", 1));
+		pieces[2]=(new Bishop("Bishop", "black", 2));
+		pieces[3]=(new Queen("queen", "black", 3));
+		pieces[4]=(new King("king", "black", 4));
+		pieces[5]=(new Bishop("Bishop", "black", 5));
+		pieces[6]=(new Knight("Knight", "black", 6));
+		pieces[7]=(new Rook("rook", "black", 7));
 
         //added by jony, not tested yet. suppose to fill the double array from the single array
-        fillDoubleArrayFromSingle(_pieces, _gridPieces);
-    }
+        fillDoubleArrayFromSingle(pieces, _pieces);
+    }*/
 
-    public String getPlayer1(){
+    public String getWhitePlayerName(){
         return _whitePlayer.getName();
     }
 
-    public String getPlayer2(){
+    public String getBlackPlayerName(){
         return _blackPlayer.getName();
     }
 
@@ -142,89 +143,184 @@ public class Game {
     }
 
     public Piece getPiece(int pos){
-        if(pos<64)
-            return _pieces[pos];
+
+        if (pos >= 0 && pos < 64)
+        {
+            int counter = 0;
+            for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+            {
+                for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+                {
+                    if (pos == counter)
+                    {
+                        return _pieces[row][col];
+                    }
+                    counter++;
+                }
+            }
+        }
+        return null;
+        /*if(pos<64)
+            return pieces[pos];
         else {
             Log.d("getPiece", "no piece at " + pos);
             return null;
-        }
+        }*/
     }
 
 	public Piece[][] getGridPieces()
 	{
-		return _gridPieces;
+		return _pieces;
 	}
 
-    public Piece[] getBoard2(){
-        return _pieces;
+    /*public Piece[] getBoard2(){
+        return pieces;
+    }*/
+
+    public void setPieces (Piece[][] pieces)
+    {
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                switch (pieces[row][col].getName()){
+                    case "rook":
+                        _pieces[row][col] = new Rook(pieces[row][col]);
+                        break;
+                    case "queen":
+                        _pieces[row][col] = new Queen(pieces[row][col]);
+                        break;
+                    case "pawn":
+                        _pieces[row][col] = new Pawn(pieces[row][col]);
+                        break;
+                    case "knight":
+                        _pieces[row][col] = new Knight(pieces[row][col]);
+                        break;
+                    case "king":
+                        _pieces[row][col] = new King(pieces[row][col]);
+                        break;
+                    case "empty":
+                        _pieces[row][col] = new Empty(pieces[row][col]);
+                        break;
+                    case "bishop":
+                        _pieces[row][col] = new Bishop(pieces[row][col]);
+                        break;
+                }
+            }
+        }
     }
 
-    public void setPieces (Piece[] pieces)
+
+    /*public void setPieces (Piece[] pieces)
     {
         for (int i = 0; i < 64; i++)
         {
             switch (pieces[i].getName()){
                 case "rook":
-                    _pieces[i] = new Rook(pieces[i]);
+                    pieces[i] = new Rook(pieces[i]);
                     break;
                 case "queen":
-                    _pieces[i] = new Queen(pieces[i]);
+                    pieces[i] = new Queen(pieces[i]);
                     break;
                 case "pawn":
-                    _pieces[i] = new Pawn(pieces[i]);
+                    pieces[i] = new Pawn(pieces[i]);
                     break;
                 case "knight":
-                    _pieces[i] = new Knight(pieces[i]);
+                    pieces[i] = new Knight(pieces[i]);
                     break;
                 case "king":
-                    _pieces[i] = new King(pieces[i]);
+                    pieces[i] = new King(pieces[i]);
                     break;
                 case "empty":
-                    _pieces[i] = new Empty(pieces[i]);
+                    pieces[i] = new Empty(pieces[i]);
                     break;
                 case "bishop":
-                    _pieces[i] = new Bishop(pieces[i]);
+                    pieces[i] = new Bishop(pieces[i]);
                     break;
             }
         }
-        fillDoubleArrayFromSingle(_pieces, _gridPieces);
-    }
+        fillDoubleArrayFromSingle(pieces, _pieces);
+    }*/
 
     public void getPiecesFromJson(JSONArray array) throws JSONException {
         int size = array.length();
         Log.d("numberOfPieces"," "+size);
         JSONObject temp ;
-        for(int i=0 ; i<size ;i++) {
+        for(int i=0 ; i<size ;i++)
+        {
             temp = array.getJSONObject(i);
             String piece = temp.getString("name");
             String color = temp.getString("color");
             int position = temp.getInt("position");
 
-            switch (piece){
+            int counter = 0;
+            boolean toBreak = false;
+            for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+            {
+                if (toBreak)
+                    break;
+                for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+                {
+                    if (counter == position)
+                    {
+                        switch (piece) {
+                            case "rook":
+                                _pieces[row][col] = new Rook(piece, color, position);
+                                break;
+                            case "queen":
+                                _pieces[row][col] = new Queen(piece, color, position);
+                                break;
+                            case "pawn":
+                                _pieces[row][col] = new Pawn(piece, color, position);
+                                break;
+                            case "knight":
+                                _pieces[row][col] = new Knight(piece, color, position);
+                                break;
+                            case "king":
+                                _pieces[row][col] = new King(piece, color, position);
+                                break;
+                            case "empty":
+                                _pieces[row][col] = new Empty(piece, color, position);
+                                break;
+                            case "bishop":
+                                _pieces[row][col] = new Bishop(piece, color, position);
+                                break;
+                        }
+                        toBreak = true;
+
+                    }
+                    counter++;
+                    if (toBreak)
+                        break;
+                }
+            }
+
+
+            /*switch (piece){
                 case "empty":
-					_pieces[i] = new Empty(piece, color, position);
+					pieces[i] = new Empty(piece, color, position);
                     break;
                 case "bishop":
-					_pieces[i] = new Bishop(piece, color, position);
+					pieces[i] = new Bishop(piece, color, position);
                     break;
                 case "king":
-					_pieces[i] = new King(piece, color, position);
+					pieces[i] = new King(piece, color, position);
                     break;
                 case "queen":
-					_pieces[i] = new Queen(piece, color, position);
+					pieces[i] = new Queen(piece, color, position);
                     break;
                 case "knight":
-					_pieces[i] = new Knight(piece, color, position);
+					pieces[i] = new Knight(piece, color, position);
                     break;
                 case "pawn":
-					_pieces[i] = new Pawn(piece, color, position);
+					pieces[i] = new Pawn(piece, color, position);
                     break;
                 case "rook":
-					_pieces[i] = new Rook(piece, color, position);
+					pieces[i] = new Rook(piece, color, position);
                     break;
                 default:
                     Log.d("error","in default: "+piece);
-            }
+            }*/
         }
     }
 
@@ -237,7 +333,7 @@ public class Game {
             json.put("status", status);
             json.put("turn", turn);
             json.put("gameid",gameId);
-            json.put("pieces", getPiecesJson());
+            json.put("pieces", getPiecesJson());//
             json.put("eatenpieces",getEatenPiecesJson());
             json.put("eatenpiecessize",eatenPieces.size());
         } catch (JSONException e) {
@@ -259,8 +355,16 @@ public class Game {
     public JSONArray getPiecesJson() throws JSONException{
         JSONArray pieces = new JSONArray();
 
-        for(int i=0; i < _pieces.length; i++)
-            pieces.put(_pieces[i].toJson());
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
+            {
+                pieces.put(_pieces[row][col].toJson());
+            }
+        }
+
+        /*for(int i=0; i < pieces.length; i++)
+            pieces.put(pieces[i].toJson());*/
 
         return pieces;
     }
@@ -272,6 +376,7 @@ public class Game {
     public ArrayList<Piece> getEatenPieces() {
         return eatenPieces;
     }
+
     public void setEatenPieces(ArrayList<Piece> p){
         eatenPieces=p;
     }
