@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Queen extends Piece {
 
-    public Queen(String name, String color,int pos) {
-        super(name, color, pos);
+    public Queen(String name, String color,int pos,boolean moved) {
+        super(name, color, pos, moved);
         if (color.equals("white")){
             image = R.drawable.qlt60;
         }

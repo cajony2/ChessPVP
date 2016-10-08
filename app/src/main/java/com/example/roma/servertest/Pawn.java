@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Pawn extends Piece {
 
     //Constructor
-    public Pawn(String name, String color, int pos) {
-        super(name, color, pos);
+    public Pawn(String name, String color, int pos,boolean moved) {
+        super(name, color, pos, moved);
         //hasNotMovedYet = true;
         // TODO Auto-generated constructor stub
         if (color.equals("white")){

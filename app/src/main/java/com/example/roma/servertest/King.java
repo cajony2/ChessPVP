@@ -9,8 +9,8 @@ public class King extends Piece {
     //public boolean _hasNotMovedYet = true;
 
 	//Constructor
-    public King(String name, String color, int pos) {
-        super(name, color, pos);
+    public King(String name, String color, int pos,boolean moved) {
+        super(name, color, pos, moved);
         //boolean hasNotMovedYet = true;
         // TODO Auto-generated constructor stub
         if (color.equals("white")){

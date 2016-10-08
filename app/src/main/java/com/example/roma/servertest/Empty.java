@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Empty extends Piece {
 
     //Constructor
-    public Empty(String name, String color, int pos) {
-        super(name, color, pos);
+    public Empty(String name, String color, int pos,boolean moved) {
+        super(name, color, pos, moved);
         if(color=="white")
             image=R.drawable.white;
         else

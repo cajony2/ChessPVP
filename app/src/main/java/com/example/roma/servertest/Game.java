@@ -252,6 +252,7 @@ public class Game {
             String piece = temp.getString("name");
             String color = temp.getString("color");
             int position = temp.getInt("position");
+            boolean moved  =temp.getBoolean("hasnotmovedyet");
 
             int counter = 0;
             boolean toBreak = false;
@@ -265,25 +266,25 @@ public class Game {
                     {
                         switch (piece) {
                             case "rook":
-                                _pieces[row][col] = new Rook(piece, color, position);
+                                _pieces[row][col] = new Rook(piece, color, position,moved);
                                 break;
                             case "queen":
-                                _pieces[row][col] = new Queen(piece, color, position);
+                                _pieces[row][col] = new Queen(piece, color, position,moved);
                                 break;
                             case "pawn":
-                                _pieces[row][col] = new Pawn(piece, color, position);
+                                _pieces[row][col] = new Pawn(piece, color, position,moved);
                                 break;
                             case "knight":
-                                _pieces[row][col] = new Knight(piece, color, position);
+                                _pieces[row][col] = new Knight(piece, color, position,moved);
                                 break;
                             case "king":
-                                _pieces[row][col] = new King(piece, color, position);
+                                _pieces[row][col] = new King(piece, color, position,moved);
                                 break;
                             case "empty":
-                                _pieces[row][col] = new Empty(piece, color, position);
+                                _pieces[row][col] = new Empty(piece, color, position,moved);
                                 break;
                             case "bishop":
-                                _pieces[row][col] = new Bishop(piece, color, position);
+                                _pieces[row][col] = new Bishop(piece, color, position,moved);
                                 break;
                         }
                         toBreak = true;
@@ -394,28 +395,29 @@ public class Game {
                 String piece = temp.getString("name");
                 String color = temp.getString("color");
                 int position = temp.getInt("position");
+                boolean moved  =temp.getBoolean("hasnotmovedyet");
 
                 switch (piece){
                     case "empty":
-                        eatenPieces.add(new Empty(piece, color, position));
+                        eatenPieces.add(new Empty(piece, color, position,moved));
                         break;
                     case "bishop":
-                        eatenPieces.add(new Bishop(piece, color, position));
+                        eatenPieces.add(new Bishop(piece, color, position,moved));
                         break;
                     case "king":
-                        eatenPieces.add(new King(piece, color, position));
+                        eatenPieces.add(new King(piece, color, position,moved));
                         break;
                     case "queen":
-                        eatenPieces.add(new Queen(piece, color, position));
+                        eatenPieces.add(new Queen(piece, color, position,moved));
                         break;
                     case "knight":
-                        eatenPieces.add(new Knight(piece, color, position));
+                        eatenPieces.add(new Knight(piece, color, position,moved));
                         break;
                     case "pawn":
-                        eatenPieces.add(new Pawn(piece, color, position));
+                        eatenPieces.add(new Pawn(piece, color, position,moved));
                         break;
                     case "rook":
-                        eatenPieces.add(new Rook(piece, color, position));
+                        eatenPieces.add(new Rook(piece, color, position,moved));
                         break;
                     default:
                         Log.i("chess","in default: "+piece);

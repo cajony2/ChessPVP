@@ -7,8 +7,8 @@ public class Rook extends Piece {
 
     boolean hasNotMovedYet;
 
-    public Rook(String name, String color,int pos) {
-        super(name, color, pos);
+    public Rook(String name, String color,int pos,boolean moved) {
+        super(name, color, pos, moved);
         //hasNotMovedYet = true;
         if (color.equals("white")){
             image = R.drawable.rlt60;

@@ -20,10 +20,10 @@ public abstract class Piece{
     protected int image;
     protected int position;
     protected boolean isEmpty;
-    protected boolean _hasNotMovedYet = true;
+    protected boolean _hasNotMovedYet;          //jesus what a name...
 
     //Constructor
-    public Piece (String name, String color, int pos){
+    public Piece (String name, String color, int pos,boolean moved){
 
         this.name = name;
         this.color = color;
@@ -31,6 +31,7 @@ public abstract class Piece{
         isEmpty = name.equals("empty") ? true : false;
         _pointPosition = positionToPoint(pos);
         _isActive = true;
+        _hasNotMovedYet = moved;
         if (color.equals("white"))
             _color = Color.WHITE;
         else
@@ -299,6 +300,7 @@ public abstract class Piece{
         json.put("color", color);
         json.put("image", image);
         json.put("position", position);
+        json.put("hasnotmovedyet",_hasNotMovedYet);
         return json;
     }
 
@@ -481,7 +483,7 @@ public abstract class Piece{
                 break;
         }
 
-        piece2 = new Empty("empty", "white", piece2.getPosition());
+        piece2 = new Empty("empty", "white", piece2.getPosition(),piece2.hasNotMovedYet());
         piece2.setPointPosition(x, y);
         piece2.setEmpty(true);
     }
