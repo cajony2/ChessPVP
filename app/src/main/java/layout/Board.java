@@ -228,6 +228,8 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                             }
 
                             swapPieces(pieces, selectedTile, position);
+                            pieces[tileCoordinate.x][tileCoordinate.y].setHasNotMovedYet(false);
+
 
                             moveMade = true;
                             //TODO
@@ -280,7 +282,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         {
             if (position >= 56 || position <= 7)//pawn reached last row
             {
-                pieces[selectedTileCoordinate.x][selectedTileCoordinate.y] = new Queen("queen", pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getColor(), pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getPosition());
+                pieces[selectedTileCoordinate.x][selectedTileCoordinate.y] = new Queen("queen", pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getColor(), pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].getPosition(), false);
             }
         }
 
@@ -314,7 +316,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         pieces[positionTileCoordinate.x][positionTileCoordinate.y].setPosition(position);
         int x = selectedTileCoordinate.x;
         int y = selectedTileCoordinate.y;
-        pieces[selectedTileCoordinate.x][selectedTileCoordinate.y] = new Empty("empty", "white", selectedTile);
+        pieces[selectedTileCoordinate.x][selectedTileCoordinate.y] = new Empty("empty", "white", selectedTile, false);
         pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].setPointPosition(x, y);
         pieces[selectedTileCoordinate.x][selectedTileCoordinate.y].setEmpty(true);
 
