@@ -36,8 +36,6 @@ public class InitGame extends Activity{
     private String userName;
     private String psw;
     private Game game;
-
-
     public static final String CREATE_GAME = "createNewGame";
     public static final String JOIN_GAME = "joinGame";
     public static final String JOIN_READY ="JoinedGame";
@@ -73,13 +71,9 @@ public class InitGame extends Activity{
                 status.setText("Searching Game");
                 ReadFromDB joinGame = new ReadFromDB(this,JOIN_GAME );
                 joinGame.execute();
-
                 break;
         }
-
-
         spinner.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -92,12 +86,10 @@ public class InitGame extends Activity{
     }
 
 
-    /*
-        async task readfromDB send a request in a separate thread depending on the action
-         join game
-         create new game
-         gameReady
-         */
+    /* async task readfromDB send a request in a separate thread depending on the action
+	 join game
+	 create new game
+	 gameReady */
     class ReadFromDB extends AsyncTask< Void, Void, String> {
         private static final int MAX_ATTEMPTS = 30;
         Activity activity;

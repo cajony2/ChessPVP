@@ -28,7 +28,6 @@
         <activity android:name=".GameBoard"></activity>
         <activity android:name=".InitGame"
                   android:noHistory="true"></activity>
-        <activity android:name=".SettingActivity"></activity>
         <activity android:name=".PersonalInfo"></activity>
         <activity android:name=".CreateAccount"></activity>
     </application>

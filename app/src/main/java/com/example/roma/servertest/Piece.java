@@ -20,10 +20,10 @@ public abstract class Piece{
     protected int image;
     protected int position;
     protected boolean isEmpty;
-    protected boolean _hasNotMovedYet;          //jesus what a name...
+    protected boolean _hasNotMovedYet;
 
     //Constructor
-    public Piece (String name, String color, int pos,boolean moved){
+    public Piece (String name, String color, int pos, boolean moved){
 
         this.name = name;
         this.color = color;
@@ -45,8 +45,7 @@ public abstract class Piece{
     }
 
     //copy constructor
-    public Piece (Piece piece)
-    {
+    public Piece (Piece piece){
         _color = piece.getIntColor();
         _pointPosition = new Point(piece.getPointPosition().x, piece.getPointPosition().y);
         _isActive = piece.getActive();
@@ -132,11 +131,6 @@ public abstract class Piece{
         return image;
     }
 
-    public void setImg(int img)
-    {
-        image = img;
-    }
-
     public void setEmpty(boolean b){
         isEmpty=b;
     }
@@ -162,11 +156,6 @@ public abstract class Piece{
     public void setColor(String color)
     {
         this.color = color;
-    }
-
-    public void setIntColor(int color)
-    {
-        _color = color;
     }
 
     public Point getPointPosition(){
@@ -246,12 +235,6 @@ public abstract class Piece{
         return null;
     }
 
-    public boolean isGuarded(Piece[][] pieces)
-    {
-        ArrayList<Piece> alliedPieces = getPiecesByColor(pieces, getIntColor());
-        return true;
-    }
-
     //returns list of pieces that threaten this piece. returns empty list if no one threaten this piece
     public ArrayList<Piece> isThreatened(Piece[][] pieces, int threateningColor) {
         ArrayList<Piece> result = new ArrayList<>();
@@ -302,35 +285,6 @@ public abstract class Piece{
         json.put("position", position);
         json.put("hasnotmovedyet",_hasNotMovedYet);
         return json;
-    }
-
-    protected static Piece[][] toDoubleArray(Piece[] pieces){
-        Piece[][] doublePieces = new Piece[8][8];
-        int counter = 0;
-        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
-        {
-            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
-            {
-                doublePieces[row][col] = pieces[counter];
-                doublePieces[row][col].setPointPosition(row, col);
-                counter++;
-            }
-        }
-        return doublePieces;
-    }
-
-    protected static Piece[] toSingleArray(Piece[][] pieces) {
-        Piece[] singleArray = new Piece[64];
-        int counter = 0;
-        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
-        {
-            for (int col = 0; col < TILES_NUMBER_IN_A_ROW; col++)
-            {
-                singleArray[counter] = pieces[row][col];
-                counter++;
-            }
-        }
-        return singleArray;
     }
 
     //when a piece checks the king, this method returns the tiles on the way to the king
@@ -423,69 +377,6 @@ public abstract class Piece{
             }
         }//end of diagonal
         return result;
-    }
-
-    protected void swapPieces(Piece[] pieces, Piece piece1, Piece piece2) {
-        Point tempPoint = new Point(piece1.getPointPosition().x, piece1.getPointPosition().y);
-        int tempPosition = piece1.getPosition();
-
-        String piece1Name = piece1.getName();
-
-        switch (piece2.getName()){
-            case "rook":
-                piece1 = new Rook(piece2);
-                break;
-            case "queen":
-                piece1 = new Queen(piece2);
-                break;
-            case "pawn":
-                piece1 = new Pawn(piece2);
-                break;
-            case "Knight":
-                piece1 = new Knight(piece2);
-                break;
-            case "king":
-                piece1 = new King(piece2);
-                break;
-            case "empty":
-                piece1 = new Empty(piece2);
-                break;
-            case "Bishop":
-                piece1 = new Bishop(piece2);
-                break;
-        }
-        piece1.setPointPosition(tempPoint);
-        piece1.setPosition(tempPosition);
-
-        int x = piece2.getPointPosition().x;
-        int y = piece2.getPointPosition().y;
-        switch (piece1Name){
-            case "rook":
-                piece2 = new Rook(piece2);
-                break;
-            case "queen":
-                piece2 = new Queen(piece2);
-                break;
-            case "pawn":
-                piece2 = new Pawn(piece2);
-                break;
-            case "Knight":
-                piece2 = new Knight(piece2);
-                break;
-            case "king":
-                piece2 = new King(piece2);
-                break;
-            case "empty":
-                piece2 = new Empty(piece2);
-                break;
-            case "Bishop":
-                piece2 = new Bishop(piece2);
-                break;
-        }
-
-        piece2 = new Empty("empty", "white", piece2.getPosition(),piece2.hasNotMovedYet());
-        piece2.setPointPosition(x, y);
-        piece2.setEmpty(true);
     }
 
     private Point positionToPoint(int pos)

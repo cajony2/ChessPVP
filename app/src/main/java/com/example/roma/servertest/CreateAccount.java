@@ -10,17 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-
 /**
  * Created by Roma on 8/27/2016.
- * create new account  get  user name and psw from user send to server and parse response
+ * create new account get user name and psw from user send to server and parse response
  *  server response:
  *  "user name taken" -> user name taken :/
  *  "userCreated"  -> all good user created!
@@ -32,20 +30,16 @@ public class CreateAccount extends Activity implements View.OnClickListener{
     TextView psw;
     TextView rePsw;
     Button createBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_account);
-
         userName = (TextView) findViewById(R.id.userName);
         psw = (TextView) findViewById(R.id.psw);
         rePsw = (TextView) findViewById(R.id.re_psw);
-
         createBtn = (Button) findViewById(R.id.create_account);
-
         createBtn.setOnClickListener(this);
-
     }
 
     @Override
@@ -65,7 +59,6 @@ public class CreateAccount extends Activity implements View.OnClickListener{
         else{
             ReadFromDB readFromDB = new ReadFromDB(this,nameString,pswString);
             readFromDB.execute();
-
         }
     }
 
@@ -89,7 +82,6 @@ public class CreateAccount extends Activity implements View.OnClickListener{
             super.onPreExecute();
             progressDialog = ProgressDialog.show(activity, "", "Creating User...");
         }
-
 
         @Override
         protected String doInBackground(Void... params) {
@@ -129,7 +121,6 @@ public class CreateAccount extends Activity implements View.OnClickListener{
         }
 
         @Override
-
         /*
         check the msg from server  if msg is "user name taken"
          */

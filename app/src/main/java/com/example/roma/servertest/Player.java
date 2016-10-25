@@ -3,13 +3,11 @@ package com.example.roma.servertest;
 import android.graphics.Color;
 
 /**
- * Created by Jony on 31/08/2016.
+ * This class represents a player in the game
  */
 public abstract class Player {
 	protected String _name;
 	protected int _color;
-	//protected int _score;
-	//protected bool _turn;
 
 	//Constructor
 	public Player(String name)

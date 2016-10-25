@@ -1,12 +1,9 @@
 package com.example.roma.servertest;
 
-import android.graphics.Color;
-
 import java.util.ArrayList;
 
 /**
- * Created by Roma on 9/12/2016.
- * 
+ * Interface to comunicate between the model and view
  */
 public interface Communicator {
     String getOpponentName();
@@ -14,7 +11,6 @@ public interface Communicator {
     String getUserName();
     void makeMove();
     Piece[][] getPieces();
-    //Piece[] getPiecesOld();
     void setEatenPiece(Piece p );
     void erasePieceFromEatenPieces(Piece p);
     int getColor();
@@ -22,14 +18,9 @@ public interface Communicator {
     void moveMade(String answerType , String message);
     void timerFinished();
     void setPieces(Piece[][] pieces);
-
     boolean canClick();
-
     void gameEnded();
-
     void setInfo(String message);
-
     void undo();
-
     boolean getWin();
 }

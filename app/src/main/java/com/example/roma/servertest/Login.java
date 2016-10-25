@@ -26,36 +26,30 @@ public class Login extends Activity implements View.OnClickListener {
     public final static String PSW = "password";
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String TIME_OUT="timeOut";
-
     EditText userName = null;
     EditText pswField = null;
     TextView createAccount;
-    TextView settingText;
+    //TextView settingText;
     SharedPreferences sharedpreferences;
-
     Button logIn;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
         userName = (EditText) findViewById(R.id.firstName);
         pswField = (EditText) findViewById(R.id.psw);
         createAccount = (TextView) findViewById(R.id.createAccount);
-        settingText = (TextView) findViewById(R.id.SettingText);
-
+        //settingText = (TextView) findViewById(R.id.SettingText);
 
         logIn = (Button) findViewById(R.id.logIn);
         logIn.setOnClickListener(this);
         createAccount.setOnClickListener(this);
-        settingText.setOnClickListener(this);
+        //settingText.setOnClickListener(this);
         loadSharedPreferences();
-
     }
-
 
     private void loadSharedPreferences(){
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -66,7 +60,6 @@ public class Login extends Activity implements View.OnClickListener {
         if(passwordSaved!=null)
             pswField.setText(passwordSaved);
     }
-
 
     public void onClick(View v){
         Intent intent;
@@ -79,20 +72,17 @@ public class Login extends Activity implements View.OnClickListener {
                 intent = new Intent(this, CreateAccount.class);
                 startActivity(intent);
                 break;
-            case R.id.SettingText:
+            /*case R.id.SettingText:
                 intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
-                break;
-
-
+                break;*/
         }
     }
+
     private void logIn(){
         String name = userName.getText().toString();
         String psw = pswField.getText().toString();
-
         setSharedpreferences();
-
         ReadFromDB readFromDB = new ReadFromDB(this,name,psw);
         readFromDB.execute();
     }
@@ -103,7 +93,6 @@ public class Login extends Activity implements View.OnClickListener {
         editor.putString(PSW, pswField.getText().toString());
         editor.apply();
     }
-
 
     class ReadFromDB extends AsyncTask< Void, Void, String> {
 
@@ -117,7 +106,6 @@ public class Login extends Activity implements View.OnClickListener {
             activity=_e;
             name=_name;
             psw=_psw;
-
         }
 
         @Override
@@ -133,27 +121,21 @@ public class Login extends Activity implements View.OnClickListener {
             try{
                 URL url = new URL("http://5.29.207.103:8080/Chess/ChessServlet");
                 // URL url = new URL("http://10.0.2.2:8080/Chess/ChessServlet");
-
                 URLConnection connection = url.openConnection();
                 connection.setRequestProperty("Action","getInfo");
                 Log.d("chess", "connecting to db: getInfo");
-
                 connection.setRequestProperty("UserName", name);
                 connection.setRequestProperty("Password", psw);
                 connection.setDoOutput(true);
                 connection.setConnectTimeout(6000);
                 OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-
                 out.write("");
-
                 out.close();
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String nextLine;
-
                 while ((nextLine = in.readLine()) != null) {
                     message += nextLine;
                 }
-
                 Log.d("chess","the return message "+message);
                 in.close();
             }
@@ -165,8 +147,6 @@ public class Login extends Activity implements View.OnClickListener {
         }
 
         @Override
-
-
         public void onPostExecute(String message){
             Log.i("chess",message);
             progressDialog.dismiss();
@@ -187,7 +167,6 @@ public class Login extends Activity implements View.OnClickListener {
                     startActivity(intent);
                     break;
             }
-
         }
     }//end of inner class ReadFromDB
 

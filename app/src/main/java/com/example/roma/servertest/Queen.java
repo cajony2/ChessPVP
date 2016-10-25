@@ -29,7 +29,6 @@ public class Queen extends Piece {
         _hasNotMovedYet = piece.hasNotMovedYet();
     }
 
-
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[][] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();
@@ -351,5 +350,4 @@ public class Queen extends Piece {
         }
         return result;
     }
-
 }

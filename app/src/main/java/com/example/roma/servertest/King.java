@@ -6,10 +6,8 @@ import java.util.ArrayList;
 
 public class King extends Piece {
 
-    //public boolean _hasNotMovedYet = true;
-
 	//Constructor
-    public King(String name, String color, int pos,boolean moved) {
+    public King(String name, String color, int pos, boolean moved) {
         super(name, color, pos, moved);
         //boolean hasNotMovedYet = true;
         // TODO Auto-generated constructor stub
@@ -32,7 +30,7 @@ public class King extends Piece {
         image = piece.getImg();
         position = piece.getPosition();
         isEmpty = piece.isEmpty();
-		_hasNotMovedYet = false;
+		_hasNotMovedYet = piece.hasNotMovedYet();
     }
 
     @Override
@@ -71,26 +69,11 @@ public class King extends Piece {
         return false;
     }
 
-    private boolean kingCanMoveThere(Piece[][] pieces, ArrayList<Piece> opponentPieces, int tileLocation) {
-
-
-        for (Piece p : opponentPieces)
-        {
-            if (p.getLegalMoves(pieces).contains(pieces[tileLocation]))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-	//piece has the same method
+	//overrides the Piece`s hasNotMovedYet method
 	public boolean hasNotMovedYet(){return _hasNotMovedYet;}
 
-	private ArrayList<Piece> castlingMoves(Piece[][] pieces)
-	{
+	private ArrayList<Piece> castlingMoves(Piece[][] pieces){
 		ArrayList<Piece> result = new ArrayList<Piece>();
-		//Piece[][] doubleArray = toDoubleArray(pieces);
 		if (hasNotMovedYet())
 		{
 			//the king is white

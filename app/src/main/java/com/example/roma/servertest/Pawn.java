@@ -33,7 +33,6 @@ public class Pawn extends Piece {
         _hasNotMovedYet = piece.hasNotMovedYet();
     }
 
-
     @Override
     public ArrayList<Integer> getLegalMoves(Piece[][] pieces) {
         ArrayList<Integer> legalMoves = new ArrayList<Integer>();

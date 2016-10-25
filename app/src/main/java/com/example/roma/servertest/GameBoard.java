@@ -14,32 +14,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import layout.Board;
 import layout.BottomInfo;
 import layout.TimerBar;
 import layout.TopInfo;
 
-
 /*
-    this is the game himself display the game board with all the pieces and make moves
+    this is the game itself, display the game board with all the pieces and make moves
     contact the server and receive the new board after the second player has made his move
-    we will have this activity from the begining of the game till the end!!!
-
+    we will have this activity from the beginning of the game till the end!!!
  */
 public class GameBoard extends Activity implements Communicator {
 
+    //variables
     private static final int OK_GAME = 1;
-
     private final int YOU_LOOSE =1;
     private final int OPPONENT_LOOSE=2;
     private final int CHCKMATE =3;
     private final int TIMEROVER=4;
     private final int CHECK = 2;
-
-    ArrayList<Piece> whiteEaten;            // need to move this to game object
-    ArrayList<Piece> blackEaten;            // need to move this to game object
+    public static final String GAME_READY = "isGameReady";
+    public static final String MOVE_MADE = "moveMade";
+    public static final String YOU_WON = "youWon";
+    ArrayList<Piece> whiteEaten;
+    ArrayList<Piece> blackEaten;
     String color;
     String userName;
     private Game game;
@@ -52,11 +51,6 @@ public class GameBoard extends Activity implements Communicator {
     private String psw;
     boolean moveMade;
     boolean endGame;
-    //Piece[][] pieces;
-
-    public static final String GAME_READY = "isGameReady";
-    public static final String MOVE_MADE = "moveMade";
-    public static final String YOU_WON = "youWon";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,11 +293,10 @@ public class GameBoard extends Activity implements Communicator {
         refreshGame(gameJson);
     }
 
-
     @Override
     public void moveMade(String answerType, String message) {
         switch (answerType) {
-            case MOVE_MADE:                                         //servlet received players move
+            case MOVE_MADE: //servlet received players move
                 Log.i("chess", "move make was successful");
                 FragmentManager fManager = getFragmentManager();
                 TimerBar timer   = (TimerBar) fManager.findFragmentById(R.id.timerBarFragment);
@@ -315,10 +308,10 @@ public class GameBoard extends Activity implements Communicator {
                     e.printStackTrace();
                 }
 
-                new ReadFromDB(this, GAME_READY, userName, game,psw).execute();             // check if opponent made his move
+                new ReadFromDB(this, GAME_READY, userName, game,psw).execute();// check if opponent made his move
 
                 break;
-            case ReadFromDB.GAME_NOT_READY:                                                                        //check if opponent made his move
+            case ReadFromDB.GAME_NOT_READY://check if opponent made his move
                 if(!endGame)
                     new ReadFromDB(this, GAME_READY, userName, game,psw).execute();
                 break;
@@ -333,9 +326,7 @@ public class GameBoard extends Activity implements Communicator {
         }
     }
 
-    /*
-        if timer is done , show the propper message and end game
-     */
+    /*if timer is done , show the propper message and end game*/
     @Override
     public void timerFinished() {
 
@@ -349,10 +340,9 @@ public class GameBoard extends Activity implements Communicator {
         }
         endGame=true;
     }
-    /*
-        by Roma
-        show end Game Dialog
-     */
+
+    /*by Roma
+	show end Game Dialog*/
     private void showDialog(int looser , int looseType){
         dialog = new Dialog(this ,R.style.myCoolDialog);
         dialog.setTitle("Game Over");
@@ -409,7 +399,6 @@ public class GameBoard extends Activity implements Communicator {
                     startPersonalActivity(message);
                 }
             });
-
         }
 
     private void startPersonalActivity(String infoJson){

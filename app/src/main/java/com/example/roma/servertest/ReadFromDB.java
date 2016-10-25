@@ -1,11 +1,8 @@
 package com.example.roma.servertest;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
-
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -25,17 +22,12 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     private String psw;
 
     public static final String MAKE_MOVE = "makeMove";
-    public static final String MOVE_MADE = "moveMade";
+    //public static final String MOVE_MADE = "moveMade";
     public static final String GAME_READY = "isGameReady";
     public static final String GAME_NOT_READY = "gameNotReady";
     public static final String GAME_IS_READY = "gameIsReady";
     public static final String ENDGAME = "endGame";
     public static final String GETINFO = "getInfo";
-
-
-
-
-
 
     public ReadFromDB(Communicator _comm, String _action, String _userName, Game _game,String _psw){
         action = _action;
@@ -45,8 +37,6 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
         comm = _comm;
         psw=_psw;
     }
-
-
 
     protected String doInBackground(Void... params) {
         Log.i("chess","HTTP:action"+action);
@@ -110,8 +100,6 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
     }
 
     @Override
-
-
     public void onPostExecute(String message){
         // after move was sent to database check if opponent made his move
         switch (action) {

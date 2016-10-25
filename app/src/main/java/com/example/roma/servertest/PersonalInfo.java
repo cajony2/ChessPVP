@@ -1,27 +1,19 @@
 package com.example.roma.servertest;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Created by Roma on 8/26/2016.
+ * This activity saves and shows on screen the player`s details
  */
 public class PersonalInfo extends Activity implements View.OnClickListener {
 
@@ -30,11 +22,8 @@ public class PersonalInfo extends Activity implements View.OnClickListener {
     TextView winstv;
     Button createNewGameBtn;
     Button joinGameBtn;
-
     String userName ;
     String psw;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +50,12 @@ public class PersonalInfo extends Activity implements View.OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, InitGame.class);
-
         intent.putExtra("userName",userName );
-
 
         switch (v.getId()){
             case R.id.createGameBtn:

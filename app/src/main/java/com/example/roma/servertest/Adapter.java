@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 /**
- * Created by Roma on 8/1/2016.
+ * This adapter handles the view of the grid board
  *
  */
 public class Adapter extends BaseAdapter {
@@ -19,16 +19,7 @@ public class Adapter extends BaseAdapter {
     ArrayList<Boolean> isSelected;
     boolean[] possibleMove;
     int selectedTile;
-    //Piece[] pieces;
     Piece[][] _pieces;
-
-    /*public Adapter(Context c , Piece[] pieces){
-        this.c=c;
-        pieces=pieces;
-        isSelected = new ArrayList<>();
-        possibleMove = new boolean[64];
-        selectedTile=-1;
-    }*/
 
     public Adapter(Context c , Piece[][] pieces){
         this.c=c;
@@ -53,7 +44,6 @@ public class Adapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-
         if (position >= 0 && position < 64)
         {
             int counter = 0;
@@ -70,8 +60,6 @@ public class Adapter extends BaseAdapter {
             }
         }
         return null;
-
-        //return pieces[position];
     }
 
     @Override
@@ -82,7 +70,6 @@ public class Adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflate = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //Piece piece = pieces[position];
         Piece piece = null;
 
         int counter = 0;
@@ -102,7 +89,7 @@ public class Adapter extends BaseAdapter {
             convertView=inflate.inflate(R.layout.singlesquare, parent, false);
         }
 
-        ImageView isSelected = (ImageView) convertView.findViewById(R.id.selected);
+        //ImageView isSelected = (ImageView) convertView.findViewById(R.id.selected);
         ImageView tileColor = (ImageView) convertView.findViewById(R.id.blacknwhite);
         ImageView pieceImage = (ImageView) convertView.findViewById(R.id.piece);
         pieceImage.setImageDrawable(null);
@@ -145,10 +132,6 @@ public class Adapter extends BaseAdapter {
 
     public void setPossibleMoves(boolean[] possibleMoves){
         possibleMove=possibleMoves;
-    }
-
-    public void setPieces(Piece[] pieces){
-        pieces=pieces;
     }
 
     public void setPieces(Piece[][] pieces){

@@ -61,7 +61,7 @@
         android:textColor="#a4c639"
         android:layout_marginTop="15dp"/>
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Settings"
@@ -70,6 +70,6 @@
         android:layout_below="@+id/createAccount"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp" />
-    />
+    />-->
 
 </RelativeLayout>
