@@ -30,6 +30,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     private final int OK = 1;
     private final int CHECK = 2;
     private final int CHECK_MATE = 3;
+    private final int DRAW = 4;//TODO roma, plz deal with this situation (draw msg for the user)
 
     GridView gridView;
     Communicator comm;
@@ -340,24 +341,40 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
                 }
             }
         }
-        /*for (Piece p : piecesOld)
-        {
-             if (p.getIntColor() == myColor && p instanceof King)
-             {
-                 myKing = p;
-                 break;
-             }
-        }*/
+
         int opponentColor = (myColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
         if (myKing.isThreatened(pieces, opponentColor).size() != 0)//the king is threatened
         {
-            if (!myKing.canMove(pieces))//king can not move
+            //if (!myKing.canMove(pieces))//king can not move
+            if (allPiecesCanNotMove(pieces, myKing.getIntColor()))//no piece can move
                 return CHECK_MATE;
             else
                 return CHECK;
         }
+        else//the king is not threatened
+        {
+            if (allPiecesCanNotMove(pieces, myKing.getIntColor()))//no piece can move
+            {
+                return DRAW;
+            }
+        }
         return OK;
+    }
+
+    private boolean allPiecesCanNotMove(Piece[][] pieces, int color)
+    {
+        for (int row = 0; row < TILES_NUMBER_IN_A_ROW; row++)
+        {
+            for (int col = 0; col <TILES_NUMBER_IN_A_ROW; col++)
+            {
+                if (pieces[row][col].getIntColor() == color && pieces[row][col].canMove(pieces))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public boolean getMoveMade() {
