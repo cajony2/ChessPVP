@@ -53,15 +53,10 @@ class ReadFromDB extends AsyncTask< Void, Void, String> {
             connection.setRequestProperty("UserName", userName);
             connection.setRequestProperty("gameId",game.getGameId()+"");
             connection.setRequestProperty("Password",psw);
-            if(action.equals(ENDGAME)){
-                if(comm.getWin())
-                    connection.setRequestProperty("winner",userName);
-                else
-                    connection.setRequestProperty("winner",game.getBlackPlayerName());
-            }
+            if(action.equals(ENDGAME))
+                connection.setRequestProperty("winner",comm.getWin());
 
             Log.i("chess", "connecting to db:"+action);
-
 
             connection.setDoOutput(true);
 

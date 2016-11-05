@@ -22,5 +22,5 @@ public interface Communicator {
     void gameEnded();
     void setInfo(String message);
     void undo();
-    boolean getWin();
+    String getWin();
 }

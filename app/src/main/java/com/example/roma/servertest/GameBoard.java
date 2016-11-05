@@ -37,6 +37,7 @@ public class GameBoard extends Activity implements Communicator {
     public static final String GAME_READY = "isGameReady";
     public static final String MOVE_MADE = "moveMade";
     public static final String YOU_WON = "youWon";
+    public static final String DRAW = "Draw";
     ArrayList<Piece> whiteEaten;
     ArrayList<Piece> blackEaten;
     String color;
@@ -47,7 +48,7 @@ public class GameBoard extends Activity implements Communicator {
     Dialog dialog;
     Button okButton;
     ProgressBar spinner;
-    boolean win;
+    String  win;
     private String psw;
     boolean moveMade;
     boolean endGame;
@@ -132,8 +133,12 @@ public class GameBoard extends Activity implements Communicator {
                     updateUI();
                    break;
                case 3:                      // checkMate , finish game
-                   win = false;
+                   win = getOpponentName();
                    showDialog(YOU_LOOSE, CHCKMATE);
+                   endGame();
+                   break;
+               case 4:
+                   win = DRAW;
                    endGame();
                    break;
                default:                      // error
@@ -215,7 +220,7 @@ public class GameBoard extends Activity implements Communicator {
     }
 
     @Override
-    public boolean getWin() {
+    public String getWin() {
         return win;
     }
 
@@ -248,19 +253,20 @@ public class GameBoard extends Activity implements Communicator {
 
         //update pieces
         Board boardFragment  = (Board) fManager.findFragmentById(R.id.board);
-        if(boardFragment.isChess() == CHECK) {
-            Log.i("chess","check!!!");
-            game.setStatus(CHECK);
-        }
-        else if (boardFragment.isChess() == CHCKMATE)//check mate
-        {
-            Log.i("chess","check mate!!!");
-            game.setStatus(CHCKMATE);
-        }
-        else
-        {
-            Log.i("chess","No check :) !!!");
-            game.setStatus(OK_GAME);
+        int  gameStatus = boardFragment.isChess();
+        game.setStatus(gameStatus);
+        switch (gameStatus){
+            case 2:
+                Log.i("chess" , "Check");
+                break;
+            case 3:
+                Log.i("chess","Check Mate");
+                break;
+            case 4:
+                Log.i("chess","Draw");
+                break;
+            default:
+                Log.i("chess","Ok Game");
         }
     }
 
@@ -332,12 +338,12 @@ public class GameBoard extends Activity implements Communicator {
     public void timerFinished() {
 
         if(game.getTurn().equals(userName)) {
-            win = false;
+            win = getOpponentName();
             showDialog(YOU_LOOSE, TIMEROVER);
             endGame();
         }
         else {
-            win = true;
+            win = userName;
         }
         endGame=true;
     }
