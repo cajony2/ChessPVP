@@ -120,6 +120,7 @@ public class GameBoard extends Activity implements Communicator {
    public void refreshGame(String str)  {
        try {
            game = new Game(new JSONObject(str));
+           updateUI();
            updateStatus();
            int status=game.getStatus();
            switch (status){

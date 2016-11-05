@@ -368,7 +368,7 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
         {
             for (int col = 0; col <TILES_NUMBER_IN_A_ROW; col++)
             {
-                if (pieces[row][col].getIntColor() == color && pieces[row][col].canMove(pieces))
+                if ((pieces[row][col].getIntColor() == color && pieces[row][col].isEmpty() != true) && /*pieces[row][col].canMove(pieces)*/ pieces[row][col].getLegalMoves(pieces).size() != 0)
                 {
                     return false;
                 }
