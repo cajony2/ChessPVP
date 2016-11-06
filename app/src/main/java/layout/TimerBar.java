@@ -20,6 +20,7 @@ public class TimerBar extends Fragment {
     Communicator comm;
     private String progressBarMessage;
     boolean stopTimer;
+    Runnable runnable;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timer_bar,container,false);
@@ -30,6 +31,7 @@ public class TimerBar extends Fragment {
         simpleProgressBar = (ProgressBar) view.findViewById(R.id.timerBar);
         progressBarText = (TextView) view.findViewById(R.id.timerText);
         stopTimer =false;
+        handler  = new Handler();
     }
 
     @Override
@@ -48,25 +50,25 @@ public class TimerBar extends Fragment {
         //reset progress
         progress=0;
         //start timer thread
-        handler  = new Handler();
-        final Runnable runnable = new Runnable() {
+        if( runnable!= null){
+            handler.removeCallbacks(runnable);
+            stopTimer=false;
+        }
+         runnable = new Runnable() {
             @Override
             public void run() {
                 // if no interrupt
                 Log.i("chess","progress:"+progress);
-                if(stopTimer){
-                    stopTimer=false;
-                    Log.i("chess","timer restarted");
-                    return;
-                }
-                simpleProgressBar.setProgress(progress);
-                progressBarText.setText(progressBarMessage+timeLeft());
-                progress++;
-                if(progress<simpleProgressBar.getMax())
-                    handler.postDelayed(this, 1000);
-                else {
-                    progressBarText.setText("Time's Up");
-                    comm.timerFinished();
+                if(!stopTimer) {
+                    simpleProgressBar.setProgress(progress);
+                    progressBarText.setText(progressBarMessage + timeLeft());
+                    progress++;
+                    if (progress < simpleProgressBar.getMax())
+                        handler.postDelayed(this, 1000);
+                    else {
+                        progressBarText.setText("Time's Up");
+                        comm.timerFinished();
+                    }
                 }
             }
         };
