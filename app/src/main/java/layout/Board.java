@@ -35,15 +35,13 @@ public class Board extends Fragment implements AdapterView.OnItemClickListener {
     GridView gridView;
     Communicator comm;
     Adapter adapter;
-    //Piece[] piecesOld;         //old version   -->for testing for now
-    Piece[][] pieces;          //new version   --> jony's algorythm
+    Piece[][] pieces;
     boolean canClick;
     boolean isSelected;
     int myColor;
     boolean[] possibleMove;
     boolean moveMade;
     View chessBoardView;
-    Piece[] piecesOldCopy = null;
     Piece[][] piecesCopy = null;
     Piece eatenPiece = null;
     int destinationPositionOfMovingPiece = -1;

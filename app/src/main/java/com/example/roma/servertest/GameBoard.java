@@ -242,6 +242,7 @@ public class GameBoard extends Activity implements Communicator {
 
             ReadFromDB read = new ReadFromDB(this,ReadFromDB.MAKE_MOVE,userName,game,psw);
             read.execute();
+            updateUI();
         }else {
             Toast toast = Toast.makeText(this, "game is null", Toast.LENGTH_LONG);
             toast.show();
